@@ -6,20 +6,23 @@ import { Session, ExerciseType } from '@/types/types';
 import { getExerciseComponent } from '../../helpers/exerciseComponents';
 import { useUserStore, useSessions } from '@/store/userStore'
 import { useRouter } from 'next/navigation';
+import { exercisesAPI } from '@/services/api';
 
 interface TrainingSessionProps {
   session: Session;
-  onComplete?: (scores: Record<string, number>) => void;
+  onComplete?: (session: Session) => void;
 }
 
 const TrainingSession = ({ session, onComplete }: TrainingSessionProps) => {
-  const [currentExercise, setCurrentExercise] = useState(0);
+  const [startTime, setStartTime] = useState<Date>(new Date());
+  const [currentExercise, setCurrentExercise] = useState(session.completedExercises || 0);
   const [scores, setScores] = useState<Record<string, number>>({});
   const [showIntro, setShowIntro] = useState(true);
   const [showCompletionModal, setShowCompletionModal] = useState(false);
   const [exercises, setExercises] = useState(session.exercises || []);
-  const user = useUserStore((state) => state.user);
-  const { sessions, setSessions } = useSessions()
+  const { user, setUser } = useUserStore();
+  const [isHydrated, setIsHydrated] = useState(false);
+  const { updateSession } = useSessions()
   const router = useRouter();
 
   useEffect(() => {
@@ -27,11 +30,28 @@ const TrainingSession = ({ session, onComplete }: TrainingSessionProps) => {
       setExercises(session.exercises);
     }
   }, [session.exercises]);
+
+  useEffect(() => {
+    if (user !== undefined) {
+      setIsHydrated(true);
+    }
+  }, [user]);
   
   const handleExerciseComplete = (score: number) => {
     const newScores = { ...scores, [exercises[currentExercise].type]: score };
     setScores(newScores);
-    
+    const now = new Date()
+    const attemp = {
+      userId: user?._id,
+      exerciseId: exercises[currentExercise]._id,
+      difficultyLevel: user?.areasProgress[exercises[currentExercise].area].difficultyLevel,
+      score: score,
+      area: exercises[currentExercise].area,
+      isTest: false,
+      startTime: startTime,
+      endTime: now,
+    }
+    exercisesAPI.createExerciseAttempt(attemp)
     // Update the current exercise's score in the session
     const updatedExercises = [...exercises];
     updatedExercises[currentExercise] = {
@@ -39,22 +59,30 @@ const TrainingSession = ({ session, onComplete }: TrainingSessionProps) => {
       isCompleted: true
     };
     setExercises(updatedExercises);
-    setSessions(sessions.map(s => 
-      s.id === session.id 
-        ? {...s, exercises: updatedExercises, completedExercises: (s.completedExercises || 0) + 1}
-        : s
-    ));
+
+    const nextExerciseIndex = currentExercise + 1;
+    const updatedSession = {
+      ...session, 
+      exercises: updatedExercises, 
+      completedExercises: (session.completedExercises || 0) + 1, 
+      isCompleted: nextExerciseIndex === exercises.length
+    };
+    updateSession(updatedSession);
     
-    if (currentExercise < exercises.length - 1) {
-      setCurrentExercise(currentExercise + 1);
+    if (nextExerciseIndex < exercises.length) {
+      setCurrentExercise(nextExerciseIndex);
       setShowIntro(true);
     } else {
-      const averageScore = Object.values(newScores).reduce((a, b) => a + b, 0) / exercises.length;
       setShowCompletionModal(true);
       if (onComplete) {
-        onComplete(newScores);
+        onComplete(updatedSession);
       }
     }
+  };
+
+  const startExercise = () => {
+    setStartTime(new Date());
+    setShowIntro(false)
   };
 
   const handleContinue = async () => {
@@ -68,6 +96,7 @@ const TrainingSession = ({ session, onComplete }: TrainingSessionProps) => {
     getExerciseComponent(exercises[currentExercise].type as ExerciseType) : 
     null;
 
+  if (!isHydrated) return <p>Loading...</p>;
   return (
     <div className="max-w-4xl mx-auto px-4">
       <AnimatePresence mode="wait">
@@ -97,7 +126,7 @@ const TrainingSession = ({ session, onComplete }: TrainingSessionProps) => {
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                onClick={() => setShowIntro(false)}
+                onClick={startExercise}
                 className="bg-purple-600 text-white px-8 py-3 rounded-full hover:bg-purple-700 flex items-center"
               >
                 Start Exercise

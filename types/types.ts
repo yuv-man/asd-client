@@ -1,5 +1,7 @@
+import { ExerciseProps } from './props';
+
 export interface User {
-    id?: string;
+    _id?: string;
     name: string;
     age: number;
     avatarUrl: string;
@@ -23,6 +25,7 @@ export interface User {
         exercisesCompleted: number;
         averageScore: number;
         lastActivity?: Date;
+        enabled: boolean;
       };
       speechTherapy: {
         difficultyLevel: number;
@@ -30,6 +33,7 @@ export interface User {
         exercisesCompleted: number;
         averageScore: number;
         lastActivity?: Date;
+        enabled: boolean;
       };
       cognitive: {
         difficultyLevel: number;
@@ -37,6 +41,7 @@ export interface User {
         exercisesCompleted: number;
         averageScore: number;
         lastActivity?: Date;
+        enabled: boolean;
       };
     };
 }
@@ -74,13 +79,6 @@ export interface Session {
   position: { x: number; y: number };
   completedExercises: number;
 }
-
-export interface ExerciseProps {
-  onComplete: (score: number) => void;
-  isTest?: boolean;
-  difficultyLevel?: number;
-}
-
 export interface PuzzlePiece {
   id: number;
   row: number;
@@ -90,31 +88,4 @@ export interface PuzzlePiece {
 }
 
 export type ExerciseType = 'attention' | 'memory' | 'problem-solving';
-
-// const exercises: Exercise[] = [
-//   {
-//     id: 'memory',
-//     title: 'Memory Test',
-//     description: 'Remember and repeat sequences of numbers',
-//     area: 'cognitive',
-//     type: 'memory',
-//     component: MemoryExercise
-//   },
-//   {
-//     id: 'attention',
-//     title: 'Attention Test',
-//     description: 'Find and match shapes quickly',
-//     area: 'cognitive',
-//     type: 'attention',
-//     component: AttentionExercise
-//   // },
-//   {
-//     id: 'problem-solving',
-//     title: 'Problem Solving',
-//     description: 'Solve age-appropriate puzzles and patterns',
-//     area: 'cognitive',
-//     type: 'problem-solving',
-//     component: ProblemSolvingExercise
-//   }
-// ];
   

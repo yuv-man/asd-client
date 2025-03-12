@@ -8,7 +8,7 @@ import { useUserStore } from '@/store/userStore';
 import { Exercise, ExerciseType } from '@/types/types';
 import puzzle from '../assets/puzzle.svg';
 import { getExerciseComponent } from '../../helpers/exerciseComponents';
-import { exercisesAPI } from '@/app/services/api'
+import { exercisesAPI } from '@/services/api'
 
 const CognitiveAssessment = () => {
   const router = useRouter();

@@ -1,0 +1,234 @@
+import { useState, useEffect } from 'react';
+import Image from 'next/image';
+import { User } from '@/types/types'
+import { avatars } from '../../helpers/avatars';
+import TherapyArea from '../common/TherapyArea';
+
+interface Avatar {
+  id: string;
+  src: any;
+}
+
+interface ProfileProps {
+  user: User | null;
+  onSave?: (data: { 
+    name: string; 
+    parentEmail: string; 
+    parentPhone: string; 
+    avatarUrl: string;
+    levelCognitive: number;
+    levelOt: number;
+    levelSpeech: number;
+    enabledCognitive: boolean;
+    enabledOt: boolean;
+    enabledSpeech: boolean;
+  }) => void;
+}
+
+export default function Profile({ user, onSave }: ProfileProps) {
+  const [name, setName] = useState(user?.name || '');
+  const [parentEmail, setParentEmail] = useState(user?.parentEmail || '');
+  const [parentPhone, setParentPhone] = useState(user?.parentPhone || '')
+  const [avatarUrl, setAvatarUrl] = useState<Avatar | undefined>(undefined);
+  const [isEditing, setIsEditing] = useState(false);
+  const [levelCognitive, setLevelCognitive] = useState(user?.areasProgress?.cognitive
+    .difficultyLevel || 1)
+  const [levelOt, setLevelOt] = useState(user?.areasProgress?.occupationalTherapy
+    .difficultyLevel || 1)
+  const [levelSpeech, setLevelSpeech] = useState(user?.areasProgress?.speechTherapy
+    .difficultyLevel || 1)
+  const [enabledCognitive, setEnabledCognitive] = useState(user?.areasProgress?.cognitive?.enabled ?? true);
+  const [enabledOt, setEnabledOt] = useState(user?.areasProgress?.occupationalTherapy?.enabled ?? true);
+  const [enabledSpeech, setEnabledSpeech] = useState(user?.areasProgress?.speechTherapy?.enabled ?? true);
+
+  useEffect(() => {
+    if (user?.avatarUrl) {
+      const avatar = avatars.find(avatar => avatar.id === user.avatarUrl);
+      if (avatar) {
+        setAvatarUrl(avatar);
+      }
+    }
+  }, [user]);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (onSave) {
+      onSave({ 
+        name, 
+        parentEmail, 
+        parentPhone, 
+        levelCognitive, 
+        levelOt, 
+        levelSpeech,
+        enabledCognitive,
+        enabledOt,
+        enabledSpeech,
+        avatarUrl: avatarUrl?.id ?? ''
+      });
+    }
+    setIsEditing(false);
+  };
+
+  const pickAvatar = (e: React.MouseEvent<HTMLButtonElement>, avatar: Avatar) => {
+    e.preventDefault();
+    setAvatarUrl(avatar);
+  };
+
+  return (
+    <div className="max-w-2xl mx-auto p-4">
+      <h1 className="title text-2xl font-bold mb-6">Profile Settings</h1>
+      
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="flex flex-col items-center gap-4">
+          <div className="flex flex-wrap gap-4 items-center">
+            {/* Selected avatar - larger size */}
+            <div className="relative w-32 h-32">
+              <Image
+                src={avatarUrl?.src || avatars[0].src}
+                alt="Profile avatar"
+                fill
+                className="rounded-full object-cover"
+              />
+            </div>
+
+            {/* Avatar selection grid - only shown when editing */}
+            {isEditing && (
+              <div className="flex flex-wrap gap-2">
+                {avatars.map((avatar, index) => (
+                  <button
+                    key={index}
+                    onClick={(e) => pickAvatar(e, avatar)}
+                    className={`image-button relative w-16 h-16 rounded-full overflow-hidden hover:ring-2 hover:ring-primary-500 
+                      ${avatarUrl?.src === avatar.src ? 'ring-2 ring-primary-500' : ''}`}
+                  >
+                    <Image
+                      src={avatar.src}
+                      alt={`Avatar option ${index + 1}`}
+                      fill
+                      className="object-cover"
+                    />
+                  </button>
+                ))}
+                
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="flex gap-8">
+          <div className="w-1/2 space-y-4">
+            <h2 className="title text-lg font-semibold">Personal Information</h2>
+            <div>
+              <label htmlFor="name" className="block text-sm font-medium">
+                Name
+              </label>
+              {isEditing ? (
+                <input
+                  type="text"
+                  id="name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                  required
+                />
+              ) : (
+                <p className="mt-1">{name || 'Not set'}</p>
+              )}
+            </div>
+
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium">
+                Email
+              </label>
+              {isEditing ? (
+                <input
+                  type="email"
+                  id="email"
+                  value={parentEmail}
+                  onChange={(e) => setParentEmail(e.target.value)}
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                />
+              ) : (
+                <p className="mt-1">{parentEmail || 'Not set'}</p>
+              )}
+            </div>
+            <div>
+              <label htmlFor="phone" className="block text-sm font-medium">
+                Phone
+              </label>
+              {isEditing ? (
+                <input
+                  type="tel"
+                  id="phone"
+                  value={parentPhone}
+                  onChange={(e) => setParentPhone(e.target.value)}
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                    />
+              ) : (
+                <p className="mt-1">{parentPhone || 'Not set'}</p>
+              )}
+            </div>
+          </div>
+
+          <div className="w-1/2 space-y-4">
+            <h2 className="title text-lg font-semibold">Therapy Areas</h2>
+            
+            <div className="grid gap-4">
+              <TherapyArea
+                title="Cognitive Therapy"
+                enabled={enabledCognitive}
+                level={levelCognitive}
+                isEditing={isEditing}
+                onEnableChange={setEnabledCognitive}
+                onLevelChange={setLevelCognitive}
+              />
+              <TherapyArea
+                title="Occupational Therapy"
+                enabled={enabledOt}
+                level={levelOt}
+                isEditing={isEditing}
+                onEnableChange={setEnabledOt}
+                onLevelChange={setLevelOt}
+              />
+              <TherapyArea
+                title="Speech Therapy"
+                enabled={enabledSpeech}
+                level={levelSpeech}
+                isEditing={isEditing}
+                onEnableChange={setEnabledSpeech}
+                onLevelChange={setLevelSpeech}
+              />
+            </div>
+          </div>
+        </div>
+        <div className="flex justify-end gap-4">
+          {isEditing ? (
+            <>
+              <button
+                type="button"
+                onClick={() => setIsEditing(false)}
+                className="px-4 py-2 border rounded-md"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="px-4 py-2 bg-blue-500 text-white rounded-md"
+              >
+                Save
+              </button>
+            </>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setIsEditing(true)}
+              className="px-4 py-2 bg-blue-500 text-white rounded-md"
+            >
+              Edit Profile
+            </button>
+          )}
+        </div>
+      </form>
+    </div>
+  );
+}

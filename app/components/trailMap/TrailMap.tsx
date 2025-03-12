@@ -3,19 +3,21 @@ import { motion } from 'framer-motion';
 import styles from './TrailMap.module.css';
 import Image from 'next/image';
 import balloon from '@/assets/airballoon.svg';
-import { FaCloud } from 'react-icons/fa';
+import { FaCloud, FaCog } from 'react-icons/fa';
 import { Session } from '../../../types/types'
 
 interface TrailMapProps {
   sessions: Session[];
   onSessionSelect: (sessionId: string) => void;
   currentPosition: number;
+  onSettingsClick?: () => void;
 }
 
 export const TrailMap: React.FC<TrailMapProps> = ({
   sessions,
   onSessionSelect,
   currentPosition,
+  onSettingsClick,
 }) => {
   return (
     <div 
@@ -24,6 +26,30 @@ export const TrailMap: React.FC<TrailMapProps> = ({
         background: 'linear-gradient(135deg, #E0C3FC 0%, #8EC5FC 100%)',
       }}
     >
+      <motion.div
+        className={styles.settingsButton}
+        onClick={onSettingsClick}
+        whileHover={{ scale: 1.1 }}
+        style={{
+          position: 'absolute',
+          top: '10px',
+          left: '10px',
+          backgroundColor:'lightBlue',
+          border: 'none',
+          borderRadius: '50%',
+          width: '40px',
+          height: '40px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          cursor: 'pointer',
+          zIndex: 10,
+          boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
+        }}
+      >
+        <FaCog size={20} color="white" />
+      </motion.div>
+
       <motion.div 
         key="scrollContainer"
         className={styles.scrollContainer}
@@ -38,6 +64,7 @@ export const TrailMap: React.FC<TrailMapProps> = ({
           alignItems: 'center'
         }}
       >
+        
         {/* Session buttons */}
         {sessions.map((session, index) => {
           const isCurrentOrPrevious = index <= currentPosition;
@@ -88,9 +115,9 @@ export const TrailMap: React.FC<TrailMapProps> = ({
         <motion.div
           className={styles.balloon}
           animate={{
-            left: '50%',
-            top: `${80 - (currentPosition * 25) - 10}%`,
-            x: '-50%'
+            left: `${currentPosition % 2 === 0 ? '50%' : '61%'}`,
+            top: `${80 - (currentPosition * 25) - 8}%`,
+            transform: 'translate(-50%, 0)'
           }}
           transition={{ duration: 1, type: 'spring' }}
           style={{ position: 'absolute', pointerEvents: 'none', zIndex: 3 }}

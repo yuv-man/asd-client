@@ -6,6 +6,6 @@ import scooter from '../../assets/cars/scooter.svg';
 export const carsIcons = [
     { icon: car, color: 'bg-red-400', name: 'car' },
     { icon: truck, color: 'bg-blue-400', name: 'truck' },
-    { icon: scooter, color: 'bg-yellow-400', name: 'scooter' }
+    { icon: bus, color: 'bg-yellow-400', name: 'bus' }
 ];
 

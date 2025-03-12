@@ -4,7 +4,7 @@ const API_BASE = 'http://localhost:5000/api';
 
 // Add an axios interceptor to include the user token and userId in requests
 axios.interceptors.request.use((config) => {
-  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const user = JSON.parse(localStorage.getItem('wonderkid-user') || '{}');
   if (user.token) {
     config.headers.Authorization = `Bearer ${user.token}`;
   }
@@ -38,7 +38,7 @@ export const exercisesAPI = {
   create: (exercise) => axios.post(`${API_BASE}/exercises`, exercise),
   update: (exercise) => axios.put(`${API_BASE}/exercises/${exercise._id}`, exercise),
   delete: (id) => axios.delete(`${API_BASE}/exercises/${id}`),
-  createExerciseAttempt: (exerciseAttempt) => axios.post(`${API_BASE}/exercise/attempt`, exerciseAttempt),
+  createExerciseAttempt: (exerciseAttempt) => axios.post(`${API_BASE}/exercises/attempt`, exerciseAttempt),
 }; 
 
 export const dashboardAPI = {

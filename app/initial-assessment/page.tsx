@@ -14,13 +14,13 @@ const InitialAssessment = () => {
   const router = useRouter();
   const [selectedType, setSelectedType] = useState<string | null>(null);
   const { user, setUser } = useUserStore();
+  const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem('wonderkid-user');
-    if (storedUser && !user) {
-      setUser(JSON.parse(storedUser));
+    if (user !== undefined) {
+      setIsHydrated(true);
     }
-  }, [user, setUser]);
+  }, [user]);
 
   const handleStartAssessment = () => {
     if (selectedType) {
@@ -28,6 +28,7 @@ const InitialAssessment = () => {
     }
   };
 
+  if (!isHydrated) return <p>Loading...</p>;
   return (
     <div className="max-w-4xl mx-auto mt-10">
       <motion.div

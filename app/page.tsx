@@ -1,22 +1,30 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { sessionStore } from '../store/userStore';
+import { sessionStore, useUserStore } from '../store/userStore';
 
 export default function Home() {
   const router = useRouter();
+  const user = useUserStore((state) => state.user);
+  const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
-    const savedUser = localStorage.getItem('wonderkid-user');
-    if (savedUser) {
-      sessionStore.initializeSessions()
+    if (user !== undefined) {
+      setIsHydrated(true);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (!isHydrated) return;
+
+    if (user) {
+      sessionStore.initializeSessions();
       router.push('/training');
     } else {
       router.push('/login');
     }
-  }, []);
+  }, [isHydrated, user, router, sessionStore]);
 
-  // Return empty div or loading state while redirecting
   return <div className="min-h-screen bg-pastelLightYellow" />;
 }

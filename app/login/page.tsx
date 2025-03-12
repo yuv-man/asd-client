@@ -10,26 +10,17 @@ import { lilitaOne, wendyOne } from '../../assets/fonts';
 import AgeSelector from '../ageSelector';
 import { avatars } from '../helpers/avatars';
 import { User } from '@/types/types';
-import { userAPI } from '../services/api';
+import { userAPI } from '../../services/api';
 
 const Login = () => {
   const router = useRouter();
-  const setUser = useUserStore((state) => state.setUser);
+  const { user, setUser } = useUserStore();
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     name: '',
     age: '4',
     avatarStyle: avatars[0].src,
   });
-
-  useEffect(() => {
-    const savedUser = localStorage.getItem('wonderkid-user');
-    if (savedUser) {
-      const userData = JSON.parse(savedUser);
-      setUser(userData);
-      router.push('/dashboard');
-    }
-  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,26 +48,31 @@ const Login = () => {
             overallScore: undefined,
             exercisesCompleted: 0,
             averageScore: 0,
-            lastActivity: undefined
+            lastActivity: undefined,
+            difficultyLevel: 1,
+            enabled: true
           },
           speechTherapy: {
             overallScore: undefined,
             exercisesCompleted: 0,
             averageScore: 0,
-            lastActivity: undefined
+            lastActivity: undefined,
+            difficultyLevel: 1,
+            enabled: true
           },
           cognitive: {
             overallScore: undefined,
             exercisesCompleted: 0,
             averageScore: 0,
-            lastActivity: undefined
+            lastActivity: undefined,
+            difficultyLevel: 1,
+            enabled: true
           }
         }
-      };
-      setUser(userData);    
+      };   
       const res = await userAPI.create(userData);
       const user = res.data;
-      localStorage.setItem('wonderkid-user', JSON.stringify(user));
+      setUser(user)
       router.push('/initial-assessment');
     }
   };
