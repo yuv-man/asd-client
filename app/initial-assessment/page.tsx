@@ -6,8 +6,8 @@ import { useUserStore } from '../../store/userStore';
 import Image from 'next/image';
 import hello from '../../assets/hello.svg';
 import { wendyOne } from '@/assets/fonts';
-import { assessmentTypes } from './assessmentTypes';
-
+import { areaTypes } from '@/app/helpers/areas';
+import { AreaType } from '@/types/types';
 
 
 const InitialAssessment = () => {
@@ -50,7 +50,7 @@ const InitialAssessment = () => {
       </motion.div>
 
       <div className="grid md:grid-cols-3 gap-6">
-        {assessmentTypes.map((type) => (
+        {Object.values(areaTypes).map((type: AreaType) => (
           <motion.div
             key={type.id}
             whileHover={{ scale: 1.02 }}

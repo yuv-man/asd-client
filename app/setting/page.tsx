@@ -76,7 +76,7 @@ const SettingsPage = () => {
         )}
         {activeTab === 'dashboard' && (
           <div>
-            <Dashboard />
+            <Dashboard user={user}/>
           </div>
         )}
       </div>

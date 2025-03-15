@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useUserStore } from '@/store/userStore';
 import { Exercise, ExerciseType } from '@/types/types';
-import puzzle from '../assets/puzzle.svg';
+import owl from '@/assets/animals/owl.svg';
 import { getExerciseComponent } from '../../helpers/exerciseComponents';
 import { exercisesAPI } from '@/services/api'
 
@@ -65,7 +65,7 @@ const CognitiveAssessment = () => {
             exit={{ opacity: 0, y: -20 }}
             className="text-center flex flex-col items-center justify-center"
           >
-            <Image src={puzzle} alt="puzzle" width={100} height={100} />
+            <Image src={owl} alt="owl" width={100} height={100} />
             <h2 className="text-3xl font-bold text-gray-900 mb-4 text-darkPurple">
               Welcome to the Cognitive Assessment
             </h2>
