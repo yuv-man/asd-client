@@ -6,6 +6,11 @@ $pastel-yellow: #FDCD60
 $dark-purple: #5546CB
 $pastel-orange: #FF8859
 $pastel-light-yellow: #FEFAE0
+$pastel-light-red: #E5989B
+$pastel-light-blue: #98D8FF
+$pastel-yellow: #FDCD60
+$pastel-red: #FF6060
+$pastel-blue: #295F98
 $pastel-purple: #C7C3FF
 $lilita-one: 'Lilita One', cursive
 $wendy-one: 'Wendy One', cursive
@@ -38,6 +43,12 @@ label
 
 .bg-pastelLightYellow
   background-color: $pastel-light-yellow
+
+.bg-pastelLightRed
+  background-color: $pastel-light-red
+
+.bg-pastelLightBlue
+  background-color: $pastel-light-blue
 
 .text-darkPurple
   color: $dark-purple
@@ -75,3 +86,16 @@ label
   background: linear-gradient(-45deg, $primary-color, $secondary-color, $accent-color)
   background-size: 200% 200%
   animation: gradient 15s ease infinite 
+
+div
+  &.cognitive
+    background-color: $pastel-light-yellow
+    color: $pastel-yellow
+
+  &.speech
+    background-color: $pastel-light-red
+    color: $pastel-red
+
+  &.ot
+    background-color: $pastel-light-blue
+    color: $pastel-blue

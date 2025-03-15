@@ -87,5 +87,20 @@ export interface PuzzlePiece {
   imageUrl: string;
 }
 
+export interface AreaType {
+  id: string;
+  title: string;
+  icon: string;
+  description: string;
+  color: string;
+  backgroundColor: string;
+  class: string;
+}
+
+export interface Avatar {
+  id: string;
+  src: any;
+}
+
 export type ExerciseType = 'attention' | 'memory' | 'problem-solving';
   

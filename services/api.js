@@ -23,12 +23,20 @@ export const userAPI = {
 
 export const dailySummariesAPI = {
   getAllByUser: (userId) => axios.get(`${API_BASE}/dailySummaries/user/${userId}`),
-  getRecentByUser: (userId) => axios.get(`${API_BASE}/dailySummaries/user/${userId}/recent`),
+  getRecentByUser: (userId) => axios.get(`${API_BASE}/dailySummaries/user/recent/${userId}`),
   getById: (id) => axios.get(`${API_BASE}/dailySummaries/${id}`),
   create: (dailySummary) => axios.post(`${API_BASE}/dailySummaries`, dailySummary),
   update: (dailySummary) => axios.put(`${API_BASE}/dailySummaries/${dailySummary._id}`, dailySummary),
-  delete: (id) => axios.delete(`${API_BASE}/tasks/${id}`)
+  delete: (id) => axios.delete(`${API_BASE}/dailySummaries/${id}`)
 }; 
+
+export const weeklySummariesAPI = {
+  getAllByUser: (userId) => axios.get(`${API_BASE}/weeklySummaries/user/${userId}`),
+  getRecentByUser: (userId) => axios.get(`${API_BASE}/weeklySummaries/user/recent/${userId}`),
+  getById: (id) => axios.get(`${API_BASE}/weeklySummaries/${id}`),
+  create: (weeklySummary) => axios.post(`${API_BASE}/weeklySummaries`, weeklySummary),
+  update: (weeklySummary) => axios.put(`${API_BASE}/weeklySummaries/${weeklySummary._id}`, weeklySummary),
+};
 
 export const exercisesAPI = {
   getAll: () => axios.get(`${API_BASE}/exercises`),
