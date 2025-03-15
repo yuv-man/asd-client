@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ExerciseProps } from '@/types/types';
+import { ExerciseProps } from '@/types/props';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { fruitsWithColors } from '@/app/helpers/memoryShapes';

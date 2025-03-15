@@ -1,34 +1,15 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { User } from '@/types/types'
 import { avatars } from '../../helpers/avatars';
 import TherapyArea from '../common/TherapyArea';
-
-interface Avatar {
-  id: string;
-  src: any;
-}
-
-interface ProfileProps {
-  user: User | null;
-  onSave?: (data: { 
-    name: string; 
-    parentEmail: string; 
-    parentPhone: string; 
-    avatarUrl: string;
-    levelCognitive: number;
-    levelOt: number;
-    levelSpeech: number;
-    enabledCognitive: boolean;
-    enabledOt: boolean;
-    enabledSpeech: boolean;
-  }) => void;
-}
+import { ProfileProps } from '@/types/props';
+import { Avatar } from '@/types/types';
 
 export default function Profile({ user, onSave }: ProfileProps) {
   const [name, setName] = useState(user?.name || '');
   const [parentEmail, setParentEmail] = useState(user?.parentEmail || '');
   const [parentPhone, setParentPhone] = useState(user?.parentPhone || '')
+  const [age, setAge] = useState(user?.age || 4)
   const [avatarUrl, setAvatarUrl] = useState<Avatar | undefined>(undefined);
   const [isEditing, setIsEditing] = useState(false);
   const [levelCognitive, setLevelCognitive] = useState(user?.areasProgress?.cognitive
@@ -40,6 +21,7 @@ export default function Profile({ user, onSave }: ProfileProps) {
   const [enabledCognitive, setEnabledCognitive] = useState(user?.areasProgress?.cognitive?.enabled ?? true);
   const [enabledOt, setEnabledOt] = useState(user?.areasProgress?.occupationalTherapy?.enabled ?? true);
   const [enabledSpeech, setEnabledSpeech] = useState(user?.areasProgress?.speechTherapy?.enabled ?? true);
+  const [numOfExercises, setNumOfExercises] = useState(3);
 
   useEffect(() => {
     if (user?.avatarUrl) {
@@ -63,7 +45,9 @@ export default function Profile({ user, onSave }: ProfileProps) {
         enabledCognitive,
         enabledOt,
         enabledSpeech,
-        avatarUrl: avatarUrl?.id ?? ''
+        avatarUrl: avatarUrl?.id ?? '',
+        numOfExercises,
+        age
       });
     }
     setIsEditing(false);
@@ -135,7 +119,22 @@ export default function Profile({ user, onSave }: ProfileProps) {
                 <p className="mt-1">{name || 'Not set'}</p>
               )}
             </div>
-
+            <div>
+              <label htmlFor="age" className="block text-sm font-medium">
+                Age
+              </label>
+              {isEditing ? (
+                <input
+                  type="number"
+                  id="age"
+                  value={age}
+                  onChange={(e) => setAge(parseInt(e.target.value))}
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                />
+              ) : (
+                <p className="mt-1">{age || 4}</p>
+              )}
+            </div>
             <div>
               <label htmlFor="email" className="block text-sm font-medium">
                 Email
@@ -198,6 +197,22 @@ export default function Profile({ user, onSave }: ProfileProps) {
                 onEnableChange={setEnabledSpeech}
                 onLevelChange={setLevelSpeech}
               />
+              <div>
+              <label htmlFor="numOfExercises" className="block text-sm font-medium">
+                Number of Exercises per Session
+              </label>
+              {isEditing ? (
+                <input
+                  type="number"
+                  id="numOfExercises"
+                  value={numOfExercises}
+                  onChange={(e) => setNumOfExercises(parseInt(e.target.value))}
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                    />
+              ) : (
+                <p className="mt-1">{numOfExercises || 3}</p>
+              )}
+            </div>
             </div>
           </div>
         </div>

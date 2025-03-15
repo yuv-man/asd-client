@@ -1,28 +1,29 @@
-'use client';
 import React from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { Brain, MessageSquare, Activity, TrendingUp, Award, Clock, ArrowRight } from 'lucide-react';
-import { useUserStore } from '@/store/userStore';
-
-const Dashboard = () => {
-  const user = useUserStore((state) => state.user);
+import { TrendingUp, Award, Clock, ArrowRight } from 'lucide-react';
+import { areaTypes } from '@/app/helpers/areas';
+import { DashboardProps } from '@/types/props';
+import Image from 'next/image';
+const Dashboard = ({ user }: DashboardProps) => {
 
   const assessmentAreas = [
     {
       id: 'cognitive',
       title: 'Cognitive Skills',
-      icon: Brain,
-      color: 'from-blue-500 to-blue-600',
-      score: 75,
+      icon: areaTypes.cognitive.icon,
+      color: areaTypes.cognitive.color,
+      class: areaTypes.cognitive.class,
+      score: 0,
       lastActivity: '2 days ago',
       improvement: '+12%'
     },
     {
       id: 'speech',
       title: 'Speech Therapy',
-      icon: MessageSquare,
-      color: 'from-purple-500 to-purple-600',
+      icon: areaTypes.speech.icon,
+      color: areaTypes.speech.color,
+      class: areaTypes.speech.class,
       score: 68,
       lastActivity: '1 day ago',
       improvement: '+8%'
@@ -30,8 +31,9 @@ const Dashboard = () => {
     {
       id: 'ot',
       title: 'Occupational Therapy',
-      icon: Activity,
-      color: 'from-green-500 to-green-600',
+      icon: areaTypes.ot.icon,
+      color: areaTypes.ot.color,
+      class: areaTypes.ot.class,
       score: 82,
       lastActivity: '3 days ago',
       improvement: '+15%'
@@ -56,8 +58,8 @@ const Dashboard = () => {
             whileHover={{ scale: 1.02 }}
             className="bg-white rounded-xl shadow-lg overflow-hidden"
           >
-            <div className={`bg-gradient-to-r ${area.color} p-6 text-white`}>
-              <area.icon className="w-8 h-8 mb-4" />
+            <div className={`${area.class} p-6 text-white`}>
+              <Image src={area.icon} alt={area.title} width={24} height={24} />
               <h3 className="text-xl font-semibold mb-2">{area.title}</h3>
               <div className="flex items-center justify-between">
                 <div className="text-3xl font-bold">{area.score}%</div>

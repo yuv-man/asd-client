@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ExerciseProps } from '@/types/types';
+import { ExerciseProps } from '@/types/props';
 import { Timer } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { carsIcons } from '../../helpers/carsIcons';

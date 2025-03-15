@@ -1,7 +1,8 @@
 import Image from 'next/image';
 import puzzleImage from '@/assets/images/puzzle.png';
 import { useState, useEffect } from "react";
-import { ExerciseProps, PuzzlePiece } from '@/types/types';
+import { PuzzlePiece } from '@/types/types';
+import { ExerciseProps } from '@/types/props'
 
 const ProblemSolvingExercise: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyLevel }) => {
     const [image, setImage] = useState(puzzleImage.src);

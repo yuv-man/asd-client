@@ -19,11 +19,47 @@ export const TrailMap: React.FC<TrailMapProps> = ({
   currentPosition,
   onSettingsClick,
 }) => {
+  // Add scroll position state
+  const [scrollY, setScrollY] = React.useState(0);
+  const containerRef = React.useRef<HTMLDivElement>(null);
+
+  const sessionHeight = 100;
+  const [viewportOffset, setViewportOffset] = React.useState(0);
+
+  // Set viewport offset on mount and window resize
+  React.useEffect(() => {
+    const updateOffset = () => {
+      setViewportOffset(document.documentElement.clientHeight / 2);
+    };
+    
+    updateOffset(); // Initial calculation
+    window.addEventListener('resize', updateOffset);
+    
+    return () => window.removeEventListener('resize', updateOffset);
+  }, []);
+
+  const targetScroll = Math.max(
+    0,
+    ((sessions.length - currentPosition - 1) * sessionHeight) - viewportOffset + (sessionHeight / 2)
+  );
+
+  // Update scroll position when currentPosition changes
+  React.useEffect(() => {
+    if (containerRef.current) {
+      setScrollY(targetScroll);
+    }
+  }, [currentPosition, targetScroll]);
+
   return (
     <div 
       className={styles.trailMapContainer}
       style={{
         background: 'linear-gradient(135deg, #E0C3FC 0%, #8EC5FC 100%)',
+        overflow: 'hidden',
+        position: 'relative',
+        height: '100vh',
+        width: '100%',
+        minHeight: '400px'
       }}
     >
       <motion.div
@@ -51,24 +87,29 @@ export const TrailMap: React.FC<TrailMapProps> = ({
       </motion.div>
 
       <motion.div 
+        ref={containerRef}
         key="scrollContainer"
         className={styles.scrollContainer}
-        animate={{ x: '0%' }}
-        transition={{ duration: 1, type: 'spring' }}
+        drag="y"
+        dragConstraints={{
+          top: -(sessions.length * sessionHeight) + viewportOffset,
+          bottom: viewportOffset
+        }}
+        animate={{ y: -targetScroll }}
+        transition={{ duration: 0.8, type: 'spring', stiffness: 100 }}
         style={{ 
-          position: 'relative', 
+          position: 'absolute',
           width: '100%', 
-          height: '100%',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center'
+          height: `${sessions.length * sessionHeight + (viewportOffset * 2)}px`,
+          top: 0,
+          left: 0
         }}
       >
         
-        {/* Session buttons */}
-        {sessions.map((session, index) => {
-          const isCurrentOrPrevious = index <= currentPosition;
-          const isEven = index % 2 === 0;
+        {/* Session buttons - map through sessions in reverse order */}
+        {[...sessions].reverse().map((session, index) => {
+          const isCurrentOrPrevious = (sessions.length - 1 - index) <= currentPosition;
+          const isEven = (sessions.length - 1 - index) % 2 === 0;
           const completedExercises = session.exercises.filter(ex => ex.isCompleted).length;
           const progressPercentage = (completedExercises / session.exercises.length) * 100;
 
@@ -81,7 +122,7 @@ export const TrailMap: React.FC<TrailMapProps> = ({
               style={{
                 position: 'absolute',
                 left: isEven ? '45%' : '55%',
-                top: `${80 - (index * 25)}%`,
+                top: `${index * sessionHeight}px`,
                 transform: 'translate(-50%, -50%)',
                 opacity: 1,
                 cursor: session.isAvailable ? 'pointer' : 'not-allowed',
@@ -95,7 +136,9 @@ export const TrailMap: React.FC<TrailMapProps> = ({
                 gap: '8px',
                 padding: '16px',
                 borderRadius: '50%',
-                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                width: '60px',
+                height: '60px'
               }}
               initial={{ scale: 1 }}
               whileHover={session.isAvailable ? { scale: 1.1 } : {}}
@@ -116,8 +159,8 @@ export const TrailMap: React.FC<TrailMapProps> = ({
           className={styles.balloon}
           animate={{
             left: `${currentPosition % 2 === 0 ? '50%' : '61%'}`,
-            top: `${80 - (currentPosition * 25) - 8}%`,
-            transform: 'translate(-50%, 0)'
+            top: `${(sessions.length - currentPosition - 1) * sessionHeight}px`,
+            transform: 'translate(-50%, -50%)'
           }}
           transition={{ duration: 1, type: 'spring' }}
           style={{ position: 'absolute', pointerEvents: 'none', zIndex: 3 }}
