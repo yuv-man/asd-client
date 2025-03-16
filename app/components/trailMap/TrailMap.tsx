@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import styles from './TrailMap.module.css';
+import './TrailMap.sass';
 import Image from 'next/image';
 import balloon from '@/assets/airballoon.svg';
 import { FaCloud, FaCog } from 'react-icons/fa';
@@ -52,7 +52,7 @@ export const TrailMap: React.FC<TrailMapProps> = ({
 
   return (
     <div 
-      className={styles.trailMapContainer}
+      className="trailMapContainer"
       style={{
         background: 'linear-gradient(135deg, #E0C3FC 0%, #8EC5FC 100%)',
         overflow: 'hidden',
@@ -63,7 +63,7 @@ export const TrailMap: React.FC<TrailMapProps> = ({
       }}
     >
       <motion.div
-        className={styles.settingsButton}
+        className="settingsButton"
         onClick={onSettingsClick}
         whileHover={{ scale: 1.1 }}
         style={{
@@ -89,7 +89,7 @@ export const TrailMap: React.FC<TrailMapProps> = ({
       <motion.div 
         ref={containerRef}
         key="scrollContainer"
-        className={styles.scrollContainer}
+        className="scrollContainer"
         drag="y"
         dragConstraints={{
           top: -(sessions.length * sessionHeight) + viewportOffset,
@@ -116,9 +116,9 @@ export const TrailMap: React.FC<TrailMapProps> = ({
           return (
             <motion.div
               key={session.id}
-              className={`${styles.exerciseButton} ${
-                progressPercentage === 100 ? styles.completed : ''
-              } ${session.isAvailable ? styles.available : styles.locked}`}
+              className={`exerciseButton ${
+                progressPercentage === 100 ? 'completed' : ''
+              } ${session.isAvailable ? 'available' : 'locked'}`}
               style={{
                 position: 'absolute',
                 left: isEven ? '45%' : '55%',
@@ -144,9 +144,9 @@ export const TrailMap: React.FC<TrailMapProps> = ({
               whileHover={session.isAvailable ? { scale: 1.1 } : {}}
               onClick={() => session.isAvailable && onSessionSelect(session.id)}
             >
-              <div className={styles.progressIndicator}>
+              <div className="progressIndicator">
                 <FaCloud size={24} color="white" />
-                <div className={styles.progressText}>
+                <div className="progressText">
                   {completedExercises}/{session.exercises.length}
                 </div>
               </div>
@@ -156,7 +156,7 @@ export const TrailMap: React.FC<TrailMapProps> = ({
 
         {/* Balloon */}
         <motion.div
-          className={styles.balloon}
+          className="balloon"
           animate={{
             left: `${currentPosition % 2 === 0 ? '50%' : '61%'}`,
             top: `${(sessions.length - currentPosition - 1) * sessionHeight}px`,
