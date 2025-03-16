@@ -1,26 +1,20 @@
+import type { Configuration } from 'webpack';
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Keep your existing webpack configuration
-  webpack(config: any) {
-    config.module.rules.push({
-      test: /\.less$/,
+  // Configure webpack for SASS/SCSS files
+  webpack(config: Configuration) {
+    // Add configuration for SASS/SCSS files
+    config.module = config.module || { rules: [] };
+    (config.module.rules = config.module.rules || []).push({
+      test: /\.(sass|scss)$/,
       use: [
-        {
-          loader: "style-loader",
-        },
-        {
-          loader: "css-loader",
-        },
-        {
-          loader: "less-loader",
-          options: {
-            lessOptions: {
-              javascriptEnabled: true, // Needed for some Less features
-            },
-          },
-        },
+        "style-loader",
+        "css-loader",
+        "sass-loader",
       ],
     });
+
     return config;
   },
   
@@ -28,18 +22,16 @@ const nextConfig = {
   experimental: {
     turbo: {
       rules: {
-        // Configure loaders for Turbopack similar to what you have for webpack
-        '.less': ['style-loader', 'css-loader', {
-          loader: 'less-loader',
-          options: {
-            lessOptions: {
-              javascriptEnabled: true,
-            },
-          },
-        }],
+        // Configure loaders for SASS/SCSS
+        '.scss': ['style-loader', 'css-loader', 'sass-loader'],
+        '.sass': ['style-loader', 'css-loader', 'sass-loader'],
       },
-      // You can add other Turbopack-specific configurations here
     },
+  },
+  
+  // Add SASS options
+  sassOptions: {
+    includePaths: ['./app', './app/styles', './app/components'],
   },
 };
 
