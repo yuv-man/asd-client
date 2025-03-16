@@ -36,3 +36,22 @@ export interface TherapyAreaProps {
       enabledSpeech: boolean;
     }) => void;
   }
+
+  export interface CardProps {
+    className?: string;
+    children: React.ReactNode;
+  }
+  
+  export interface CardContentProps {
+    className?: string;
+    children: React.ReactNode;
+  }
+
+  export interface BalloonProps {
+    id: number;
+    color: string;
+    size: number;
+    position: { x: number; y: number };
+    popped: boolean;
+    onClick: (id: number, color: string) => void;
+  }

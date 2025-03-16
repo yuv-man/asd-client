@@ -6,12 +6,12 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useUserStore } from '@/store/userStore';
 import { Exercise, ExerciseType } from '@/types/types';
-import owl from '@/assets/animals/owl.svg';
+import monkey from '@/assets/animals/monkey.svg';
 import { getExerciseComponent } from '../../helpers/exerciseComponents';
 import { exercisesAPI } from '@/services/api'
 import ResultModal from '@/app/components/common/ResultsModal';
 
-const CognitiveAssessment = () => {
+const OTAssessment = () => {
   const router = useRouter();
   const user = useUserStore((state) => state.user);
   const [currentExercise, setCurrentExercise] = useState(0);
@@ -26,7 +26,7 @@ const CognitiveAssessment = () => {
     const fetchedExercises = async() => {
       try {
         setIsLoading(true);
-        const fetchedExercises = await exercisesAPI.getByArea('cognitive');
+        const fetchedExercises = await exercisesAPI.getByArea('ot');
         const exercisesWithComponents = fetchedExercises.data.map((exercise:Exercise) => ({
           ...exercise,
           component: getExerciseComponent(exercise.type as ExerciseType)
@@ -63,7 +63,7 @@ const CognitiveAssessment = () => {
   const CurrentExerciseComponent = exercises[currentExercise]?.component;
 
   return (
-    <div className="max-w-4xl mx-auto px-4 cognitive">
+    <div className="max-w-4xl mx-auto px-4 ot">
       <AnimatePresence mode="wait">
         {showIntro ? (
           <motion.div
@@ -73,13 +73,13 @@ const CognitiveAssessment = () => {
             exit={{ opacity: 0, y: -20 }}
             className="text-center flex flex-col items-center justify-center"
           >
-            <Image src={owl} alt="owl" width={100} height={100} />
+            <Image src={monkey} alt="monkey" width={100} height={100} />
             <h2 className="text-3xl font-bold text-gray-900 mb-4 text-darkPurple">
-              Welcome to the Cognitive Assessment
+              Welcome to the OT Assessment
             </h2>
             <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto text-darkPurple">
-              Hi {user?.name}! You'll complete three fun exercises to test your memory,
-              attention, and problem-solving skills. Each exercise is designed to be
+              Hi {user?.name}! You'll complete three fun exercises to test your fine motor skills, 
+              coordination and reaction time. Each exercise is designed to be
               engaging and age-appropriate.
             </p>
             <motion.button
@@ -109,7 +109,7 @@ const CognitiveAssessment = () => {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -100 }}
           >
-            <CurrentExerciseComponent onComplete={handleExerciseComplete} isTest={true} difficultyLevel={user?.areasProgress?.cognitive?.difficultyLevel} />
+            <CurrentExerciseComponent onComplete={handleExerciseComplete} isTest={true} difficultyLevel={user?.areasProgress?.occupationalTherapy?.difficultyLevel} />
           </motion.div>
         ) : null}
       </AnimatePresence>
@@ -119,7 +119,7 @@ const CognitiveAssessment = () => {
           isOpen={showResults}
           onClose={handleContinue}
           score={finalScore}
-          area="cognitive"
+          area="ot"
           exerciseResults={scores}
         />
       )}
@@ -127,4 +127,4 @@ const CognitiveAssessment = () => {
   );
 };
 
-export default CognitiveAssessment;
+export default OTAssessment;

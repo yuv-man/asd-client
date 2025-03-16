@@ -66,7 +66,7 @@ export interface Exercise {
   title: string;
   description: string;
   area: "occupationalTherapy" | "speechTherapy" | "cognitive";
-  type: 'memory' | 'attention' | 'problem-solving';
+  type: ExerciseType;
   isCompleted?: boolean;
   component?: React.FC<ExerciseProps>;
 }
@@ -102,5 +102,22 @@ export interface Avatar {
   src: any;
 }
 
-export type ExerciseType = 'attention' | 'memory' | 'problem-solving';
+export interface FallingObject {
+  id: number;
+  type: string;
+  position: number;
+  top: number;
+  caught: boolean;
+  missed: boolean;
+}
+
+export interface BalloonType {
+  id: number;
+  color: string;
+  size: number;
+  position: { x: number; y: number };
+  popped: boolean;
+}
+
+export type ExerciseType = 'attention' | 'memory' | 'problem-solving' | 'catch-objects' | 'shape-tracing' | 'balloon-game';
   
