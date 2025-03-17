@@ -63,7 +63,7 @@ const OTAssessment = () => {
   const CurrentExerciseComponent = exercises[currentExercise]?.component;
 
   return (
-    <div className="max-w-4xl mx-auto px-4 ot">
+    <div className="max-w-4xl mx-auto px-4 ot h-150">
       <AnimatePresence mode="wait">
         {showIntro ? (
           <motion.div
@@ -71,7 +71,7 @@ const OTAssessment = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="text-center flex flex-col items-center justify-center"
+            className="text-center flex flex-col items-center justify-center pt-20"
           >
             <Image src={monkey} alt="monkey" width={100} height={100} />
             <h2 className="text-3xl font-bold text-gray-900 mb-4 text-darkPurple">

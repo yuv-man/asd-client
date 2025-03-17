@@ -2,17 +2,17 @@ export const catchObjectSettings = {
     easy: { 
       spawnRate: 2000, // milliseconds
       fallSpeed: 3,
-      objectTypes: ['apple', 'ball', 'star']
+      objectTypes: ['apple', 'fish', 'soda']
     },
     medium: {
       spawnRate: 1500,
       fallSpeed: 4,
-      objectTypes: ['apple', 'ball', 'star', 'triangle']
+      objectTypes: ['apple', 'fish', 'soda', 'steak']
     },
     hard: {
       spawnRate: 1000,
       fallSpeed: 5,
-      objectTypes: ['apple', 'ball', 'star', 'triangle', 'diamond']
+      objectTypes: ['apple', 'fish', 'soda', 'steak', 'poachedEgg']
     }
   };
 

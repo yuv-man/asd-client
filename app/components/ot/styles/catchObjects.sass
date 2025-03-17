@@ -5,7 +5,6 @@
   flex-direction: column
   justify-content: center
   align-items: center
-  background-color: #f5f5f5
 
 .main
   padding: 2rem 0
@@ -85,7 +84,6 @@
   justify-content: space-between
   width: 100%
   padding: 0.5rem 1rem
-  background-color: #f0f0f0
   border-radius: 4px
   margin-bottom: 0.5rem
 
@@ -96,7 +94,7 @@
 .gameArea
   position: relative
   width: 100%
-  height: 500px
+  height: 400px
   background-color: #e9f5ff
   border: 2px solid #0070f3
   border-radius: 8px
@@ -120,35 +118,15 @@
 
 .fallingObject
   position: absolute
-  width: 40px
-  height: 40px
-  background-size: contain
-  background-repeat: no-repeat
-  background-position: center
-
-.apple
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="red"/><path d="M50 10 L50 30 L40 25" fill="green" stroke="green" stroke-width="4"/></svg>')
-
-.ball
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="orange" stroke="black" stroke-width="2"/><path d="M30 30 Q50 70 70 30" stroke="black" stroke-width="2" fill="none"/></svg>')
-
-.star
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><polygon points="50,10 61,40 95,40 67,60 75,90 50,75 25,90 33,60 5,40 39,40" fill="gold"/></svg>')
-
-.triangle
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><polygon points="50,15 85,85 15,85" fill="purple"/></svg>')
-
-.diamond
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><polygon points="50,10 90,50 50,90 10,50" fill="cyan" stroke="blue" stroke-width="2"/></svg>')
+  transform: translate(-50%, -50%)
+  width: 8%
+  height: auto
 
 .basket
   position: absolute
-  bottom: 5%
+  bottom: 12%
   width: 100px
   height: 50px
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 50"><path d="M5,5 L20,45 L80,45 L95,5" stroke="brown" stroke-width="5" fill="none"/><path d="M0,10 L100,10" stroke="brown" stroke-width="5"/></svg>')
-  background-size: contain
-  background-repeat: no-repeat
   background-position: center
   transform: translateX(-50%)
 
@@ -160,6 +138,10 @@
   justify-content: center
   align-items: center
   background-color: #f5f5f5
+
+.time
+  font-size: 1.5rem
+  margin-left: 1rem
 
 @media (max-width: 600px)
   .title

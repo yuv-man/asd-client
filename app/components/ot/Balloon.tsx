@@ -2,6 +2,9 @@
 import { useState, useEffect } from 'react';
 import './styles/balloon.sass';
 import { BalloonProps } from '@/types/props';
+import balloonSvg from '@/assets/balloon.svg';
+import Image from 'next/image';
+import BalloonSVG from './BalloonSVG';
 
 export default function Balloon({ id, color, size, position, popped, onClick }: BalloonProps) {
   const [isPopping, setIsPopping] = useState(false);
@@ -21,7 +24,6 @@ export default function Balloon({ id, color, size, position, popped, onClick }: 
     <div
       className={`balloon ${isPopping ? 'popping' : ''}`}
       style={{
-        backgroundColor: color,
         width: `${size}px`,
         height: `${size * 1.2}px`,
         left: `${position.x}%`,
@@ -30,6 +32,9 @@ export default function Balloon({ id, color, size, position, popped, onClick }: 
       }}
       onClick={handleClick}
     >
+      <BalloonSVG 
+        color={color}
+      />
       <div className="balloonString"></div>
     </div>
   );

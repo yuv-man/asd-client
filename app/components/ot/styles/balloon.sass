@@ -13,7 +13,6 @@ $font-family: 'Comic Sans MS', cursive, sans-serif
 @mixin button-base
   border: none
   cursor: pointer
-  font-family: $font-family
   transition: all 0.3s
 
 // Main container styles
@@ -22,7 +21,6 @@ $font-family: 'Comic Sans MS', cursive, sans-serif
   padding: 0 0.5rem
   @include flex-center
   flex-direction: column
-  font-family: $font-family
 
 .main
   padding: 2rem 0
@@ -89,22 +87,6 @@ $font-family: 'Comic Sans MS', cursive, sans-serif
     font-size: 1.2rem
     margin-bottom: 2rem
 
-.startButton
-  @include button-base
-  background-color: #ff6b6b
-  color: white
-  padding: 15px 30px
-  font-size: 1.5rem
-  border-radius: 50px
-  box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4)
-  
-  &:hover
-    transform: translateY(-3px)
-    box-shadow: 0 8px 20px rgba(255, 107, 107, 0.6)
-  
-  &:active
-    transform: translateY(1px)
-
 // Balloon styles
 .balloon
   position: absolute
@@ -113,17 +95,6 @@ $font-family: 'Comic Sans MS', cursive, sans-serif
   transform-origin: bottom center
   animation: float 2s ease-in-out infinite alternate
   transition: all 0.2s
-  box-shadow: inset -10px -10px 20px $balloon-shadow
-  
-  &:before
-    content: ''
-    position: absolute
-    width: 6px
-    height: 6px
-    border-radius: 50%
-    background-color: rgba(255, 255, 255, 0.8)
-    top: 15%
-    left: 15%
   
   &:hover
     transform: scale(1.05)

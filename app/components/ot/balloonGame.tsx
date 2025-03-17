@@ -4,12 +4,13 @@ import './styles/catchObjects.sass';
 import Balloon from './Balloon';
 import { BalloonType } from '@/types/types';
 import { balloonGameSettings } from '@/app/helpers/difficultySettings';
+import { ExerciseProps } from '@/types/props';
 
 const COLORS = ['red', 'blue', 'green', 'yellow', 'purple'];
 
 type Difficulty = 'easy' | 'medium' | 'hard';
 
-export default function BalloonGame() {
+const BalloonGame: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyLevel }) => {
   const [gameStarted, setGameStarted] = useState(false);
   const [score, setScore] = useState(0);
   const [targetColor, setTargetColor] = useState('');
@@ -196,6 +197,12 @@ export default function BalloonGame() {
     return () => clearInterval(targetInterval);
   }, [gameStarted, setNewTarget, difficulty]);
 
+  useEffect(() => {
+    if (timeLeft === 0) {
+      onComplete(Math.round(score));
+    }
+  }, [timeLeft, score, onComplete]);
+
   return (
     <div className="gameContainer">
       {!gameStarted ? (
@@ -266,3 +273,5 @@ export default function BalloonGame() {
     </div>
   );
 }
+
+export default BalloonGame;
