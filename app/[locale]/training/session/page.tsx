@@ -1,7 +1,7 @@
 'use client'
 
 import { Session } from '@/types/types';
-import TrainingSession from '../../components/training/TrainingSession'
+import TrainingSession from '@/app/components/training/TrainingSession'
 import { useSessions } from '@/store/userStore'
 
 export default function TrainingSessionPage() {

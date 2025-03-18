@@ -122,9 +122,11 @@ export const TrailMap: React.FC<TrailMapProps> = ({
                 opacity: 1,
                 cursor: session.isAvailable ? 'pointer' : 'not-allowed',
                 zIndex: 2,
-                background: session.isAvailable 
-                  ? 'linear-gradient(135deg, #63B3ED 0%, #4299E1 100%)'
-                  : 'linear-gradient(135deg, #CBD5E0 0%, #A0AEC0 100%)',
+                background: progressPercentage === 100
+                  ? 'linear-gradient(135deg,rgb(139, 222, 174) 0%, #38A169 100%)'
+                  : session.isAvailable
+                    ? 'linear-gradient(135deg, #63B3ED 0%, #4299E1 100%)'
+                    : 'linear-gradient(135deg, #CBD5E0 0%, #A0AEC0 100%)',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
