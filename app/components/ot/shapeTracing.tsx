@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { SHAPES } from '@/app/helpers/shapes';
 import { RotateCcw, CheckCircle2, XCircle } from 'lucide-react';
 import { CardProps, CardContentProps, ExerciseProps } from '@/types/props';
+import { shapeTracingSettings } from '@/app/helpers/difficultySettings';
 
 // Update Card component
 const Card: React.FC<CardProps> = ({ className, children }) => {
@@ -37,36 +38,27 @@ interface Line {
 }
 
 // Add these constants at the top with other constants
-const DIFFICULTY_SETTINGS = {
-  easy: {
-    maxDeviation: 40,
-    accuracyThreshold: 75
-  },
-  medium: {
-    maxDeviation: 30,
-    accuracyThreshold: 85
-  },
-  hard: {
-    maxDeviation: 20,
-    accuracyThreshold: 90
-  }
-} as const;
+
 
 type ShapeKey = keyof typeof SHAPES;
 
 const ShapeTracing: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyLevel }) => {
-  const [selectedShape, setSelectedShape] = useState<ShapeKey>('star');
+  // Add new state variables for test mode
+  const [startTime, setStartTime] = useState<number | null>(null);
+  const [endTime, setEndTime] = useState<number | null>(null);
+
+  // Modify initial shape selection for test mode
+  const initialShape = Object.entries(SHAPES).find(([_, shape]) => shape.difficulty === difficultyLevel)?.[0] as ShapeKey;
+  const [selectedShape, setSelectedShape] = useState<ShapeKey>(initialShape);
   const [currentPoint, setCurrentPoint] = useState<number>(1);
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [lines, setLines] = useState<Line[]>([]);
-  const [currentLine, setCurrentLine] = useState<Line | null>(null);
   const [completed, setCompleted] = useState<boolean>(false);
   const [accuracy, setAccuracy] = useState<number | null>(null);
   const [attempts, setAttempts] = useState<number>(0);
-  const [bestAccuracy, setBestAccuracy] = useState<number>(0);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [drawingPath, setDrawingPath] = useState<Array<{x: number, y: number}>>([]);
-  const [difficulty, setDifficulty] = useState<keyof typeof DIFFICULTY_SETTINGS>('medium');
+  const [difficulty, setDifficulty] = useState<keyof typeof shapeTracingSettings>('medium');
 
   const points = SHAPES[selectedShape].points;
 
@@ -185,11 +177,50 @@ const ShapeTracing: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyL
     });
 
     const averageDeviation = totalDeviation / drawingPath.length;
-    const maxAllowedDeviation = DIFFICULTY_SETTINGS[difficulty].maxDeviation;
+    const maxAllowedDeviation = shapeTracingSettings[difficulty].maxDeviation;
     
     // Convert deviation to accuracy percentage
     const accuracy = Math.max(0, Math.min(100, 100 - (averageDeviation / maxAllowedDeviation * 100)));
     return accuracy;
+  };
+
+  // Add useEffect to set start time when component mounts in test mode
+  useEffect(() => {
+    if (isTest) {
+      setStartTime(Date.now());
+    }
+  }, [isTest]);
+
+  // Modify the completion logic in handleDrawEnd and handleTouchEnd
+  const handleCompletion = (drawingAccuracy: number) => {
+    setAccuracy(drawingAccuracy);
+    setCompleted(true);
+
+    if (isTest) {
+      setEndTime(Date.now());
+      const timeInSeconds = startTime ? (Date.now() - startTime) / 1000 : 0;
+      
+      // Calculate score based on accuracy, time, and attempts
+      const accuracyWeight = 0.5;
+      const timeWeight = 0.3;
+      const attemptsWeight = 0.2;
+      
+      const accuracyScore = (drawingAccuracy / 100) * accuracyWeight * 100;
+      const timeScore = Math.max(0, (60 - timeInSeconds) / 60) * timeWeight * 100;
+      const attemptsScore = Math.max(0, (10 - attempts) / 10) * attemptsWeight * 100;
+      
+      const totalScore = Math.round(accuracyScore + timeScore + attemptsScore);
+
+      // Call onComplete with the score and metrics
+      onComplete?.({
+        score: totalScore,
+        metrics: {
+          accuracy: drawingAccuracy,
+          timeInSeconds: Math.round(timeInSeconds),
+          attempts: attempts
+        }
+      });
+    }
   };
 
   const handleDrawEnd = (e: React.MouseEvent<HTMLCanvasElement>) => {
@@ -209,7 +240,7 @@ const ShapeTracing: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyL
         endPoint
       );
 
-      if (pathAccuracy >= DIFFICULTY_SETTINGS[difficulty].accuracyThreshold) {
+      if (pathAccuracy >= shapeTracingSettings[difficulty].accuracyThreshold) {
         const newLine = {
           start: points[currentPoint - 1],
           end: endPoint
@@ -220,9 +251,7 @@ const ShapeTracing: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyL
         
         if (currentPoint + 1 === points.length) {
           const drawingAccuracy = calculateAccuracy(newLines);
-          setAccuracy(drawingAccuracy);
-          setBestAccuracy(Math.max(bestAccuracy, drawingAccuracy));
-          setCompleted(true);
+          handleCompletion(drawingAccuracy);
         } else {
           setCurrentPoint(currentPoint + 1);
           setAttempts(prev => prev + 1);
@@ -249,11 +278,10 @@ const ShapeTracing: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyL
   };
 
   const selectShape = (shape: string) => {
-    if (completed && accuracy !== null && accuracy >= ACCURACY_THRESHOLD) {
+    if (!isTest && completed && accuracy !== null && accuracy >= ACCURACY_THRESHOLD) {
       setSelectedShape(shape as ShapeKey);
       resetDrawing();
       setAttempts(0);
-      setBestAccuracy(0);
     }
   };
 
@@ -313,7 +341,7 @@ const ShapeTracing: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyL
         points[currentPoint - 1], 
         endPoint
       );
-      if (pathAccuracy >= DIFFICULTY_SETTINGS[difficulty].accuracyThreshold) {
+      if (pathAccuracy >= shapeTracingSettings[difficulty].accuracyThreshold) {
         const newLine = {
           start: points[currentPoint - 1],
           end: endPoint
@@ -323,9 +351,7 @@ const ShapeTracing: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyL
         
         if (currentPoint + 1 === points.length) {
           const drawingAccuracy = calculateAccuracy(newLines);
-          setAccuracy(drawingAccuracy);
-          setBestAccuracy(Math.max(bestAccuracy, drawingAccuracy));
-          setCompleted(true);
+          handleCompletion(drawingAccuracy);
         } else {
           setCurrentPoint(currentPoint + 1);
         }
@@ -437,19 +463,12 @@ const ShapeTracing: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyL
   return (
     <Card className="w-full max-w-lg mx-auto">
       <CardContent className="p-6">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold">Learn to Draw!</h2>
+        <div className="flex flex-col justify-between items-center mb-4">
           <div className="flex gap-2">
-            <select 
-              value={difficulty}
-              onChange={(e) => setDifficulty(e.target.value as keyof typeof DIFFICULTY_SETTINGS)}
-              className="px-2 py-1 rounded border"
-            >
-              <option value="easy">Easy</option>
-              <option value="medium">Medium</option>
-              <option value="hard">Hard</option>
-            </select>
-            {Object.entries(SHAPES).map(([key, shape]) => {
+            <h2 className="text-xl font-bold">Learn to Draw!</h2>
+          </div>
+          <div className="flex gap-2">
+            {Object.entries(SHAPES).filter(([key, shape]) => shape.difficulty === difficultyLevel).map(([key, shape]) => {
               const Icon = shape.icon;
               return (
                 <button
@@ -483,7 +502,7 @@ const ShapeTracing: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyL
           </div>
         </div>
 
-        <div className="relative">
+        <div className="relative flex justify-center items-center">
           <canvas
             ref={canvasRef}
             width={300}
@@ -500,7 +519,7 @@ const ShapeTracing: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyL
           
           {completed && (
             <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-20 rounded-lg">
-              <div className="bg-white p-4 rounded-lg shadow-lg">
+              <div className="bg-white p-4 rounded-lg shadow-lg text-center">
                 <div className="flex items-center gap-2 mb-2">
                   {accuracy !== null && accuracy >= ACCURACY_THRESHOLD ? (
                     <CheckCircle2 className="w-6 h-6 text-green-500" />
@@ -512,7 +531,7 @@ const ShapeTracing: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyL
                   </span>
                 </div>
                 <div className="text-sm text-gray-600 mb-2">
-                  Attempts: {attempts} | Best: {bestAccuracy}%
+                  Attempts: {attempts} 
                 </div>
                 {accuracy !== null && accuracy >= ACCURACY_THRESHOLD ? (
                   <div className="text-green-600">

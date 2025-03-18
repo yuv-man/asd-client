@@ -34,7 +34,7 @@ const AttentionExercise: React.FC<ExerciseProps> = ({ onComplete, isTest, diffic
   
     useEffect(() => {
       if (timeLeft === 0) {
-        onComplete(Math.round((score / attempts) * 100) || 0);
+        onComplete?.({ score: Math.round((score / attempts) * 100) || 0 });
       }
     }, [timeLeft, score, attempts, onComplete]);
   

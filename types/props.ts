@@ -10,7 +10,14 @@ export interface TherapyAreaProps {
   }
 
   export interface ExerciseProps {
-    onComplete: (score: number) => void;
+    onComplete?: (result: { 
+      score: number;
+      metrics?: {
+        accuracy: number;
+        timeInSeconds: number;
+        attempts: number;
+      }
+    }) => void;
     isTest?: boolean;
     difficultyLevel?: number;
   }

@@ -87,7 +87,7 @@ const MemoryExercise: React.FC<ExerciseProps> = ({ onComplete, isTest, difficult
           }, 500);
         } else {
           const score = Math.round(100 * (3 / attempts));
-          onComplete(score);
+          onComplete?.({ score });
         }
       } else {
         // Handle incorrect attempt

@@ -21,3 +21,18 @@ export const catchObjectSettings = {
     medium: { balloonCount: 5, speed: 1500, targetInterval: 4000 },
     hard: { balloonCount: 7, speed: 1000, targetInterval: 3000 }
   };
+
+  export const shapeTracingSettings = {
+    easy: {
+      maxDeviation: 40,
+      accuracyThreshold: 75
+    },
+    medium: {
+      maxDeviation: 30,
+      accuracyThreshold: 85
+    },
+    hard: {
+      maxDeviation: 20,
+      accuracyThreshold: 90
+    }
+  }

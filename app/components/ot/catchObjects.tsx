@@ -168,7 +168,7 @@ const CatchObjects: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyL
 
   useEffect(() => {
     if (gameOver) {
-      onComplete?.(score);
+      onComplete?.({ score });
     }
   }, [gameOver, onComplete, score]);
 

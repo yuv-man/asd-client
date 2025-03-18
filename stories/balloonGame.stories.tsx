@@ -15,8 +15,8 @@ type Story = StoryObj<typeof BalloonGame>;
 
 export const Default: Story = {
   args: {
-    onComplete: (score: number) => {
-      console.log(`Game completed with score: ${score}`);
+    onComplete: (result: { score: number; metrics?: { accuracy: number; timeInSeconds: number; attempts: number; } | undefined }) => {
+      console.log(`Game completed with score: ${result.score}`);
     },
     isTest: false,
     difficultyLevel: 1,
@@ -25,8 +25,8 @@ export const Default: Story = {
 
 export const TestMode: Story = {
   args: {
-    onComplete: (score: number) => {
-      console.log(`Test completed with score: ${score}`);
+    onComplete: (result: { score: number; metrics?: { accuracy: number; timeInSeconds: number; attempts: number; } | undefined }) => {
+      console.log(`Test completed with score: ${result.score}`);
     },
     isTest: true,
     difficultyLevel: 1,
@@ -35,8 +35,8 @@ export const TestMode: Story = {
 
 export const MediumDifficulty: Story = {
   args: {
-    onComplete: (score: number) => {
-      console.log(`Game completed with score: ${score}`);
+    onComplete: (result: { score: number; metrics?: { accuracy: number; timeInSeconds: number; attempts: number; } | undefined }) => {
+      console.log(`Game completed with score: ${result.score}`);
     },
     isTest: false,
     difficultyLevel: 2,
@@ -45,8 +45,8 @@ export const MediumDifficulty: Story = {
 
 export const HardDifficulty: Story = {
   args: {
-    onComplete: (score: number) => {
-      console.log(`Game completed with score: ${score}`);
+    onComplete: (result: { score: number; metrics?: { accuracy: number; timeInSeconds: number; attempts: number; } | undefined }) => {
+      console.log(`Game completed with score: ${result.score}`);
     },
     isTest: false,
     difficultyLevel: 3,

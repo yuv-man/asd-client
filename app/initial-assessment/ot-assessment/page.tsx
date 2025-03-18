@@ -41,8 +41,8 @@ const OTAssessment = () => {
     fetchedExercises();
   }, []);
 
-  const handleExerciseComplete = (score: number) => {
-    const newScores = { ...scores, [exercises[currentExercise].type]: score };
+  const handleExerciseComplete = (result: { score: number; metrics?: { accuracy: number; timeInSeconds: number; attempts: number; } | undefined }) => {
+    const newScores = { ...scores, [exercises[currentExercise].type]: result.score };
     setScores(newScores);
     
     if (currentExercise < exercises.length - 1) {
