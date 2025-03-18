@@ -63,59 +63,12 @@ const ShapeTracing: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyL
   const points = SHAPES[selectedShape].points;
 
   // Calculate accuracy between drawn lines and ideal shape
-  const calculateAccuracy = (drawnLines: Line[]) => {
-    let totalAccuracy = 0;
-    const idealLines = points.slice(0, -1).map((point, i) => ({
-      start: point,
-      end: points[i + 1]
-    }));
-
-    if (drawnLines.length !== idealLines.length) {
-      return 0;
-    }
-
-    drawnLines.forEach((drawnLine, i) => {
-      const idealLine = idealLines[i];
-      
-      if (!drawnLine.start || !drawnLine.end || !idealLine.start || !idealLine.end) {
-        return 0;
-      }
-      
-      try {
-        // Calculate angle accuracy with more tolerance
-        const drawnAngle = Math.atan2(
-          drawnLine.end.y - drawnLine.start.y,
-          drawnLine.end.x - drawnLine.start.x
-        );
-        const idealAngle = Math.atan2(
-          idealLine.end.y - idealLine.start.y,
-          idealLine.end.x - idealLine.start.x
-        );
-        const angleDiff = Math.abs(drawnAngle - idealAngle);
-        const angleAccuracy = Math.max(0, Math.min(100, 100 - (angleDiff / (Math.PI / 4) * 100)));
-
-        // Calculate length accuracy with more tolerance
-        const drawnLength = Math.sqrt(
-          Math.pow(drawnLine.end.x - drawnLine.start.x, 2) +
-          Math.pow(drawnLine.end.y - drawnLine.start.y, 2)
-        );
-        const idealLength = Math.sqrt(
-          Math.pow(idealLine.end.x - idealLine.start.x, 2) +
-          Math.pow(idealLine.end.y - idealLine.start.y, 2)
-        );
-        const lengthDiff = Math.abs(drawnLength - idealLength);
-        const lengthAccuracy = idealLength === 0 ? 0 : 
-          Math.max(0, Math.min(100, 100 - (lengthDiff / (idealLength * 0.5) * 100)));
-
-        // Combine accuracies with adjusted weights
-        totalAccuracy += (angleAccuracy * 0.7 + lengthAccuracy * 0.3);
-      } catch (error) {
-        console.error("Error calculating accuracy:", error);
-        return 0;
-      }
-    });
-
-    return drawnLines.length > 0 ? Math.round(totalAccuracy / drawnLines.length) : 0;
+  const calculateAccuracy = () => {
+    // Number of lines is points.length - 1
+    const numberOfLines = points.length - 1;
+    // Lower attempts means higher accuracy (inverse relationship)
+    const accuracy = Math.max(0, 100 - ((attempts / numberOfLines - 1) * 20));
+    return Math.round(accuracy);
   };
 
   const getPointAtPosition = (x: number, y: number): Point | undefined => {
@@ -250,7 +203,7 @@ const ShapeTracing: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyL
         setLines(newLines);
         
         if (currentPoint + 1 === points.length) {
-          const drawingAccuracy = calculateAccuracy(newLines);
+          const drawingAccuracy = calculateAccuracy();
           handleCompletion(drawingAccuracy);
         } else {
           setCurrentPoint(currentPoint + 1);
@@ -350,7 +303,7 @@ const ShapeTracing: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyL
         setLines(newLines);
         
         if (currentPoint + 1 === points.length) {
-          const drawingAccuracy = calculateAccuracy(newLines);
+          const drawingAccuracy = calculateAccuracy();
           handleCompletion(drawingAccuracy);
         } else {
           setCurrentPoint(currentPoint + 1);

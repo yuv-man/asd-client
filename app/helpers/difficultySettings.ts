@@ -24,15 +24,15 @@ export const catchObjectSettings = {
 
   export const shapeTracingSettings = {
     easy: {
-      maxDeviation: 40,
+      maxDeviation: 50,
       accuracyThreshold: 75
     },
     medium: {
-      maxDeviation: 30,
+      maxDeviation: 40,
       accuracyThreshold: 85
     },
     hard: {
-      maxDeviation: 20,
+      maxDeviation: 30,
       accuracyThreshold: 90
     }
   }
