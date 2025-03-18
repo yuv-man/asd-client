@@ -223,9 +223,9 @@ export const SHAPES: Record<string, Shape> = {
       ctx.beginPath();
       ctx.moveTo(150, 75);
       // Right half
-      ctx.bezierCurveTo(180, 0, 270, 70, 150, 220);
+      ctx.bezierCurveTo(200, 0, 330, 70, 150, 220);
       // Left half
-      ctx.bezierCurveTo(30, 70, 120, 0, 150, 75);
+      ctx.bezierCurveTo(-40, 70, 120, 0, 150, 75);
       ctx.closePath();
     }
   },

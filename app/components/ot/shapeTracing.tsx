@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { SHAPES } from '@/app/helpers/shapes';
+import { SHAPES } from '@/app/helpers/shapesToTrace';
 import { RotateCcw, CheckCircle2, XCircle } from 'lucide-react';
 import { CardProps, CardContentProps, ExerciseProps } from '@/types/props';
 import { shapeTracingSettings } from '@/app/helpers/difficultySettings';
