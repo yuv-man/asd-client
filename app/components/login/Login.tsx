@@ -6,7 +6,7 @@ import { useUserStore } from '@/store/userStore';
 import bgLogin from '@/assets/backgrounf-login.png';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { lilitaOne, wendyOne } from '@/assets/fonts';
+import { lilitaOne } from '@/assets/fonts';
 import AgeSelector from '../../ageSelector';
 import { avatars } from '../../helpers/avatars';
 import { User } from '@/types/types';
@@ -38,6 +38,7 @@ const Login = () => {
         age: parseInt(formData.age),
         avatarUrl: formData.avatarStyle,
         lastLogin: new Date(),
+        language: 'en',
         dailyUsage: [{
           date: new Date(),
           totalTimeSpentMinutes: 0,

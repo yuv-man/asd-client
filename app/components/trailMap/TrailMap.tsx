@@ -4,14 +4,9 @@ import './TrailMap.sass';
 import Image from 'next/image';
 import balloon from '@/assets/airballoon.svg';
 import { FaCloud, FaCog } from 'react-icons/fa';
-import { Session } from '../../../types/types'
+import { TrailMapProps } from '@/types/props';
 
-interface TrailMapProps {
-  sessions: Session[];
-  onSessionSelect: (sessionId: string) => void;
-  currentPosition: number;
-  onSettingsClick?: () => void;
-}
+
 
 export const TrailMap: React.FC<TrailMapProps> = ({
   sessions,

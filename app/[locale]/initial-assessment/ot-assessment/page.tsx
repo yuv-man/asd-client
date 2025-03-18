@@ -7,7 +7,7 @@ import Image from 'next/image';
 import { useUserStore } from '@/store/userStore';
 import { Exercise, ExerciseType } from '@/types/types';
 import monkey from '@/assets/animals/monkey.svg';
-import { getExerciseComponent } from '../../helpers/exerciseComponents';
+import { getExerciseComponent } from '../../../helpers/exerciseComponents';
 import { exercisesAPI } from '@/services/api'
 import ResultModal from '@/app/components/common/ResultsModal';
 

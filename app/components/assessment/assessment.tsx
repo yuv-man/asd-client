@@ -13,7 +13,7 @@ import { AreaType } from '@/types/types';
 const InitialAssessment = () => {
   const router = useRouter();
   const [selectedType, setSelectedType] = useState<string | null>(null);
-  const { user } = useUserStore();
+  const { user, setUser } = useUserStore();
   const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {

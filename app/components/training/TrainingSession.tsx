@@ -37,15 +37,15 @@ const TrainingSession = ({ session, onComplete }: TrainingSessionProps) => {
     }
   }, [user]);
   
-  const handleExerciseComplete = (score: number) => {
-    const newScores = { ...scores, [exercises[currentExercise].type]: score };
+  const handleExerciseComplete = (result: { score: number; metrics?: { accuracy: number; timeInSeconds: number; attempts: number; } | undefined }) => {
+    const newScores = { ...scores, [exercises[currentExercise].type]: result.score };
     setScores(newScores);
     const now = new Date()
     const attemp = {
       userId: user?._id,
       exerciseId: exercises[currentExercise]._id,
       difficultyLevel: user?.areasProgress[exercises[currentExercise].area].difficultyLevel,
-      score: score,
+      score: result.score,
       area: exercises[currentExercise].area,
       isTest: false,
       startTime: startTime,

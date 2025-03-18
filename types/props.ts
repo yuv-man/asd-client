@@ -1,4 +1,4 @@
-import { User } from './types';
+import { Session, User } from './types';
 
 export interface TherapyAreaProps {
     title: string;
@@ -29,6 +29,7 @@ export interface TherapyAreaProps {
   export interface ProfileProps {
     user: User | null;
     onSave?: (data: { 
+      _id: string;
       name: string; 
       parentEmail: string; 
       parentPhone: string; 
@@ -61,4 +62,11 @@ export interface TherapyAreaProps {
     position: { x: number; y: number };
     popped: boolean;
     onClick: (id: number, color: string) => void;
+  }
+
+  export interface TrailMapProps {
+    sessions: Session[];
+    onSessionSelect: (sessionId: string) => void;
+    currentPosition: number;
+    onSettingsClick?: () => void;
   }

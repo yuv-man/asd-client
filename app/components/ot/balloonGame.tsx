@@ -199,7 +199,7 @@ const BalloonGame: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyLe
 
   useEffect(() => {
     if (timeLeft === 0) {
-      onComplete(Math.round(score));
+      onComplete?.({ score: Math.round(score) });
     }
   }, [timeLeft, score, onComplete]);
 

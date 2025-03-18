@@ -70,7 +70,7 @@ const ProblemSolvingExercise: React.FC<ExerciseProps> = ({ onComplete, isTest, d
     const checkIfSolved = (puzzle: PuzzlePiece[]) => {
         if (puzzle.every((piece: PuzzlePiece, index: number) => piece.originalIndex === index)) {
             setSolved(true);
-            onComplete(calculateScore());
+            onComplete?.({ score: calculateScore() });
         }
     };
 

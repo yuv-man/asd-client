@@ -1,17 +1,22 @@
 'use client';
-
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import './setting.sass'
-import Dashboard from '../components/setting/dashboard';
-import Profile from '../components/setting/profile';
+import Dashboard from '../../components/setting/dashboard';
+import Profile from '../../components/setting/profile';
 import { useUserStore } from '@/store/userStore'
 import { userAPI } from '@/services/api';
+import { useTranslations } from 'next-intl';  
 
-const SettingsPage = () => {
+const SettingsPage = ({ params }: { params: { locale: string } }) => {
+  return <ClientSettingsContent />;
+};
+
+const ClientSettingsContent = () => {
   const [activeTab, setActiveTab] = useState('profile');
   const [isHydrated, setIsHydrated] = useState(false);
   const {user, setUser} = useUserStore()
+  const t = useTranslations();
 
   useEffect(() => {
     if (user !== undefined) {
@@ -19,9 +24,11 @@ const SettingsPage = () => {
     }
   }, [user]);
 
-  const handleProfileSave = (data: any) => {
-    setUser(data);
-    userAPI.update(data);
+  const handleProfileSave = async (data: any) => {
+    const res = await userAPI.update(data);
+    if (res.status === 200) {
+      setUser(res.data);
+    }
   };
 
   if (!isHydrated) return <p>Loading...</p>;
@@ -41,7 +48,7 @@ const SettingsPage = () => {
                         } px-3 py-2 font-medium nav`}
                         onClick={() => setActiveTab('profile')}
                     >
-                        Profile
+                        {t('setting.profile')}
                     </button>
                     <button
                         className={`nav ${
@@ -51,7 +58,7 @@ const SettingsPage = () => {
                         } px-3 py-2 font-medium`}
                         onClick={() => setActiveTab('dashboard')}
                     >
-                        Dashboard
+                        {t('setting.dashboard')}
                     </button>
               </div>
               <Link
@@ -59,7 +66,7 @@ const SettingsPage = () => {
                 className="text-gray-500 hover:text-gray-700 mr-6"
                 >
                 <span className="flex items-center">
-                    <span className="ml-1">Back</span>
+                    <span className="ml-1">{t('setting.back')}</span>
                     </span>
                 </Link>
             </div>

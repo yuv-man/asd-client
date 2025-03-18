@@ -1,0 +1,41 @@
+{
+    "common": {
+      "settings": "הגדרות",
+      "language": "שפה",
+      "save": "שמור שינויים"
+    },
+    "settings": {
+      "title": "הגדרות משתמש",
+      "languagePreference": "העדפת שפה",
+      "english": "אנגלית",
+      "hebrew": "עברית",
+      "saveSuccess": "ההגדרות נשמרו בהצלחה"
+    },
+    "home": {
+      "welcome": "ברוכים הבאים לאפליקציה שלנו",
+      "description": "זוהי אפליקציה רב-לשונית"
+    },
+    "setting": {
+      "back": "חזרה",
+      "profile": "פרופיל",
+      "dashboard": "לוח בקרה",
+      "Profile_Settings": "הגדרות פרופיל",
+      "Personal_Information": "מידע אישי",
+      "Name": "שם",
+      "Email": "אימייל",
+      "Phone": "טלפון",
+      "Age": "גיל",
+      "Therapy_Areas": "קטגוריות טיפול",
+      "Cognitive_Therapy": "משחקי הגיון",
+      "Speech_Therapy": "טיפול תקשורתי",
+      "Occupational_Therapy": "ריפוי בעיסוק",
+      "Number_of_Exercises": "מספר תרגילים לפעילות",
+      "Level": "רמה",
+      "English": "אנגלית",
+      "Hebrew": "עברית",
+      "Edit_Profile": "עריכת פרופיל",
+      "Cancel": "ביטול",
+      "Save": "שמור", 
+      "Enabled": "פעיל"
+    }
+}

@@ -1,5 +1,5 @@
 
-import Login from '../components/login/Login';
+import Login from '../../components/login/Login';
 
 export const dynamic = 'force-dynamic';
 

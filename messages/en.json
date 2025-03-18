@@ -1,0 +1,41 @@
+{
+    "common": {
+      "settings": "Settings",
+      "language": "Language",
+      "save": "Save Changes"
+    },
+    "settings": {
+      "title": "User Settings",
+      "languagePreference": "Language Preference",
+      "english": "English",
+      "hebrew": "Hebrew",
+      "saveSuccess": "Settings saved successfully"
+    },
+    "home": {
+      "welcome": "Welcome to our app",
+      "description": "This is a multilingual application"
+    },
+    "setting": {
+      "back": "Back",
+      "profile": "Profile",
+      "dashboard": "Dashboard",
+      "Profile_Settings": "Profile Settings",
+      "Personal_Information": "Personal Information",
+      "Name": "Name",
+      "Email": "Email",
+      "Phone": "Phone",
+      "Age": "Age",
+      "Therapy_Areas": "Therapy Areas",
+      "Cognitive_Therapy": "Cognitive Therapy",
+      "Speech_Therapy": "Speech Therapy",
+      "Occupational_Therapy": "Occupational Therapy",
+      "Number_of_Exercises": "Number of Exercises per Session",
+      "Level": "Level",
+      "English": "English",
+      "Hebrew": "Hebrew",
+      "Edit_Profile": "Edit Profile",
+      "Cancel": "Cancel",
+      "Save": "Save",
+      "Enabled": "Enabled"
+    }
+  }

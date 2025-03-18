@@ -1,5 +1,5 @@
 
-import InitialAssessment from '../components/assessment/assessment';
+import InitialAssessment from '../../components/assessment/assessment';
 
 export const dynamic = 'force-dynamic';
 

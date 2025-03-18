@@ -1,6 +1,6 @@
 import { TherapyAreaProps } from '@/types/props';
 import { Award } from 'lucide-react';
-
+import { useTranslations } from 'next-intl';
 export default function TherapyArea({
   title,
   enabled,
@@ -9,6 +9,7 @@ export default function TherapyArea({
   onEnableChange,
   onLevelChange,
 }: TherapyAreaProps) {
+  const t = useTranslations();
   return (
     <div className="flex items-center justify-between rounded-md">
       <div>
@@ -22,7 +23,7 @@ export default function TherapyArea({
                 onChange={(e) => onEnableChange(e.target.checked)}
                 className="mr-2"
               />
-              Enabled
+              {t('setting.Enabled')}
             </label>
             {enabled && <div className="flex items-center">
               <Award className="w-4 h-4" />
@@ -34,7 +35,7 @@ export default function TherapyArea({
               >
                 {[1, 2, 3, 4, 5].map((level) => (
                   <option key={level} value={level}>
-                    Level {level}
+                    {t('setting.Level')} {level}
                   </option>
                 ))}
               </select>
@@ -44,7 +45,7 @@ export default function TherapyArea({
         ) : (
           <div className={`flex items-center gap-2 ${enabled ? '' : 'disabled'}`}>
             <Award className="w-4 h-4" />
-            <p className="mt-1">{`Level ${level}`}</p>
+            <p className="mt-1">{`${t('setting.Level')} ${level}`}</p>
           </div>
         )}
       </div>

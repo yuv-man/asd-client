@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
-import { Lilita_One, Wendy_One } from "next/font/google";
+import { Lilita_One, Wendy_One, Fredoka } from "next/font/google";
 import "./globals.css";
 import './styles/globals.sass';
-
 
 const lilitaOne = Lilita_One({
   weight: '400',
@@ -12,6 +11,11 @@ const lilitaOne = Lilita_One({
 const wendyOne = Wendy_One({
   weight: '400',
   subsets: ['latin'],
+});
+
+const fredoka = Fredoka({
+  weight: '400',
+  subsets: ['hebrew'],
 });
 
 
@@ -26,13 +30,14 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
+
   return (
-    <html lang="en">
+    <html>
       <body
-        className={`${lilitaOne.className} ${wendyOne.className} antialiased`}
+        className={`${lilitaOne.className} ${wendyOne.className} ${fredoka.className} antialiased`}
         suppressHydrationWarning
       >
         {children}

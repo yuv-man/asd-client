@@ -1,5 +1,7 @@
 import type { Configuration } from 'webpack';
 
+const withNextIntl = require('next-intl/plugin')('./i18n.config.js');
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Configure webpack for SASS/SCSS files
@@ -40,4 +42,4 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+export default withNextIntl(nextConfig);

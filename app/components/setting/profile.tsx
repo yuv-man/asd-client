@@ -4,8 +4,11 @@ import { avatars } from '../../helpers/avatars';
 import TherapyArea from '../common/TherapyArea';
 import { ProfileProps } from '@/types/props';
 import { Avatar } from '@/types/types';
+import { LanguageSelector } from '../common/languageSelector';
+import { useTranslations } from 'next-intl';
 
 export default function Profile({ user, onSave }: ProfileProps) {
+  const t = useTranslations();
   const [name, setName] = useState(user?.name || '');
   const [parentEmail, setParentEmail] = useState(user?.parentEmail || '');
   const [parentPhone, setParentPhone] = useState(user?.parentPhone || '')
@@ -36,6 +39,7 @@ export default function Profile({ user, onSave }: ProfileProps) {
     e.preventDefault();
     if (onSave) {
       onSave({ 
+        _id: user?._id || '',
         name, 
         parentEmail, 
         parentPhone, 
@@ -60,8 +64,10 @@ export default function Profile({ user, onSave }: ProfileProps) {
 
   return (
     <div className="max-w-2xl mx-auto p-4">
-      <h1 className="title text-2xl font-bold mb-6">Profile Settings</h1>
-      
+      <div className='flex justify-between items-center'>
+        <h1 className="title text-2xl font-bold mb-6">{t('setting.Profile_Settings')}</h1>
+        <LanguageSelector />
+      </div>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="flex flex-col items-center gap-4">
           <div className="flex flex-wrap gap-4 items-center">
@@ -101,10 +107,10 @@ export default function Profile({ user, onSave }: ProfileProps) {
 
         <div className="flex gap-8">
           <div className="w-1/2 space-y-4">
-            <h2 className="title text-lg font-semibold">Personal Information</h2>
+            <h2 className="title text-lg font-semibold">{t('setting.Personal_Information')}</h2>
             <div>
               <label htmlFor="name" className="block text-sm font-medium">
-                Name
+                {t('setting.Name')}
               </label>
               {isEditing ? (
                 <input
@@ -121,7 +127,7 @@ export default function Profile({ user, onSave }: ProfileProps) {
             </div>
             <div>
               <label htmlFor="age" className="block text-sm font-medium">
-                Age
+                {t('setting.Age')}
               </label>
               {isEditing ? (
                 <input
@@ -137,7 +143,7 @@ export default function Profile({ user, onSave }: ProfileProps) {
             </div>
             <div>
               <label htmlFor="email" className="block text-sm font-medium">
-                Email
+                {t('setting.Email')}
               </label>
               {isEditing ? (
                 <input
@@ -153,7 +159,7 @@ export default function Profile({ user, onSave }: ProfileProps) {
             </div>
             <div>
               <label htmlFor="phone" className="block text-sm font-medium">
-                Phone
+                {t('setting.Phone')}
               </label>
               {isEditing ? (
                 <input
@@ -170,11 +176,11 @@ export default function Profile({ user, onSave }: ProfileProps) {
           </div>
 
           <div className="w-1/2 space-y-4">
-            <h2 className="title text-lg font-semibold">Therapy Areas</h2>
+            <h2 className="title text-lg font-semibold">{t('setting.Therapy_Areas')}</h2>
             
             <div className="grid gap-4">
               <TherapyArea
-                title="Cognitive Therapy"
+                title={t('setting.Cognitive_Therapy')}
                 enabled={enabledCognitive}
                 level={levelCognitive}
                 isEditing={isEditing}
@@ -182,7 +188,7 @@ export default function Profile({ user, onSave }: ProfileProps) {
                 onLevelChange={setLevelCognitive}
               />
               <TherapyArea
-                title="Occupational Therapy"
+                title={t('setting.Occupational_Therapy')}
                 enabled={enabledOt}
                 level={levelOt}
                 isEditing={isEditing}
@@ -190,7 +196,7 @@ export default function Profile({ user, onSave }: ProfileProps) {
                 onLevelChange={setLevelOt}
               />
               <TherapyArea
-                title="Speech Therapy"
+                title={t('setting.Speech_Therapy')}
                 enabled={enabledSpeech}
                 level={levelSpeech}
                 isEditing={isEditing}
@@ -199,7 +205,7 @@ export default function Profile({ user, onSave }: ProfileProps) {
               />
               <div>
               <label htmlFor="numOfExercises" className="block text-sm font-medium">
-                Number of Exercises per Session
+                {t('setting.Number_of_Exercises')}
               </label>
               {isEditing ? (
                 <input
@@ -224,13 +230,13 @@ export default function Profile({ user, onSave }: ProfileProps) {
                 onClick={() => setIsEditing(false)}
                 className="px-4 py-2 border rounded-md"
               >
-                Cancel
+                {t('setting.Cancel')}
               </button>
               <button
                 type="submit"
                 className="px-4 py-2 bg-blue-500 text-white rounded-md"
               >
-                Save
+                {t('setting.Save')}
               </button>
             </>
           ) : (
@@ -239,7 +245,7 @@ export default function Profile({ user, onSave }: ProfileProps) {
               onClick={() => setIsEditing(true)}
               className="px-4 py-2 bg-blue-500 text-white rounded-md"
             >
-              Edit Profile
+              {t('setting.Edit_Profile')}
             </button>
           )}
         </div>

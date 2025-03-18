@@ -4,6 +4,7 @@ export interface User {
     _id?: string;
     name: string;
     age: number;
+    language: string;
     avatarUrl: string;
     parentEmail?: string;
     parentPhone?: string;
