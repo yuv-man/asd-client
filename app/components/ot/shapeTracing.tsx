@@ -3,6 +3,7 @@ import { SHAPES } from '@/app/helpers/shapesToTrace';
 import { RotateCcw, CheckCircle2, XCircle } from 'lucide-react';
 import { CardProps, CardContentProps, ExerciseProps } from '@/types/props';
 import { shapeTracingSettings } from '@/app/helpers/difficultySettings';
+import { Timer } from 'lucide-react';
 
 // Update Card component
 const Card: React.FC<CardProps> = ({ className, children }) => {
@@ -46,6 +47,7 @@ const ShapeTracing: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyL
   // Add new state variables for test mode
   const [startTime, setStartTime] = useState<number | null>(null);
   const [endTime, setEndTime] = useState<number | null>(null);
+  const [timeInSeconds, setTimeInSeconds] = useState(0);
 
   // Modify initial shape selection for test mode
   const initialShape = Object.entries(SHAPES).find(([_, shape]) => shape.difficulty === difficultyLevel)?.[0] as ShapeKey;
@@ -413,6 +415,15 @@ const ShapeTracing: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyL
     });
   }, [points, lines, drawingPath, currentPoint, completed, selectedShape]);
 
+  useEffect(() => {
+    if (startTime) {
+      const interval = setInterval(() => {
+        setTimeInSeconds(Math.round((Date.now() - startTime) / 1000));
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [startTime]);
+
   return (
     <Card className="w-full max-w-lg mx-auto">
       <CardContent className="p-6">
@@ -445,13 +456,13 @@ const ShapeTracing: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyL
                 </button>
               );
             })}
-            <button 
+            {!isTest && <button 
               onClick={resetDrawing}
               className="p-2 rounded-full hover:bg-gray-100"
               title="Try Again"
             >
               <RotateCcw className="w-6 h-6 text-gray-600" />
-            </button>
+            </button>}
           </div>
         </div>
 
@@ -502,11 +513,17 @@ const ShapeTracing: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyL
 
         <div className="mt-4 text-center text-gray-600">
           {!completed ? (
-            `Drag from point ${currentPoint} to point ${currentPoint + 1} (Attempts: ${attempts})`
+            <div>
+              <div>Drag from point {currentPoint} to point {currentPoint + 1} </div>
+              <div className={`flex flex-row ${isTest ? 'justify-between' : 'justify-center'}`}>
+                <div>Attempts: {attempts}</div>
+                {isTest && <div className="flex flex-row items-center"><Timer className="w-4 h-4 mr-2 text-pastelOrange" /> <span>{timeInSeconds}</span></div>}
+              </div>
+            </div>
           ) : accuracy !== null && accuracy >= ACCURACY_THRESHOLD ? (
-            'Choose another shape or reset to try again!'
+            <div>Choose another shape or reset to try again!</div>
           ) : (
-            'Click reset to try again and improve your accuracy!'
+            <div>Click reset to try again and improve your accuracy!</div>
           )}
         </div>
       </CardContent>

@@ -5,6 +5,7 @@ import Image from 'next/image';
 import balloon from '@/assets/airballoon.svg';
 import { FaCloud, FaCog } from 'react-icons/fa';
 import { TrailMapProps } from '@/types/props';
+import { areaTypes } from '@/app/helpers/areas';
 
 export const TrailMap: React.FC<TrailMapProps> = ({
   sessions,
@@ -98,8 +99,41 @@ export const TrailMap: React.FC<TrailMapProps> = ({
           left: 0
         }}
       >
-        
-        {/* Session buttons - map through sessions in reverse order */}
+        {/* Animal buttons */}
+        {Object.values(areaTypes).map((area, index) => {
+          const positions = [
+            { left: '25%', top: '30%' },
+            { left: '75%', top: '20%' },
+            { left: '25%', top: '10%' }
+          ];
+          
+          return (
+            <motion.div
+              key={area.title}
+              className={`animalButton ${area.title.toLowerCase()}`}
+              style={{
+                position: 'absolute',
+                ...positions[index],
+                cursor: 'pointer',
+                zIndex: 2,
+                borderRadius: '50%',
+                backgroundColor: 'transparent',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+              whileHover={{ 
+                scale: 1.1,
+                transition: { duration: 0.2 }
+              }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Image src={area.icon} alt={area.title} width={60} height={60} />  
+            </motion.div>
+          );
+        })}
+
+        {/* Session buttons */}
         {[...sessions].reverse().map((session, index) => {
           const isCurrentOrPrevious = (sessions.length - 1 - index) <= currentPosition;
           const isEven = (sessions.length - 1 - index) % 2 === 0;
@@ -107,45 +141,47 @@ export const TrailMap: React.FC<TrailMapProps> = ({
           const progressPercentage = (completedExercises / session.exercises.length) * 100;
 
           return (
-            <motion.div
-              key={session.id}
-              className={`exerciseButton ${
-                progressPercentage === 100 ? 'completed' : ''
-              } ${session.isAvailable ? 'available' : 'locked'}`}
-              style={{
-                position: 'absolute',
-                left: isEven ? '45%' : '55%',
-                top: `${index * sessionHeight}px`,
-                transform: 'translate(-50%, -50%)',
-                opacity: 1,
-                cursor: session.isAvailable ? 'pointer' : 'not-allowed',
-                zIndex: 2,
-                background: progressPercentage === 100
-                  ? 'linear-gradient(135deg,rgb(139, 222, 174) 0%, #38A169 100%)'
-                  : session.isAvailable
-                    ? 'linear-gradient(135deg, #63B3ED 0%, #4299E1 100%)'
-                    : 'linear-gradient(135deg, #CBD5E0 0%, #A0AEC0 100%)',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '16px',
-                borderRadius: '50%',
-                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-                width: '60px',
-                height: '60px'
-              }}
-              initial={{ scale: 1 }}
-              whileHover={session.isAvailable ? { scale: 1.1 } : {}}
-              onClick={() => session.isAvailable && onSessionSelect(session.id)}
-            >
-              <div className="progressIndicator">
-                <FaCloud size={24} color="white" />
-                <div className="progressText">
-                  {completedExercises}/{session.exercises.length}
+            <React.Fragment key={session.id}>
+              {/* Original exercise button */}
+              <motion.div
+                className={`exerciseButton ${
+                  progressPercentage === 100 ? 'completed' : ''
+                } ${session.isAvailable ? 'available' : 'locked'}`}
+                style={{
+                  position: 'absolute',
+                  left: isEven ? '45%' : '55%',
+                  top: `${index * sessionHeight}px`,
+                  transform: 'translate(-50%, -50%)',
+                  opacity: 1,
+                  cursor: session.isAvailable ? 'pointer' : 'not-allowed',
+                  zIndex: 2,
+                  background: progressPercentage === 100
+                    ? 'linear-gradient(135deg,rgb(139, 222, 174) 0%, #38A169 100%)'
+                    : session.isAvailable
+                      ? 'linear-gradient(135deg, #63B3ED 0%, #4299E1 100%)'
+                      : 'linear-gradient(135deg, #CBD5E0 0%, #A0AEC0 100%)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: '8px',
+                  padding: '16px',
+                  borderRadius: '50%',
+                  boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                  width: '60px',
+                  height: '60px'
+                }}
+                initial={{ scale: 1 }}
+                whileHover={session.isAvailable ? { scale: 1.1 } : {}}
+                onClick={() => session.isAvailable && onSessionSelect(session.id)}
+              >
+                <div className="progressIndicator">
+                  <FaCloud size={24} color="white" />
+                  <div className="progressText">
+                    {completedExercises}/{session.exercises.length}
+                  </div>
                 </div>
-              </div>
-            </motion.div>
+              </motion.div>
+            </React.Fragment>
           );
         })}
 
