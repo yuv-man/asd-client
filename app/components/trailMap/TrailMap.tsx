@@ -6,8 +6,6 @@ import balloon from '@/assets/airballoon.svg';
 import { FaCloud, FaCog } from 'react-icons/fa';
 import { TrailMapProps } from '@/types/props';
 
-
-
 export const TrailMap: React.FC<TrailMapProps> = ({
   sessions,
   onSessionSelect,

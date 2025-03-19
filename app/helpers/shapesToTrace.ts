@@ -1,7 +1,9 @@
-import { Star, Home, Heart, Triangle, Square, Hexagon, Pentagon, Flower, Palette, Cherry } from 'lucide-react';
+import { Star, Home, Heart, Triangle, Square, Hexagon, Pentagon, Flower, Palette } from 'lucide-react';
+import { PiButterfly } from "react-icons/pi";
 
 export interface Shape {
   name: string;
+  previewShape?: (ctx: CanvasRenderingContext2D) => void;
   icon: React.ElementType;
   difficulty: number;
   points: { x: number, y: number, number: number }[];
@@ -279,7 +281,42 @@ export const SHAPES: Record<string, Shape> = {
   // Expert level shapes
   butterfly: {
     name: 'Butterfly',
-    icon: Cherry,
+    previewShape: (ctx: CanvasRenderingContext2D) => {
+      ctx.setLineDash([5, 5]); // Create dashed line effect
+      
+      // Body
+      ctx.beginPath();
+      ctx.moveTo(150, 100);
+      ctx.lineTo(150, 200);
+      
+      // Antennae
+      ctx.moveTo(150, 100);
+      ctx.bezierCurveTo(130, 80, 120, 70, 130, 60);
+      ctx.moveTo(150, 100);
+      ctx.bezierCurveTo(170, 80, 180, 70, 170, 60);
+      
+      // Upper wings
+      ctx.moveTo(150, 120);
+      ctx.bezierCurveTo(190, 90, 250, 100, 200, 170);
+      ctx.bezierCurveTo(170, 150, 160, 130, 150, 120);
+      
+      ctx.moveTo(150, 120);
+      ctx.bezierCurveTo(110, 90, 50, 100, 100, 170);
+      ctx.bezierCurveTo(130, 150, 140, 130, 150, 120);
+      
+      // Lower wings
+      ctx.moveTo(150, 170);
+      ctx.bezierCurveTo(180, 180, 240, 200, 190, 230);
+      ctx.bezierCurveTo(160, 220, 150, 200, 150, 170);
+      
+      ctx.moveTo(150, 170);
+      ctx.bezierCurveTo(120, 180, 60, 200, 110, 230);
+      ctx.bezierCurveTo(140, 220, 150, 200, 150, 170);
+      
+      ctx.stroke();
+      ctx.setLineDash([]); // Reset line style  
+    },
+    icon: PiButterfly,
     difficulty: 4,
     points: [
       { x: 150, y: 60, number: 1 },    // Top antenna left
@@ -312,33 +349,48 @@ export const SHAPES: Record<string, Shape> = {
     },
     drawShape: (ctx: CanvasRenderingContext2D) => {
       ctx.beginPath();
+      
       // Body
+      ctx.moveTo(150, 100); // Head
+      ctx.lineTo(150, 200); // Body line
+      
+      // Left antenna
       ctx.moveTo(150, 100);
+      ctx.lineTo(130, 80);
+      ctx.lineTo(150, 60);
+      
+      // Right antenna
+      ctx.moveTo(150, 100);
+      ctx.lineTo(170, 80);
+      ctx.lineTo(190, 60);
+      
+      // Right upper wing
+      ctx.moveTo(170, 110);
+      ctx.lineTo(230, 80);
+      ctx.lineTo(250, 130);
+      ctx.lineTo(230, 170);
+      ctx.lineTo(190, 150);
+      
+      // Right lower wing
+      ctx.moveTo(190, 150);
+      ctx.lineTo(220, 190);
+      ctx.lineTo(240, 220);
+      ctx.lineTo(190, 230);
       ctx.lineTo(150, 200);
       
-      // Antennae
-      ctx.moveTo(150, 100);
-      ctx.bezierCurveTo(130, 80, 120, 70, 130, 60);
-      ctx.moveTo(150, 100);
-      ctx.bezierCurveTo(170, 80, 180, 70, 170, 60);
+      // Left lower wing
+      ctx.moveTo(150, 200);
+      ctx.lineTo(110, 230);
+      ctx.lineTo(60, 220);
+      ctx.lineTo(80, 190);
+      ctx.lineTo(110, 150);
       
-      // Upper wings
-      ctx.moveTo(150, 120);
-      ctx.bezierCurveTo(190, 90, 250, 100, 200, 170);
-      ctx.bezierCurveTo(170, 150, 160, 130, 150, 120);
-      
-      ctx.moveTo(150, 120);
-      ctx.bezierCurveTo(110, 90, 50, 100, 100, 170);
-      ctx.bezierCurveTo(130, 150, 140, 130, 150, 120);
-      
-      // Lower wings
-      ctx.moveTo(150, 170);
-      ctx.bezierCurveTo(180, 180, 240, 200, 190, 230);
-      ctx.bezierCurveTo(160, 220, 150, 200, 150, 170);
-      
-      ctx.moveTo(150, 170);
-      ctx.bezierCurveTo(120, 180, 60, 200, 110, 230);
-      ctx.bezierCurveTo(140, 220, 150, 200, 150, 170);
+      // Left upper wing
+      ctx.moveTo(110, 150);
+      ctx.lineTo(70, 170);
+      ctx.lineTo(50, 130);
+      ctx.lineTo(70, 80);
+      ctx.lineTo(130, 110);
       
       ctx.closePath();
     }

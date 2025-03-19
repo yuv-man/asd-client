@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { TrailMap } from '@/app/components/trailMap/TrailMap';
 import { useRouter } from 'next/navigation';
 import Modal from '@/app/components/common/Modal';
-import { Session } from '../../types/types'
+import { Session } from '@/types/types'
 import { useSessions } from '@/store/userStore'
 
 // Move this type definition to a separate types file if needed
@@ -18,30 +18,31 @@ export default function TrainingPage() {
 
   useEffect(() => {
     const idx = sessions.findIndex(s => s.isCompleted === false)
-    if(idx !== -1)
+    if(idx !== -1) {
       setSelectedSession(sessions[idx])
       setCurrentPosition(idx)
+    }
   }, [sessions])
 
-  const handleSessionSelect = (sessionId: string) => {
+  const handleSessionSelect = useCallback((sessionId: string) => {
     const session = sessions.find(s => s.id === sessionId);
     if (session && session.isAvailable) {
       setSelectedSession(session);
       setCurrentSession(session)
       setIsModalOpen(true);
     }
-  };
+  }, [sessions, setCurrentSession]);
 
-  const handleStartSession = () => {
+  const handleStartSession = useCallback(() => {
     if (selectedSession) {
       setIsModalOpen(false);
       router.push(`/training/session`);
     }
-  };
+  }, [selectedSession, router]);
 
-  const handleSettingClicked = () => {
+  const handleSettingClicked = useCallback(() => {
     router.push('/setting');
-  }
+  }, [router]);
 
   return (
     <div className="container mx-auto">

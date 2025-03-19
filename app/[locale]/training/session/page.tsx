@@ -3,19 +3,20 @@
 import { Session } from '@/types/types';
 import TrainingSession from '@/app/components/training/TrainingSession'
 import { useSessions } from '@/store/userStore'
+import { useCallback } from 'react'
 
-export default function TrainingSessionPage() {
+function TrainingSessionPage() {
     const { currentSession, updateSession, moveToNextSession } = useSessions();
   
     if (!currentSession) {
         return <div>Loading...</div>;
     }
-
-    const handleSessionCompletion = async (session: Session) => {
+    
+    const handleSessionCompletion = useCallback(async (session: Session) => {
         const updatedSession = {...session, isCompleted: true};
         updateSession(updatedSession);
         await moveToNextSession(session.id);
-    }
+    }, [updateSession, moveToNextSession]);
 
     return (
         <main className="flex min-h-screen flex-col items-center p-24">
@@ -24,3 +25,5 @@ export default function TrainingSessionPage() {
         </main>
     )
 }
+
+export default TrainingSessionPage;
