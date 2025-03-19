@@ -69,4 +69,5 @@ export interface TherapyAreaProps {
     onSessionSelect: (sessionId: string) => void;
     currentPosition: number;
     onSettingsClick?: () => void;
+    onQuizSelect: (quizId: string) => void;
   }

@@ -62,6 +62,13 @@ export interface TestResult {
   recommendations: string[];
 }
 
+export interface Quiz {
+  id: string;
+  title: string;
+  exercises: Exercise[];
+  area: "ot" | "speech" | "cognitive";
+}
+
 export interface Exercise {
   _id: string;
   title: string;

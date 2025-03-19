@@ -1,6 +1,6 @@
-export const areaTypes = Object.freeze({
-        occupationalTherapy: "occupationalTherapy",
-        speechTherapy: "speechTherapy",
-        cognitive: "cognitive"
+export const areaTypesEnum = Object.freeze({
+        ot: "Occupational Therapy",
+        speech: "Speech Therapy",
+        cognitive: "Cognitive"
     
 })

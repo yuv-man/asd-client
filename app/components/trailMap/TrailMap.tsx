@@ -1,4 +1,5 @@
-import React from 'react';
+'use client'
+import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import './TrailMap.sass';
 import Image from 'next/image';
@@ -12,6 +13,7 @@ export const TrailMap: React.FC<TrailMapProps> = ({
   onSessionSelect,
   currentPosition,
   onSettingsClick,
+  onQuizSelect
 }) => {
   // Add scroll position state
   const [scrollY, setScrollY] = React.useState(0);
@@ -21,7 +23,7 @@ export const TrailMap: React.FC<TrailMapProps> = ({
   const [viewportOffset, setViewportOffset] = React.useState(0);
 
   // Set viewport offset on mount and window resize
-  React.useEffect(() => {
+  useEffect(() => {
     const updateOffset = () => {
       setViewportOffset(document.documentElement.clientHeight / 2);
     };
@@ -38,11 +40,15 @@ export const TrailMap: React.FC<TrailMapProps> = ({
   );
 
   // Update scroll position when currentPosition changes
-  React.useEffect(() => {
+  useEffect(() => {
     if (containerRef.current) {
       setScrollY(targetScroll);
     }
   }, [currentPosition, targetScroll]);
+
+  const handleQuizSelect = (areaId: string) => {
+    onQuizSelect(areaId)
+  };
 
   return (
     <div 
@@ -111,6 +117,7 @@ export const TrailMap: React.FC<TrailMapProps> = ({
             <motion.div
               key={area.title}
               className={`animalButton ${area.title.toLowerCase()}`}
+              onClick={() => handleQuizSelect(area.id)}
               style={{
                 position: 'absolute',
                 ...positions[index],
