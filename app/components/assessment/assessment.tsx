@@ -5,22 +5,36 @@ import { useRouter } from 'next/navigation';
 import { useUserStore } from '@/store/userStore';
 import Image from 'next/image';
 import hello from '@/assets/hello.svg';
-import { wendyOne } from '@/assets/fonts';
 import { areaTypes } from '@/app/helpers/areas';
 import { AreaType } from '@/types/types';
+import { useInitialAssessmentStore } from '@/store/userStore';
 
 
 const InitialAssessment = () => {
   const router = useRouter();
+  const [areas, setAreas] = useState<AreaType[]>(Object.values(areaTypes));
   const [selectedType, setSelectedType] = useState<string | null>(null);
   const { user, setUser } = useUserStore();
   const [isHydrated, setIsHydrated] = useState(false);
+  const { initialAssessment, setInitialAssessment } = useInitialAssessmentStore();
 
   useEffect(() => {
     if (user !== undefined) {
       setIsHydrated(true);
     }
   }, [user]);
+
+  useEffect(() => {
+    if (initialAssessment) {
+      setAreas(prevAreas => {
+        const completedAreas = ['ot', 'speech', 'cognitive'] as const;
+        return prevAreas.filter(area => {
+          return !completedAreas.includes(area.id as typeof completedAreas[number]) || 
+                 !initialAssessment.areas[area.id as keyof typeof initialAssessment.areas].isCompleted;
+        });
+      });
+    }
+  }, [initialAssessment]);
 
   const handleStartAssessment = () => {
     if (selectedType) {
@@ -36,21 +50,21 @@ const InitialAssessment = () => {
         animate={{ opacity: 1, y: 0 }}
         className="text-center mb-12"
       >
-        <div className={`flex items-center text-2xl justify-start gap-4 text-darkPurple ${wendyOne.className}`}>
+        <div className={`flex items-center text-2xl justify-start gap-4 text-darkPurple`}>
             <Image src={hello} alt="Hello" width={50} height={50} />
             <div>Hello <b>{user?.name}</b></div>
         </div>
-        <h1 className={`text-3xl font-bold text-darkPurple mb-4 ${wendyOne.className}`}>
+        <h1 className={`text-3xl font-bold text-darkPurple mb-4`}>
           Let's Start Your Assessment
         </h1>
-        <p className={`text-md text-gray-400 ${wendyOne.className}`}>
+        <p className={`text-md text-gray-400`}>
           Choose an assessment type to begin. <br />We'll evaluate your current abilities
           and create a personalized improvement plan.
         </p>
       </motion.div>
 
       <div className="grid md:grid-cols-3 gap-6">
-        {Object.values(areaTypes).map((type: AreaType) => (
+        {areas.map((type: AreaType) => (
           <motion.div
             key={type.id}
             whileHover={{ scale: 1.02 }}

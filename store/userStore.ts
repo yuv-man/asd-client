@@ -3,7 +3,7 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 import { User, Session } from '../types/types';
 import { exercisesAPI } from '../services/api';
 import { calculatePosition } from '../services/calculatePosition';
-import { Exercise } from '../types/types';
+import { Exercise, InitialAssessment } from '../types/types';
 
 export const useUserStore = create<{
   user: User | null;
@@ -138,7 +138,29 @@ export const useSessions = create<SessionStore>()(
   )
 );
 
-// Add this line to export the store instance
 export const sessionStore = useSessions.getState();
 
+export const useInitialAssessmentStore = create<{
+  initialAssessment: InitialAssessment;
+  setInitialAssessment: (initialAssessment: InitialAssessment) => void;
+}>()(
+  persist(
+    (set) => ({
+      initialAssessment: {
+        userId: '',
+        areas: {
+          ot: { score: 0, isCompleted: false },
+          speech: { score: 0, isCompleted: false },
+          cognitive: { score: 0, isCompleted: false }
+        }
+      },
+      setInitialAssessment: (initialAssessment: InitialAssessment) => set({ initialAssessment }),
+    }),
+    {
+      name: 'initial-assessment-storage',
+      storage: createJSONStorage(() => localStorage),
+    }
+  )
+);
 
+export const initialAssessmentStore = useInitialAssessmentStore.getState();

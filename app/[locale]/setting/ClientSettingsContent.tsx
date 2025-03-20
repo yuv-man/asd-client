@@ -6,6 +6,9 @@ import { useUserStore } from '@/store/userStore'
 import { userAPI } from '@/services/api';
 import { useTranslations, useLocale } from 'next-intl';
 import Link from 'next/link';
+import Image from 'next/image';
+import logo from '@/public/wonderkid.svg';
+
 
 const ClientSettingsContent = () => {
     const [activeTab, setActiveTab] = useState('profile');
@@ -36,6 +39,7 @@ const ClientSettingsContent = () => {
             <div className="flex items-center py-4">
               <div className="flex flex-row justify-between w-500 items-center">
                   <div className="flex space-x-8" >
+                    <Image src={logo} alt="logo" width={15} height={15} />
                       <button
                           className={`${
                           activeTab === 'profile'

@@ -6,19 +6,21 @@ import fish from '@/assets/memoryIcons/fish.svg';
 import steak from '@/assets/memoryIcons/steak.svg';
 import poachEgg from '@/assets/memoryIcons/poached-eggs.svg';
 import Head from 'next/head';
-import './styles/catchObjects.sass';
+import './styles/catchObjects.scss';
 import { catchObjectSettings } from '../../helpers/difficultySettings';
 import { FallingObject } from '@/types/types';
 import { ExerciseProps } from '@/types/props';
 import Image from 'next/image';
 import basket from '@/assets/cars/shopping-card.svg';
-type Difficulty = 'easy' | 'medium' | 'hard';
+import { difficultyEnum } from '@/enums/enumDifficulty';
+
+type DifficultyLevel = 'easy' | 'medium' | 'hard';
 
 const CatchObjects: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyLevel }) => {
   const [score, setScore] = useState(0);
   const [gameActive, setGameActive] = useState(false);
   const [gameOver, setGameOver] = useState(false);
-  const [difficulty, setDifficulty] = useState<Difficulty>('medium');
+  const [difficulty, setDifficulty] = useState<Number>(difficultyLevel || 1);
   const [fallingObjects, setFallingObjects] = useState<FallingObject[]>([]);
   const [basketPosition, setBasketPosition] = useState(50);
   const [timeLeft, setTimeLeft] = useState(30); // 60 seconds game duration
@@ -95,7 +97,8 @@ const CatchObjects: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyL
   useEffect(() => {
     if (!gameActive) return;
     
-    const currentSettings = catchObjectSettings[difficulty as keyof typeof catchObjectSettings];
+    const difficultyKey = difficultyEnum[difficulty as 1 | 2 | 3] as DifficultyLevel;
+    const currentSettings = catchObjectSettings[difficultyKey];
     
     const generateObject = () => {
       const objectTypes = currentSettings.objectTypes;
@@ -128,7 +131,8 @@ const CatchObjects: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyL
       const updatedObjects = prevObjects.map(obj => {
         if (obj.caught || obj.missed) return obj;
         
-        const newTop = obj.top + (catchObjectSettings[difficulty as Difficulty].fallSpeed / 10);
+        const difficultyKey = difficultyEnum[difficulty as 1 | 2 | 3] as DifficultyLevel;
+        const newTop = obj.top + (catchObjectSettings[difficultyKey].fallSpeed / 10);
         
         if (newTop >= 75 && newTop <= 85) {
           const objectCenter = obj.position + 4;
@@ -175,7 +179,7 @@ const CatchObjects: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyL
   return (
     <div className="container">
       <Head>
-        <title>Catch Falling Objects</title>
+        <title className='catchObjects'>Catch Falling Objects</title>
         <meta name="description" content="Occupational therapy game to help with motor skills" />
         <link rel="icon" href="/favicon.ico" />
       </Head>

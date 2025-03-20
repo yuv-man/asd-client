@@ -7,7 +7,7 @@ import { Avatar } from '@/types/types';
 import { LanguageSelector } from '../common/languageSelector';
 import { useTranslations } from 'next-intl';
 
-export default function Profile({ user, onSave }: ProfileProps) {
+function Profile({ user, onSave }: ProfileProps) {
   const t = useTranslations();
   const [name, setName] = useState(user?.name || '');
   const [parentEmail, setParentEmail] = useState(user?.parentEmail || '');
@@ -17,13 +17,13 @@ export default function Profile({ user, onSave }: ProfileProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [levelCognitive, setLevelCognitive] = useState(user?.areasProgress?.cognitive
     .difficultyLevel || 1)
-  const [levelOt, setLevelOt] = useState(user?.areasProgress?.occupationalTherapy
+  const [levelOt, setLevelOt] = useState(user?.areasProgress?.ot
     .difficultyLevel || 1)
-  const [levelSpeech, setLevelSpeech] = useState(user?.areasProgress?.speechTherapy
+  const [levelSpeech, setLevelSpeech] = useState(user?.areasProgress?.speech
     .difficultyLevel || 1)
   const [enabledCognitive, setEnabledCognitive] = useState(user?.areasProgress?.cognitive?.enabled ?? true);
-  const [enabledOt, setEnabledOt] = useState(user?.areasProgress?.occupationalTherapy?.enabled ?? true);
-  const [enabledSpeech, setEnabledSpeech] = useState(user?.areasProgress?.speechTherapy?.enabled ?? true);
+  const [enabledOt, setEnabledOt] = useState(user?.areasProgress?.ot?.enabled ?? true);
+  const [enabledSpeech, setEnabledSpeech] = useState(user?.areasProgress?.speech?.enabled ?? true);
   const [numOfExercises, setNumOfExercises] = useState(3);
 
   useEffect(() => {
@@ -228,13 +228,13 @@ export default function Profile({ user, onSave }: ProfileProps) {
               <button
                 type="button"
                 onClick={() => setIsEditing(false)}
-                className="px-4 py-2 border rounded-md"
+                className="px-4 py-2 border rounded-md setting-button"
               >
                 {t('setting.Cancel')}
               </button>
               <button
                 type="submit"
-                className="px-4 py-2 bg-blue-500 text-white rounded-md"
+                className="px-4 py-2 bg-blue-500 text-white rounded-md setting-button"
               >
                 {t('setting.Save')}
               </button>
@@ -243,7 +243,7 @@ export default function Profile({ user, onSave }: ProfileProps) {
             <button
               type="button"
               onClick={() => setIsEditing(true)}
-              className="px-4 py-2 bg-blue-500 text-white rounded-md"
+              className="px-4 py-2 bg-blue-500 text-white rounded-md setting-button"
             >
               {t('setting.Edit_Profile')}
             </button>
@@ -253,3 +253,5 @@ export default function Profile({ user, onSave }: ProfileProps) {
     </div>
   );
 }
+
+export default Profile;

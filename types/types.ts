@@ -20,7 +20,7 @@ export interface User {
       sessionsCount: number;
     }[];
     areasProgress: {
-      occupationalTherapy: {
+      ot: {
         difficultyLevel: number;
         overallScore?: number;
         exercisesCompleted: number;
@@ -28,7 +28,7 @@ export interface User {
         lastActivity?: Date;
         enabled: boolean;
       };
-      speechTherapy: {
+      speech: {
         difficultyLevel: number;
         overallScore?: number;
         exercisesCompleted: number;
@@ -50,7 +50,7 @@ export interface User {
 export interface Assessment {
   id: string;
   userId: string;
-  type: 'OT' | 'SPEECH' | 'COGNITIVE';
+  type: 'ot' | 'speech' | 'cognitive';
   score: number;
   date: string;
 }
@@ -73,12 +73,53 @@ export interface Exercise {
   _id: string;
   title: string;
   description: string;
-  area: "occupationalTherapy" | "speechTherapy" | "cognitive";
+  area: "ot" | "speech" | "cognitive";
   type: ExerciseType;
   isCompleted?: boolean;
   component?: React.FC<ExerciseProps>;
 }
 
+export interface WeeklySummary {
+  userId: string;
+  date: Date;
+  totalTimeSpentMinutes: number;
+  exercisesCompleted: number;
+  exerciseAttempts: number;
+  areaBreakdown: {
+    ot: {
+      timeSpentMinutes: number;
+      exercisesCompleted: number;
+      averageScore: number;
+    },
+    speech: {
+      timeSpentMinutes: number;
+      exercisesCompleted: number;
+      averageScore: number;
+    },
+    cognitive: {
+      timeSpentMinutes: number;
+      exercisesCompleted: number;
+      averageScore: number;
+    }
+  },
+  recentExercises: [{
+    exerciseId: string,
+    title: string,
+    area: string,
+    difficultyLevel: number,
+    score: number,
+    timestamp: Date
+  }]
+}
+
+export interface Score {
+  score: number;
+  metrics?: {
+    accuracy?: number;
+    timeInSeconds?: number;
+    attempts?: number;
+  };
+}
 export interface Session {
   id: string;
   exercises: Exercise[];
@@ -129,3 +170,20 @@ export interface BalloonType {
 
 export type ExerciseType = 'attention' | 'memory' | 'problem-solving' | 'catch-objects' | 'shape-tracing' | 'balloon-game';
   
+export interface InitialAssessment {
+  userId: string;
+  areas: {
+    ot: {
+      score: number;
+      isCompleted: boolean;
+    },
+    speech: {
+      score: number;
+      isCompleted: boolean;
+    },
+    cognitive: {
+      score: number;
+      isCompleted: boolean;
+    }
+  }
+} 

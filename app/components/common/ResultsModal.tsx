@@ -14,7 +14,7 @@ interface ResultsModalProps {
 const ResultsModal = ({ isOpen, onClose, score, area, exerciseResults }: ResultsModalProps) => {
   return (
     <AnimatePresence>
-      {isOpen && (
+      
         <Dialog
           as={motion.div}
           initial={{ opacity: 0 }}
@@ -22,10 +22,9 @@ const ResultsModal = ({ isOpen, onClose, score, area, exerciseResults }: Results
           exit={{ opacity: 0 }}
           className="fixed inset-0 z-50 overflow-y-auto"
           onClose={onClose}
+          open={isOpen}
         >
           <div className="min-h-screen px-4 text-center">
-            <div className="fixed inset-0 bg-black opacity-30" />
-            
             <span className="inline-block h-screen align-middle" aria-hidden="true">&#8203;</span>
             
             <motion.div
@@ -34,8 +33,8 @@ const ResultsModal = ({ isOpen, onClose, score, area, exerciseResults }: Results
               exit={{ scale: 0.95 }}
               className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl"
             >
-              <Dialog.Title as="h3" className="text-2xl font-medium leading-6 text-gray-900 mb-4">
-                Assessment Results
+              <Dialog.Title as="h3" className="text-2xl font-medium leading-6 text-pastelOrange mb-4 text-center">
+                {area.toUpperCase()} Assessment Results
               </Dialog.Title>
 
               <div className="mt-4">
@@ -59,14 +58,15 @@ const ResultsModal = ({ isOpen, onClose, score, area, exerciseResults }: Results
                   onClick={onClose}
                   className="mt-6 w-full bg-purple-600 text-white px-4 py-2 rounded-full hover:bg-purple-700 flex items-center justify-center"
                 >
-                  Continue to Training
+                  Continue
                   <ArrowRight className="ml-2 w-4 h-4" />
                 </button>
               </div>
             </motion.div>
           </div>
         </Dialog>
-      )}
+        <div className="fixed inset-0 bg-black/50" />
+
     </AnimatePresence>
   );
 };

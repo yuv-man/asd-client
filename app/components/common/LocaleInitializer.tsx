@@ -8,7 +8,7 @@ interface LocaleInitializerProps {
   locale: string;
 }
 
-export default function LocaleInitializer({ children, locale }: LocaleInitializerProps) {
+function LocaleInitializer({ children, locale }: LocaleInitializerProps) {
   const initializeLocale = useLanguageStore((state) => state.initializeLocale);
   
   useEffect(() => {
@@ -18,3 +18,5 @@ export default function LocaleInitializer({ children, locale }: LocaleInitialize
 
   return <>{children}</>;
 }
+
+export default LocaleInitializer;

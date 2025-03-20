@@ -4,6 +4,9 @@ import { RotateCcw, CheckCircle2, XCircle } from 'lucide-react';
 import { CardProps, CardContentProps, ExerciseProps } from '@/types/props';
 import { shapeTracingSettings } from '@/app/helpers/difficultySettings';
 import { Timer } from 'lucide-react';
+import { difficultyEnum } from '@/enums/enumDifficulty';
+
+type DifficultyLevel = 'easy' | 'medium' | 'hard';
 
 // Update Card component
 const Card: React.FC<CardProps> = ({ className, children }) => {
@@ -60,7 +63,7 @@ const ShapeTracing: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyL
   const [attempts, setAttempts] = useState<number>(0);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [drawingPath, setDrawingPath] = useState<Array<{x: number, y: number}>>([]);
-  const [difficulty, setDifficulty] = useState<keyof typeof shapeTracingSettings>('medium');
+  const [difficulty, setDifficulty] = useState<number>(difficultyLevel || 1);
 
   const points = SHAPES[selectedShape].points;
 
@@ -132,7 +135,8 @@ const ShapeTracing: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyL
     });
 
     const averageDeviation = totalDeviation / drawingPath.length;
-    const maxAllowedDeviation = shapeTracingSettings[difficulty].maxDeviation;
+    const difficultyKey = difficultyEnum[difficulty as 1 | 2 | 3] as DifficultyLevel;
+    const maxAllowedDeviation = shapeTracingSettings[difficultyKey].maxDeviation;
     
     // Convert deviation to accuracy percentage
     const accuracy = Math.max(0, Math.min(100, 100 - (averageDeviation / maxAllowedDeviation * 100)));
@@ -194,8 +198,8 @@ const ShapeTracing: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyL
         points[currentPoint - 1], 
         endPoint
       );
-
-      if (pathAccuracy >= shapeTracingSettings[difficulty].accuracyThreshold) {
+      const difficultyKey = difficultyEnum[difficulty as 1 | 2 | 3] as DifficultyLevel;
+      if (pathAccuracy >= shapeTracingSettings[difficultyKey].accuracyThreshold) {
         const newLine = {
           start: points[currentPoint - 1],
           end: endPoint
@@ -296,7 +300,8 @@ const ShapeTracing: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyL
         points[currentPoint - 1], 
         endPoint
       );
-      if (pathAccuracy >= shapeTracingSettings[difficulty].accuracyThreshold) {
+      const difficultyKey = difficultyEnum[difficulty as 1 | 2 | 3] as DifficultyLevel;
+      if (pathAccuracy >= shapeTracingSettings[difficultyKey].accuracyThreshold) {
         const newLine = {
           start: points[currentPoint - 1],
           end: endPoint
@@ -423,6 +428,23 @@ const ShapeTracing: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyL
       return () => clearInterval(interval);
     }
   }, [startTime]);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    // Add non-passive touch event listeners
+    canvas.addEventListener('touchstart', (e) => e.preventDefault(), { passive: false });
+    canvas.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
+    canvas.addEventListener('touchend', (e) => e.preventDefault(), { passive: false });
+
+    // Cleanup
+    return () => {
+      canvas.removeEventListener('touchstart', (e) => e.preventDefault());
+      canvas.removeEventListener('touchmove', (e) => e.preventDefault());
+      canvas.removeEventListener('touchend', (e) => e.preventDefault());
+    };
+  }, []);
 
   return (
     <Card className="w-full max-w-lg mx-auto">

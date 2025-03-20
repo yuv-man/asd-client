@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Lilita_One, Wendy_One, Fredoka } from "next/font/google";
 import "./globals.css";
-import './styles/globals.sass';
+import './styles/globals.scss';
 
 const lilitaOne = Lilita_One({
   weight: '400',

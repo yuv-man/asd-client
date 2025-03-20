@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
-import './TrailMap.sass';
+import './TrailMap.scss';
 import Image from 'next/image';
 import balloon from '@/assets/airballoon.svg';
 import { FaCloud, FaCog } from 'react-icons/fa';
@@ -18,6 +18,7 @@ export const TrailMap: React.FC<TrailMapProps> = ({
   // Add scroll position state
   const [scrollY, setScrollY] = React.useState(0);
   const containerRef = React.useRef<HTMLDivElement>(null);
+  const [displayedSessions, setDisplayedSessions] = React.useState(sessions);
 
   const sessionHeight = 100;
   const [viewportOffset, setViewportOffset] = React.useState(0);
@@ -34,9 +35,34 @@ export const TrailMap: React.FC<TrailMapProps> = ({
     return () => window.removeEventListener('resize', updateOffset);
   }, []);
 
+  // Update displayedSessions when sessions prop changes
+  useEffect(() => {
+    setDisplayedSessions(sessions);
+  }, [sessions]);
+
+  // Modify the existing useEffect to depend on sessions
+  useEffect(() => {
+    if (currentPosition >= displayedSessions.length - 1) {
+      // Generate two new sessions
+      const newSessions = Array(2).fill(null).map((_, index) => ({
+        id: `session-${displayedSessions.length + index}`,
+        exercises: Array(3).fill({
+          id: 'exercise',
+          isCompleted: false
+        }),
+        isAvailable: false,
+        isCompleted: false,
+        position: { x: 0, y: 0 },
+        completedExercises: 0
+      }));
+      
+      setDisplayedSessions([...displayedSessions, ...newSessions]);
+    }
+  }, [currentPosition, displayedSessions, sessions]); // Added sessions dependency
+
   const targetScroll = Math.max(
     0,
-    ((sessions.length - currentPosition - 1) * sessionHeight) - viewportOffset + (sessionHeight / 2)
+    ((displayedSessions.length - currentPosition - 1) * sessionHeight) - viewportOffset + (sessionHeight / 2)
   );
 
   // Update scroll position when currentPosition changes
@@ -92,7 +118,7 @@ export const TrailMap: React.FC<TrailMapProps> = ({
         className="scrollContainer"
         drag="y"
         dragConstraints={{
-          top: -(sessions.length * sessionHeight) + viewportOffset,
+          top: -(displayedSessions.length * sessionHeight) + viewportOffset,
           bottom: viewportOffset
         }}
         animate={{ y: -targetScroll }}
@@ -100,7 +126,7 @@ export const TrailMap: React.FC<TrailMapProps> = ({
         style={{ 
           position: 'absolute',
           width: '100%', 
-          height: `${sessions.length * sessionHeight + (viewportOffset * 2)}px`,
+          height: `${displayedSessions.length * sessionHeight + (viewportOffset * 2)}px`,
           top: 0,
           left: 0
         }}
@@ -141,9 +167,9 @@ export const TrailMap: React.FC<TrailMapProps> = ({
         })}
 
         {/* Session buttons */}
-        {[...sessions].reverse().map((session, index) => {
-          const isCurrentOrPrevious = (sessions.length - 1 - index) <= currentPosition;
-          const isEven = (sessions.length - 1 - index) % 2 === 0;
+        {[...displayedSessions].reverse().map((session, index) => {
+          const isCurrentOrPrevious = (displayedSessions.length - 1 - index) <= currentPosition;
+          const isEven = (displayedSessions.length - 1 - index) % 2 === 0;
           const completedExercises = session.exercises.filter(ex => ex.isCompleted).length;
           const progressPercentage = (completedExercises / session.exercises.length) * 100;
 
@@ -196,8 +222,8 @@ export const TrailMap: React.FC<TrailMapProps> = ({
         <motion.div
           className="balloon"
           animate={{
-            left: `${currentPosition % 2 === 0 ? '50%' : '61%'}`,
-            top: `${(sessions.length - currentPosition - 1) * sessionHeight}px`,
+            left: `${currentPosition % 2 === 0 ? '50%' : '60%'}`,
+            top: `${(displayedSessions.length - currentPosition - 1) * sessionHeight}px`,
             transform: 'translate(-50%, -50%)'
           }}
           transition={{ duration: 1, type: 'spring' }}

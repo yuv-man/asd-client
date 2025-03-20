@@ -119,7 +119,7 @@ const TrainingSession = ({ session, onComplete }: TrainingSessionProps) => {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => router.push('/training')}
-                className="bg-gray-200 text-darkPurple px-8 py-3 rounded-full hover:bg-gray-300 flex items-center"
+                className="bg-purple-500 px-8 py-3 rounded-full hover:bg-gray-300 flex items-center"
               >
                 Back to Training
               </motion.button>

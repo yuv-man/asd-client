@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useUserStore } from '@/store/userStore';
-import bgLogin from '@/assets/backgrounf-login.png';
+import bgLogin from '@/assets/background-login.png';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { lilitaOne } from '@/assets/fonts';
@@ -45,7 +45,7 @@ const Login = () => {
           sessionsCount: 1
         }],
         areasProgress: {
-          occupationalTherapy: {
+          ot: {
             overallScore: undefined,
             exercisesCompleted: 0,
             averageScore: 0,
@@ -53,7 +53,7 @@ const Login = () => {
             difficultyLevel: 1,
             enabled: true
           },
-          speechTherapy: {
+          speech: {
             overallScore: undefined,
             exercisesCompleted: 0,
             averageScore: 0,

@@ -34,7 +34,7 @@ const AttentionExercise: React.FC<ExerciseProps> = ({ onComplete, isTest, diffic
   
     useEffect(() => {
       if (timeLeft === 0) {
-        onComplete?.({ score: Math.round((score / attempts) * 100) || 0 });
+        onComplete?.({ score: Math.round((score / attempts) * 100) || 0, metrics: {accuracy: Math.round((score / attempts) * 100) || 0, timeInSeconds: 0, attempts: attempts} });
       }
     }, [timeLeft, score, attempts, onComplete]);
   
@@ -52,13 +52,15 @@ const AttentionExercise: React.FC<ExerciseProps> = ({ onComplete, isTest, diffic
           <div className="flex flex-col items-center gap-2">
             <div className="flex items-center gap-2">
               <p className="text-secondary">Find this:</p>
-              <Image
-                src={carsIcons.find(v => v.name === targetVehicle)?.icon}
-                alt={targetVehicle}
-                width={40}
-                height={40}
-                className="w-20 h-20"
-              />
+              {targetVehicle && carsIcons.find(v => v.name === targetVehicle)?.icon ? (
+                <Image
+                  src={carsIcons.find(v => v.name === targetVehicle)!.icon}
+                  alt={targetVehicle}
+                  width={40}
+                  height={40}
+                  className="w-20 h-20"
+                />
+              ) : null}
             </div>
             <div className="mt-2 flex justify-center items-center text-secondary">
               <Timer className="w-4 h-4 mr-2 text-pastelOrange" />
@@ -80,13 +82,15 @@ const AttentionExercise: React.FC<ExerciseProps> = ({ onComplete, isTest, diffic
               } hover:bg-gray-200 flex items-center justify-center`}
               onClick={() => handleShapeClick(vehicle)}
             >
-              <Image
-                src={carsIcons.find(v => v.name === vehicle)?.icon}
-                alt={vehicle}
-                width={24}
-                height={24}
-                className="w-24 h-24"
-              />
+              {vehicle && carsIcons.find(v => v.name === vehicle)?.icon ? (
+                <Image
+                  src={carsIcons.find(v => v.name === vehicle)!.icon}
+                  alt={vehicle}
+                  width={24}
+                  height={24}
+                  className="w-24 h-24"
+                />
+              ) : null}
             </motion.button>
           ))}
         </div>

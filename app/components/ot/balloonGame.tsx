@@ -1,14 +1,15 @@
 // components/BalloonGame.js
 import { useState, useEffect, useCallback } from 'react';
-import './styles/catchObjects.sass';
+import './styles/catchObjects.scss';
 import Balloon from './Balloon';
 import { BalloonType } from '@/types/types';
 import { balloonGameSettings } from '@/app/helpers/difficultySettings';
 import { ExerciseProps } from '@/types/props';
+import { difficultyEnum } from '@/enums/enumDifficulty';
 
 const COLORS = ['red', 'blue', 'green', 'yellow', 'purple'];
 
-type Difficulty = 'easy' | 'medium' | 'hard';
+type DifficultyLevel = 'easy' | 'medium' | 'hard';
 
 const BalloonGame: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyLevel }) => {
   const [gameStarted, setGameStarted] = useState(false);
@@ -16,7 +17,7 @@ const BalloonGame: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyLe
   const [targetColor, setTargetColor] = useState('');
   const [balloons, setBalloons] = useState<BalloonType[]>([]);
   const [timeLeft, setTimeLeft] = useState(30);
-  const [difficulty, setDifficulty] = useState<Difficulty>('easy');
+  const [difficulty, setDifficulty] = useState<number>(difficultyLevel || 1);
   const [misses, setMisses] = useState(0);
   const [hits, setHits] = useState(0);
   const [avgReactionTime, setAvgReactionTime] = useState(0);
@@ -48,7 +49,8 @@ const BalloonGame: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyLe
 
   // Initialize balloons
   const initializeBalloons = useCallback(() => {
-    const settings = balloonGameSettings[difficulty as keyof typeof balloonGameSettings];
+    const difficultyKey = difficultyEnum[difficulty as 1 | 2 | 3] as DifficultyLevel;
+    const settings = balloonGameSettings[difficultyKey];
     const newBalloons = [];
     
     for (let i = 0; i < settings.balloonCount; i++) {
@@ -181,7 +183,8 @@ const BalloonGame: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyLe
   useEffect(() => {
     if (!gameStarted) return;
     
-    const settings = balloonGameSettings[difficulty as keyof typeof balloonGameSettings];
+    const difficultyKey = difficultyEnum[difficulty as 1 | 2 | 3] as DifficultyLevel;
+    const settings = balloonGameSettings[difficultyKey];
     const moveInterval = setInterval(moveBalloons, settings.speed / 10);
     
     return () => clearInterval(moveInterval);
@@ -191,7 +194,8 @@ const BalloonGame: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyLe
   useEffect(() => {
     if (!gameStarted) return;
     
-    const settings = balloonGameSettings[difficulty as keyof typeof balloonGameSettings];
+    const difficultyKey = difficultyEnum[difficulty as 1 | 2 | 3] as DifficultyLevel;
+    const settings = balloonGameSettings[difficultyKey];
     const targetInterval = setInterval(setNewTarget, settings.targetInterval);
     
     return () => clearInterval(targetInterval);

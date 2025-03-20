@@ -1,0 +1,183 @@
+.container {
+  min-height: 100vh;
+  padding: 0 0.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.main {
+  padding: 2rem 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 800px;
+}
+
+.title {
+  .catchObjects {
+    margin: 0;
+    line-height: 1.15;
+    font-size: 2.5rem;
+    text-align: center;
+    color: #0070f3;
+    margin-bottom: 1.5rem;
+  }
+}
+
+.gameControls {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.difficultySelector {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.difficultyButtons {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.difficultyButton {
+  padding: 0.5rem 1rem;
+  background-color: #e0e0e0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.2s;
+
+  &:hover {
+    background-color: #d0d0d0;
+  }
+
+  &.selected {
+    background-color: #0070f3;
+    color: white;
+  }
+}
+
+.startButton {
+  padding: 0.75rem 1.5rem;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #218838;
+  }
+}
+
+.gameOver {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  border-radius: 8px;
+}
+
+.stats {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+
+  .score, .lives {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+}
+
+.gameArea {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  background-color: #e9f5ff;
+  border: 2px solid #0070f3;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: none;
+
+  &.active {
+    background-image: linear-gradient(to bottom, #87CEEB, #e9f5ff);
+  }
+}
+
+.instructions {
+  padding: 2rem;
+  text-align: center;
+
+  h2 {
+    margin-bottom: 1rem;
+    color: #0070f3;
+  }
+
+  p {
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+  }
+}
+
+.fallingObject {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 8%;
+  height: auto;
+}
+
+.basket {
+  position: absolute;
+  bottom: 12%;
+  width: 100px;
+  height: 50px;
+  background-position: center;
+  transform: translateX(-50%);
+}
+
+.footer {
+  width: 100%;
+  height: 60px;
+  border-top: 1px solid #eaeaea;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f5f5f5;
+}
+
+.time {
+  font-size: 1.5rem;
+  margin-left: 1rem;
+}
+
+@media (max-width: 600px) {
+  .title {
+    font-size: 1.8rem;
+  }
+
+  .gameArea {
+    height: 400px;
+  }
+
+  .difficultyButtons {
+    flex-direction: column;
+  }
+}

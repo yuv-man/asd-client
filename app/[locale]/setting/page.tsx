@@ -1,4 +1,4 @@
-import './setting.sass'
+import './setting.scss'
 import ClientSettingsContent from './ClientSettingsContent';
 
 const SettingsPage = ({ params }: { params: { locale: string } }) => {

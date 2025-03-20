@@ -1,9 +1,7 @@
 // components/Balloon.js
 import { useState, useEffect } from 'react';
-import './styles/balloon.sass';
+import './styles/balloon.scss';
 import { BalloonProps } from '@/types/props';
-import balloonSvg from '@/assets/balloon.svg';
-import Image from 'next/image';
 import BalloonSVG from './BalloonSVG';
 
 export default function Balloon({ id, color, size, position, popped, onClick }: BalloonProps) {

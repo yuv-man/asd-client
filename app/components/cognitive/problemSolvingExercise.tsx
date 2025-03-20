@@ -3,6 +3,7 @@ import puzzleImage from '@/assets/images/puzzle.png';
 import { useState, useEffect } from "react";
 import { PuzzlePiece } from '@/types/types';
 import { ExerciseProps } from '@/types/props'
+import { Timer } from 'lucide-react';
 
 const ProblemSolvingExercise: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyLevel }) => {
     const [image, setImage] = useState(puzzleImage.src);
@@ -70,7 +71,7 @@ const ProblemSolvingExercise: React.FC<ExerciseProps> = ({ onComplete, isTest, d
     const checkIfSolved = (puzzle: PuzzlePiece[]) => {
         if (puzzle.every((piece: PuzzlePiece, index: number) => piece.originalIndex === index)) {
             setSolved(true);
-            onComplete?.({ score: calculateScore() });
+            onComplete?.({ score: calculateScore(), metrics: {timeInSeconds: time, attempts: moves, accuracy: 100}  });
         }
     };
 
@@ -134,7 +135,10 @@ const ProblemSolvingExercise: React.FC<ExerciseProps> = ({ onComplete, isTest, d
                 ))}
             </div>
             <div className='flex flex-row items-center justify-center gap-4 mt-4'>
-              <p className='text-secondary'>Time: {time}s</p>
+                <div className='flex flex-row items-center justify-center gap-2'>
+                    <Timer className='w-4 h-4 text-pastelOrange' />
+                    <p className='text-secondary'>{time}s</p>
+                </div>
               <p className='text-secondary'>Moves: {moves}</p>
               {solved && <h2 className='text-secondary'>Score: {calculateScore()}</h2>}
             </div>
