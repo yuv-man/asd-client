@@ -15,24 +15,23 @@ export const TrailMap: React.FC<TrailMapProps> = ({
   onSettingsClick,
   onQuizSelect
 }) => {
-  // Add scroll position state
-  const [scrollY, setScrollY] = React.useState(0);
-  const containerRef = React.useRef<HTMLDivElement>(null);
   const [displayedSessions, setDisplayedSessions] = React.useState(sessions);
-
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const [windowHeight, setWindowHeight] = React.useState(0);
+  
+  // Fixed session height
   const sessionHeight = 100;
-  const [viewportOffset, setViewportOffset] = React.useState(0);
-
-  // Set viewport offset on mount and window resize
+  
+  // Initialize window height on client side
   useEffect(() => {
-    const updateOffset = () => {
-      setViewportOffset(document.documentElement.clientHeight / 2);
+    setWindowHeight(window.innerHeight);
+    
+    const handleResize = () => {
+      setWindowHeight(window.innerHeight);
     };
-    
-    updateOffset(); // Initial calculation
-    window.addEventListener('resize', updateOffset);
-    
-    return () => window.removeEventListener('resize', updateOffset);
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   // Update displayedSessions when sessions prop changes
@@ -40,10 +39,9 @@ export const TrailMap: React.FC<TrailMapProps> = ({
     setDisplayedSessions(sessions);
   }, [sessions]);
 
-  // Modify the existing useEffect to depend on sessions
+  // Generate new sessions if needed
   useEffect(() => {
     if (currentPosition >= displayedSessions.length - 1) {
-      // Generate two new sessions
       const newSessions = Array(2).fill(null).map((_, index) => ({
         id: `session-${displayedSessions.length + index}`,
         exercises: Array(3).fill({
@@ -58,23 +56,21 @@ export const TrailMap: React.FC<TrailMapProps> = ({
       
       setDisplayedSessions([...displayedSessions, ...newSessions]);
     }
-  }, [currentPosition, displayedSessions, sessions]); // Added sessions dependency
-
-  const targetScroll = Math.max(
-    0,
-    ((displayedSessions.length - currentPosition - 1) * sessionHeight) - viewportOffset + (sessionHeight / 2)
-  );
-
-  // Update scroll position when currentPosition changes
-  useEffect(() => {
-    if (containerRef.current) {
-      setScrollY(targetScroll);
-    }
-  }, [currentPosition, targetScroll]);
+  }, [currentPosition, displayedSessions, sessions]);
 
   const handleQuizSelect = (areaId: string) => {
-    onQuizSelect(areaId)
+    onQuizSelect(areaId);
   };
+
+  // Calculate exact container height - only the space needed for buttons
+  const exactContainerHeight = displayedSessions.length * sessionHeight;
+  
+  // Calculate scroll position to center current session
+  const targetScrollY = ((displayedSessions.length - currentPosition - 1) * sessionHeight) - (windowHeight / 2) + (sessionHeight / 2);
+  
+  // Improved drag constraints
+  const maxDragUp = -(exactContainerHeight - windowHeight);
+  const maxDragDown = 0;
 
   return (
     <div 
@@ -84,10 +80,10 @@ export const TrailMap: React.FC<TrailMapProps> = ({
         overflow: 'hidden',
         position: 'relative',
         height: '100vh',
-        width: '100%',
-        minHeight: '400px'
+        width: '100%'
       }}
     >
+      {/* Settings button */}
       <motion.div
         className="settingsButton"
         onClick={onSettingsClick}
@@ -96,7 +92,7 @@ export const TrailMap: React.FC<TrailMapProps> = ({
           position: 'absolute',
           top: '10px',
           left: '10px',
-          backgroundColor:'lightBlue',
+          backgroundColor: 'lightBlue',
           border: 'none',
           borderRadius: '50%',
           width: '40px',
@@ -112,30 +108,30 @@ export const TrailMap: React.FC<TrailMapProps> = ({
         <FaCog size={20} color="white" />
       </motion.div>
 
+      {/* Scrollable content */}
       <motion.div 
         ref={containerRef}
-        key="scrollContainer"
         className="scrollContainer"
         drag="y"
         dragConstraints={{
-          top: -(displayedSessions.length * sessionHeight) + viewportOffset,
-          bottom: viewportOffset
+          top: maxDragUp,
+          bottom: maxDragDown
         }}
-        animate={{ y: -targetScroll }}
+        animate={{ y: -targetScrollY }}
         transition={{ duration: 0.8, type: 'spring', stiffness: 100 }}
         style={{ 
           position: 'absolute',
-          width: '100%', 
-          height: `${displayedSessions.length * sessionHeight + (viewportOffset * 2)}px`,
-          top: 0,
-          left: 0
+          width: '100%',
+          height: exactContainerHeight,
+          paddingTop: windowHeight / 2 - sessionHeight / 2,
+          paddingBottom: windowHeight / 2 - sessionHeight / 2
         }}
       >
         {/* Animal buttons */}
         {Object.values(areaTypes).map((area, index) => {
           const positions = [
-            { left: '25%', top: '30%' },
-            { left: '75%', top: '20%' },
+            { left: '25%', top: '70%' },
+            { left: '75%', top: '40%' },
             { left: '25%', top: '10%' }
           ];
           
@@ -168,53 +164,50 @@ export const TrailMap: React.FC<TrailMapProps> = ({
 
         {/* Session buttons */}
         {[...displayedSessions].reverse().map((session, index) => {
-          const isCurrentOrPrevious = (displayedSessions.length - 1 - index) <= currentPosition;
           const isEven = (displayedSessions.length - 1 - index) % 2 === 0;
           const completedExercises = session.exercises.filter(ex => ex.isCompleted).length;
           const progressPercentage = (completedExercises / session.exercises.length) * 100;
 
           return (
-            <React.Fragment key={session.id}>
-              {/* Original exercise button */}
-              <motion.div
-                className={`exerciseButton ${
-                  progressPercentage === 100 ? 'completed' : ''
-                } ${session.isAvailable ? 'available' : 'locked'}`}
-                style={{
-                  position: 'absolute',
-                  left: isEven ? '45%' : '55%',
-                  top: `${index * sessionHeight}px`,
-                  transform: 'translate(-50%, -50%)',
-                  opacity: 1,
-                  cursor: session.isAvailable ? 'pointer' : 'not-allowed',
-                  zIndex: 2,
-                  background: progressPercentage === 100
-                    ? 'linear-gradient(135deg,rgb(139, 222, 174) 0%, #38A169 100%)'
-                    : session.isAvailable
-                      ? 'linear-gradient(135deg, #63B3ED 0%, #4299E1 100%)'
-                      : 'linear-gradient(135deg, #CBD5E0 0%, #A0AEC0 100%)',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  gap: '8px',
-                  padding: '16px',
-                  borderRadius: '50%',
-                  boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-                  width: '60px',
-                  height: '60px'
-                }}
-                initial={{ scale: 1 }}
-                whileHover={session.isAvailable ? { scale: 1.1 } : {}}
-                onClick={() => session.isAvailable && onSessionSelect(session.id)}
-              >
-                <div className="progressIndicator">
-                  <FaCloud size={24} color="white" />
-                  <div className="progressText">
-                    {completedExercises}/{session.exercises.length}
-                  </div>
+            <motion.div
+              key={session.id}
+              className={`exerciseButton ${
+                progressPercentage === 100 ? 'completed' : ''
+              } ${session.isAvailable ? 'available' : 'locked'}`}
+              style={{
+                position: 'absolute',
+                left: isEven ? '45%' : '55%',
+                top: `${index * sessionHeight}px`,
+                transform: 'translate(-50%, -50%)',
+                opacity: 1,
+                cursor: session.isAvailable ? 'pointer' : 'not-allowed',
+                zIndex: 2,
+                background: progressPercentage === 100
+                  ? 'linear-gradient(135deg,rgb(139, 222, 174) 0%, #38A169 100%)'
+                  : session.isAvailable
+                    ? 'linear-gradient(135deg, #63B3ED 0%, #4299E1 100%)'
+                    : 'linear-gradient(135deg, #CBD5E0 0%, #A0AEC0 100%)',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '16px',
+                borderRadius: '50%',
+                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                width: '60px',
+                height: '60px'
+              }}
+              initial={{ scale: 1 }}
+              whileHover={session.isAvailable ? { scale: 1.1 } : {}}
+              onClick={() => session.isAvailable && onSessionSelect(session.id)}
+            >
+              <div className="progressIndicator">
+                <FaCloud size={24} color="white" />
+                <div className="progressText">
+                  {completedExercises}/{session.exercises.length}
                 </div>
-              </motion.div>
-            </React.Fragment>
+              </div>
+            </motion.div>
           );
         })}
 
@@ -234,4 +227,4 @@ export const TrailMap: React.FC<TrailMapProps> = ({
       </motion.div>
     </div>
   );
-}; 
+};

@@ -66,6 +66,19 @@ const MemoryExercise: React.FC<ExerciseProps> = ({ onComplete, isTest, difficult
     };
   }, [round]);
 
+  const calculateNormalizedScore = (totalAttempts: number, successfulRounds: number) => {
+    // Accuracy weight (60% of total score)
+    const accuracyWeight = 0.6;
+    const expectedAttempts = 3; // One attempt per round ideally
+    const accuracyScore = Math.max(0, (expectedAttempts / totalAttempts)) * 1000 * accuracyWeight;
+
+    // Memory performance weight (40% of total score)
+    const performanceWeight = 0.4;
+    const performanceScore = (successfulRounds / 3) * 1000 * performanceWeight;
+
+    return Math.round(Math.min(1000, accuracyScore + performanceScore));
+  };
+
   // Handle when a user clicks a shape
   const handleShapeClick = (index: number) => {
     if (showingSequence || isDisplaying) return;
@@ -76,23 +89,28 @@ const MemoryExercise: React.FC<ExerciseProps> = ({ onComplete, isTest, difficult
     // Check if the user has completed the sequence
     if (newUserSequence.length === sequence.length) {
       const correct = newUserSequence.every((num, i) => num === sequence[i]);
+      const newAttempts = attempts + 1;
+      setAttempts(newAttempts);
       
       if (correct) {
-        const newAttempts = attempts + 1;
-        setAttempts(newAttempts);
-        
         if (round < 3) {
           setTimeout(() => {
             setRound(round + 1);
           }, 500);
         } else {
-          const score = Math.round(100 * (3 / attempts));
-          onComplete?.({ score, metrics: {accuracy: score, timeInSeconds: 0, attempts: newAttempts} });
+          // Calculate final score when all rounds are complete
+          const normalizedScore = calculateNormalizedScore(newAttempts, round);
+          onComplete?.({ 
+            score: normalizedScore,
+            metrics: {
+              accuracy: Math.round((3 / newAttempts) * 100),
+              attempts: newAttempts,
+              timeInSeconds: 30,
+            }
+          });
         }
       } else {
         // Handle incorrect attempt
-        const newAttempts = attempts + 1;
-        setAttempts(newAttempts);
         setShowTryAgain(true);
         
         // Show sequence again after a brief delay
@@ -115,7 +133,6 @@ const MemoryExercise: React.FC<ExerciseProps> = ({ onComplete, isTest, difficult
           }, sequence.length * 1500 + 1000);
         }, 800);
       }
-      
     }
   };
 

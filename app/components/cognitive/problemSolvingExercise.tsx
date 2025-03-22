@@ -71,13 +71,31 @@ const ProblemSolvingExercise: React.FC<ExerciseProps> = ({ onComplete, isTest, d
     const checkIfSolved = (puzzle: PuzzlePiece[]) => {
         if (puzzle.every((piece: PuzzlePiece, index: number) => piece.originalIndex === index)) {
             setSolved(true);
-            onComplete?.({ score: calculateScore(), metrics: {timeInSeconds: time, attempts: moves, accuracy: 100}  });
+            const finalScore = calculateScore();
+            onComplete?.({ 
+                score: finalScore, 
+                metrics: {
+                    timeInSeconds: time,
+                    attempts: moves,
+                    accuracy: 0
+                }
+            });
         }
     };
 
     // Calculate Score
     const calculateScore = () => {
-        return Math.max(1000 - time * 5 - moves * 10, 0);
+        // Time weight (50% of total score)
+        const timeWeight = 0.5;
+        const maxExpectedTime = 180; // 3 minutes
+        const timeScore = Math.max(0, (1 - time / maxExpectedTime)) * 1000 * timeWeight;
+
+        // Moves/attempts weight (50% of total score)
+        const movesWeight = 0.5;
+        const expectedMoves = 20; // Expected number of moves for optimal solution
+        const movesScore = Math.max(0, (1 - moves / expectedMoves)) * 1000 * movesWeight;
+
+        return Math.round(Math.max(0, Math.min(1000, timeScore + movesScore)));
     };
 
     return (
@@ -139,8 +157,15 @@ const ProblemSolvingExercise: React.FC<ExerciseProps> = ({ onComplete, isTest, d
                     <Timer className='w-4 h-4 text-pastelOrange' />
                     <p className='text-secondary'>{time}s</p>
                 </div>
-              <p className='text-secondary'>Moves: {moves}</p>
-              {solved && <h2 className='text-secondary'>Score: {calculateScore()}</h2>}
+                <p className='text-secondary'>Moves: {moves}</p>
+                {solved && (
+                    <div className='flex gap-2'>
+                        <h2 className='text-secondary'>Score: {calculateScore()}</h2>
+                        <p className='text-secondary'>
+                            (Efficiency: {Math.round((20 / moves) * 100)}%)
+                        </p>
+                    </div>
+                )}
             </div>
         </div>
     );

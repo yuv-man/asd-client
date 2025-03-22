@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { ExerciseProps } from '@/types/props';
 import { Timer } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -32,11 +32,34 @@ const AttentionExercise: React.FC<ExerciseProps> = ({ onComplete, isTest, diffic
       };
     }, []);
   
+    const calculateNormalizedScore = useCallback(() => {
+      if (attempts === 0) return 0;
+
+      // Accuracy weight (70% of total score)
+      const accuracyWeight = 0.7;
+      const accuracyScore = (score / attempts) * 1000 * accuracyWeight;
+
+      // Attempts weight (30% of total score)
+      const attemptsWeight = 0.3;
+      const expectedAttempts = 15; // Expected number of attempts in 30 seconds
+      const attemptsScore = Math.min(attempts / expectedAttempts, 1) * 1000 * attemptsWeight;
+
+      return Math.round(Math.min(1000, accuracyScore + attemptsScore));
+    }, [score, attempts]);
+  
     useEffect(() => {
       if (timeLeft === 0) {
-        onComplete?.({ score: Math.round((score / attempts) * 100) || 0, metrics: {accuracy: Math.round((score / attempts) * 100) || 0, timeInSeconds: 0, attempts: attempts} });
+        const normalizedScore = calculateNormalizedScore();
+        onComplete?.({ 
+          score: normalizedScore, 
+          metrics: {
+            accuracy: Math.round((score / attempts) * 100) || 0,
+            timeInSeconds: 30,
+            attempts: attempts,
+          }
+        });
       }
-    }, [timeLeft, score, attempts, onComplete]);
+    }, [timeLeft, score, attempts, onComplete, calculateNormalizedScore]);
   
     const handleShapeClick = (shape: string) => {
       setAttempts(a => a + 1);
@@ -95,8 +118,13 @@ const AttentionExercise: React.FC<ExerciseProps> = ({ onComplete, isTest, diffic
           ))}
         </div>
   
-        <div className="mt-4 text-center text-gray-600">
-          Score: {score} / {attempts}
+        <div className="mt-4 text-center">
+          <div className="text-gray-600">
+            Score: {calculateNormalizedScore()} / 1000
+          </div>
+          <div className="text-sm text-gray-500">
+            Matches: {score} / {attempts} ({Math.round((score / attempts) * 100) || 0}%)
+          </div>
         </div>
       </div>
     );

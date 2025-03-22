@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef } from "react";
+import { ExerciseProps } from "@/types/props";
+import useLanguageStore from "@/store/languageStore";
 
 interface SpeechRecognitionInstance extends EventTarget {
   lang: string;
@@ -18,7 +20,7 @@ const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecogni
 
 const words = ["apple", "banana", "cat", "dog", "elephant"]; // List of words
 
-export default function SpeechTherapyGame() {
+const FollowWord: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyLevel }) => {
   const [currentWord, setCurrentWord] = useState("");
   const [spokenWord, setSpokenWord] = useState("");
   const [score, setScore] = useState(0);
@@ -26,6 +28,7 @@ export default function SpeechTherapyGame() {
   const [isListening, setIsListening] = useState(false);
   const [error, setError] = useState("");
   const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
+  const { locale } = useLanguageStore();
 
   useEffect(() => {
     pickRandomWord();
@@ -35,7 +38,7 @@ export default function SpeechTherapyGame() {
       setError("Speech recognition is not supported in this browser. Please use Chrome.");
     } else {
       recognitionRef.current = new SpeechRecognition();
-      recognitionRef.current!.lang = "en-US";
+      recognitionRef.current!.lang = locale === "en" ? "en-US" : "he-IL";
       recognitionRef.current!.onresult = handleResult;
       recognitionRef.current!.onerror = handleError;
     }
@@ -92,3 +95,5 @@ export default function SpeechTherapyGame() {
     </div>
   );
 }
+
+export default FollowWord;

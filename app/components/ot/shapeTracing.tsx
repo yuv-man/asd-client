@@ -159,18 +159,27 @@ const ShapeTracing: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyL
       setEndTime(Date.now());
       const timeInSeconds = startTime ? (Date.now() - startTime) / 1000 : 0;
       
-      // Calculate score based on accuracy, time, and attempts
-      const accuracyWeight = 0.5;
-      const timeWeight = 0.3;
-      const attemptsWeight = 0.2;
+      // Calculate normalized scores for each component (0-1000)
+      const accuracyWeight = 0.5;  // 50% of total score
+      const timeWeight = 0.3;      // 30% of total score
+      const attemptsWeight = 0.2;  // 20% of total score
       
-      const accuracyScore = (drawingAccuracy / 100) * accuracyWeight * 100;
-      const timeScore = Math.max(0, (60 - timeInSeconds) / 60) * timeWeight * 100;
-      const attemptsScore = Math.max(0, (10 - attempts) / 10) * attemptsWeight * 100;
+      // Accuracy score (0-1000)
+      const accuracyScore = (drawingAccuracy / 100) * 1000 * accuracyWeight;
       
+      // Time score (0-1000)
+      // Assuming 60 seconds is the maximum time, better times get higher scores
+      const timeScore = Math.max(0, (1 - timeInSeconds / 60)) * 1000 * timeWeight;
+      
+      // Attempts score (0-1000)
+      // Assuming 10 attempts is the maximum, fewer attempts get higher scores
+      const maxAttempts = 10;
+      const attemptsScore = Math.max(0, (1 - attempts / maxAttempts)) * 1000 * attemptsWeight;
+      
+      // Calculate total score (0-1000)
       const totalScore = Math.round(accuracyScore + timeScore + attemptsScore);
 
-      // Call onComplete with the score and metrics
+      // Call onComplete with the normalized score and metrics
       onComplete?.({
         score: totalScore,
         metrics: {

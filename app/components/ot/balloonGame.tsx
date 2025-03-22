@@ -201,11 +201,36 @@ const BalloonGame: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyLe
     return () => clearInterval(targetInterval);
   }, [gameStarted, setNewTarget, difficulty]);
 
+  // Calculate normalized score (0-1000)
+  const calculateNormalizedScore = useCallback(() => {
+    // Accuracy weight (60% of total score)
+    const accuracyWeight = 0.6;
+    const accuracyScore = hits > 0 
+      ? (hits / (hits + misses)) * 1000 * accuracyWeight
+      : 0;
+
+    // Performance weight (40% of total score)
+    const performanceWeight = 0.4;
+    const maxExpectedHits = 30; // Assuming 1 hit per second in a 30-second game
+    const performanceScore = (hits / maxExpectedHits) * 1000 * performanceWeight;
+
+    return Math.round(Math.min(1000, accuracyScore + performanceScore));
+  }, [hits, misses]);
+
+  // Update the game over effect
   useEffect(() => {
     if (timeLeft === 0) {
-      onComplete?.({ score: Math.round(score) });
+      const normalizedScore = calculateNormalizedScore();
+      onComplete?.({ 
+        score: normalizedScore,
+        metrics: {
+          accuracy: hits > 0 ? Math.round((hits / (hits + misses)) * 100) : 0,
+          timeInSeconds: 30,
+          attempts: hits + misses
+        }
+      });
     }
-  }, [timeLeft, score, onComplete]);
+  }, [timeLeft, hits, misses, avgReactionTime, calculateNormalizedScore, onComplete]);
 
   return (
     <div className="gameContainer">
@@ -266,7 +291,7 @@ const BalloonGame: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyLe
         <div className="gameResults">
           <h2>Game Over!</h2>
           <div className="resultsGrid">
-            <div>Final Score: {score}</div>
+            <div>Score: {calculateNormalizedScore()}</div>
             <div>Hits: {hits}</div>
             <div>Misses: {misses}</div>
             <div>Accuracy: {hits > 0 ? Math.round((hits / (hits + misses)) * 100) : 0}%</div>

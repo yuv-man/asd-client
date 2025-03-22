@@ -3,20 +3,32 @@
 import { Session } from '@/types/types';
 import TrainingSession from '@/app/components/training/TrainingSession'
 import { useSessions } from '@/store/userStore'
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 
 function TrainingSessionPage() {
     const { currentSession, updateSession, moveToNextSession } = useSessions();
+    const [isProcessingCompletion, setIsProcessingCompletion] = useState(false);
   
     if (!currentSession) {
-        return <div>Loading...</div>;
+        return <span className="loader"></span>;
     }
     
     const handleSessionCompletion = useCallback(async (session: Session) => {
-        const updatedSession = {...session, isCompleted: true};
-        updateSession(updatedSession);
-        await moveToNextSession(session.id);
-    }, [updateSession, moveToNextSession]);
+        // Prevent duplicate completion using the processing flag
+        if (isProcessingCompletion) {
+            return;
+        }
+        
+        setIsProcessingCompletion(true);
+        
+        try {
+            const updatedSession = {...session, isCompleted: true};
+            updateSession(updatedSession);
+            await moveToNextSession(session.id);
+        } finally {
+            setIsProcessingCompletion(false);
+        }
+    }, [updateSession, moveToNextSession, isProcessingCompletion]);
 
     return (
         <main className="flex min-h-screen flex-col items-center p-24">

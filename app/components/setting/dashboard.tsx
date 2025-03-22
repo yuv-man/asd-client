@@ -1,129 +1,174 @@
 import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { TrendingUp, Award, Clock, ArrowRight, Star } from 'lucide-react';
-import { areaTypes } from '@/app/helpers/areas';
-import { DashboardProps } from '@/types/props';
-import Image from 'next/image';
-import { weeklySummariesAPI } from '@/services/api';
-import { WeeklySummary } from '@/types/types';
+import { Award, ArrowRight, Star } from 'lucide-react';
+import { WeeklySummary, User } from '@/types/types';
+import { weeklySummariesAPI, dailySummariesAPI } from '@/services/api';
+import AreaAnalyses from './areaAnalyses';
 
-const Dashboard = ({ user }: DashboardProps) => {
+const Dashboard = ({ user }: { user: User | null }) => {
   const [userProgress, setUserProgress] = useState<WeeklySummary>();
-  const assessmentAreas = [
-    {
-      id: 'cognitive',
-      title: 'Cognitive Skills',
-      icon: areaTypes.cognitive.icon,
-      color: areaTypes.cognitive.color,
-      class: areaTypes.cognitive.class,
-      score: 0,
-      lastActivity: '2 days ago',
-      improvement: '+12%'
-    },
-    {
-      id: 'speech',
-      title: 'Speech Therapy',
-      icon: areaTypes.speech.icon,
-      color: areaTypes.speech.color,
-      class: areaTypes.speech.class,
-      score: 68,
-      lastActivity: '1 day ago',
-      improvement: '+8%'
-    },
-    {
-      id: 'ot',
-      title: 'Occupational Therapy',
-      icon: areaTypes.ot.icon,
-      color: areaTypes.ot.color,
-      class: areaTypes.ot.class,
-      score: 82,
-      lastActivity: '3 days ago',
-      improvement: '+15%'
+  const [recentData, setRecentData] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
+ 
+  const fetchRecentData = async () => {
+    try {
+      const recentData = await dailySummariesAPI.getRecentByUser(user?._id);
+      if(recentData?.data?.length > 0) {
+        const data = recentData.data;
+        
+        // Create a set of all unique dates from the data
+        const allDates = new Set(data.map((item: any) => 
+          new Date(item.date).toLocaleDateString()
+        ));
+        
+        // Initialize data structures with null values for all dates
+        const createEmptyDataSet = () => ({
+          dates: Array.from(allDates).sort(),
+          scores: Array(allDates.size).fill(null),
+          times: Array(allDates.size).fill(null),
+          exercisesCompleted: Array(allDates.size).fill(null)
+        });
+
+        const otData = createEmptyDataSet();
+        const speechData = createEmptyDataSet();
+        const cognitiveData = createEmptyDataSet();
+
+        // Fill in actual data where it exists
+        data.forEach((item: any) => {
+          if (!item.areaBreakdown) return;
+          
+          const date = new Date(item.date).toLocaleDateString();
+          const dateIndex = otData.dates.indexOf(date);
+
+          // OT data
+          const ot = item.areaBreakdown['ot'];
+          if (ot) {
+            otData.scores[dateIndex] = ot.averageScore;
+            otData.times[dateIndex] = ot.timeSpentMinutes;
+            otData.exercisesCompleted[dateIndex] = ot.exercisesCompleted;
+          }
+
+          // Speech data
+          const speech = item.areaBreakdown['speech'];
+          if (speech) {
+            speechData.scores[dateIndex] = speech.averageScore;
+            speechData.times[dateIndex] = speech.timeSpentMinutes;
+            speechData.exercisesCompleted[dateIndex] = speech.exercisesCompleted;
+          }
+
+          // Cognitive data
+          const cognitive = item.areaBreakdown['cognitive'];
+          if (cognitive) {
+            cognitiveData.scores[dateIndex] = cognitive.averageScore;
+            cognitiveData.times[dateIndex] = cognitive.timeSpentMinutes;
+            cognitiveData.exercisesCompleted[dateIndex] = cognitive.exercisesCompleted;
+          }
+        });
+
+        setRecentData({
+          ot: otData,
+          speech: speechData,
+          cognitive: cognitiveData
+        });
+      } else {
+        // Initialize with empty data if no data is returned
+        setRecentData({
+          ot: { dates: [], scores: [], times: [], exercisesCompleted: [] },
+          speech: { dates: [], scores: [], times: [], exercisesCompleted: [] },
+          cognitive: { dates: [], scores: [], times: [], exercisesCompleted: [] }
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching recent data:", error);
+      // Initialize with empty data on error
+      setRecentData({
+        ot: { dates: [], scores: [], times: [], exercisesCompleted: [] },
+        speech: { dates: [], scores: [], times: [], exercisesCompleted: [] },
+        cognitive: { dates: [], scores: [], times: [], exercisesCompleted: [] }
+      });
+    } finally {
+      setIsLoading(false);
     }
-  ];
+  };
 
   useEffect(() => {
-    const fetchUserProgress = async () => {
-      const progress = await weeklySummariesAPI.getRecentByUser(user?._id);
-      if (progress?.data) {
-        console.log(progress.data);
-        setUserProgress(progress.data);
+    const fetchUserWeeklyProgress = async () => {
+      try {
+        const progress = await weeklySummariesAPI.getRecentByUser(user?._id);
+        if (progress?.data) {
+          setUserProgress(progress.data);
+        }
+      } catch (error) {
+        console.error("Error fetching user progress:", error);
       }
     };
-    fetchUserProgress();
+    
+    if (user?._id) {
+      fetchUserWeeklyProgress();
+      fetchRecentData();
+    }
   }, [user]);
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
       <div className="mb-12">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">
-          Welcome back, {user?.name}! 👋
+          Welcome back, {user?.name || 'User'}! 👋
         </h1>
         <p className="text-gray-600">
           Track your progress and continue your learning journey.
         </p>
       </div>
 
-      <div className="grid md:grid-cols-3 gap-6 mb-12">
-        {userProgress?.areaBreakdown && Object.entries(userProgress.areaBreakdown).map(([area, value]) => (
-          <motion.div
-            key={areaTypes[area].id}
-            whileHover={{ scale: 1.02 }}
-            className="bg-white rounded-xl shadow-lg overflow-hidden"
-          >
-            <div className={`${areaTypes[area].class} p-6 text-white`}>
-              <Image src={areaTypes[area].icon} alt={area} width={24} height={24} />
-              <h3 className="text-xl font-semibold mb-2">{area}</h3>
-              <div className="flex items-center justify-between">
-                <div className="text-3xl font-bold">{value.averageScore}%</div>
-                {/* <div className="flex items-center text-green-300">
-                  <TrendingUp className="w-4 h-4 mr-1" />
-                  {area.improvement}
-                </div> */}
-              </div>
-            </div>
-            <div className="p-6">
-              <div className="flex items-center justify-between text-sm text-gray-600 mb-4">
-                <div className="flex items-center">
-                  <Clock className="w-4 h-4 mr-1" />
-                  {value.timeSpentMinutes.toFixed(2)} minutes
-                </div>
-                <div className="flex items-center">
-                  <Award className="w-4 h-4 mr-1" />
-                  {user?.areasProgress[area as keyof typeof user.areasProgress].difficultyLevel}
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        ))}
-      </div>
+      {isLoading ? (
+        <div className="text-center py-8">Loading your progress data...</div>
+      ) : (
+        userProgress && recentData && (
+          <div className="grid md:grid-cols-3 gap-6 mb-6">
+            {Object.entries(userProgress.areaBreakdown || {}).map(([area, value]) => (
+              <AreaAnalyses 
+                key={area} 
+                user={user} 
+                area={area} 
+                value={value} 
+                recentData={recentData[area]} 
+              />
+            ))}
+          </div>
+        )
+      )}
 
       <div className="grid md:grid-cols-2 gap-6">
         <div className="bg-white rounded-xl shadow-lg p-6">
           <h3 className="text-xl font-semibold mb-4">Recent Activities</h3>
           <div className="space-y-4">
-            {userProgress?.recentExercises && userProgress.recentExercises.map((activity, index) => (
-              <div
-                key={index}
-                className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
-              >
-                <div>
-                  <h4 className={`font-medium ${activity.area}`}>{activity.title}</h4>
+            {userProgress?.recentExercises && userProgress.recentExercises.length > 0 ? (
+              userProgress.recentExercises.slice(0, 10).map((activity, index) => (
+                <div
+                  key={index}
+                  className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                >
+                  <div>
+                    <h4 className={`font-medium ${activity.area}`}>{activity.title}</h4>
+                  </div>
+                  <p className="text-sm text-gray-600">
+                    {new Date(activity.timestamp).toLocaleDateString()}
+                  </p>
+                  <div className="flex items-center">
+                    <Star className="w-4 h-4 mr-1" />
+                    <div>{activity.score}</div>
+                  </div>
+                  <div className="text-purple-600 flex items-center">
+                    <Award className="w-4 h-4 mr-1" />
+                    {activity.difficultyLevel}
+                  </div>
                 </div>
-                <p className="text-sm text-gray-600">
-                  {new Date(activity.timestamp).toLocaleDateString()}
-                </p>
-                <div className="flex items-center">
-                  <Star className="w-4 h-4 mr-1" />
-                  <div>{activity.score}</div>
-                </div>
-                <div className="text-purple-600 flex items-center">
-                  <Award className="w-4 h-4 mr-1" />
-                  {activity.difficultyLevel}
-                </div>
+              ))
+            ) : (
+              <div className="text-center text-gray-500 py-4">
+                No recent activities found
               </div>
-            ))}
+            )}
           </div>
         </div>
 

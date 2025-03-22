@@ -1,18 +1,17 @@
 'use client';
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { useUserStore } from '@/store/userStore';
-import { Exercise, ExerciseType, Score } from '@/types/types';
+import { useUserStore, useInitialAssessmentStore } from '@/store/userStore';
+import { Exercise, ExerciseType } from '@/types/types';
 import owl from '@/assets/animals/owl.svg';
-import { getExerciseComponent } from '@/app/helpers/exerciseComponents';
+import { getExerciseComponent } from '../../helpers/exerciseComponents';
 import { exercisesAPI } from '@/services/api'
 import ResultsModal from '@/app/components/common/ResultsModal';
-import { useInitialAssessmentStore } from '@/store/userStore';
 
-const CognitiveQuiz = ({isInitialAssessment}: {isInitialAssessment?: boolean}) => {
+const SpeechQuiz = ({isInitialAssessment}: {isInitialAssessment?: boolean}) => {
   const router = useRouter();
   const user = useUserStore((state) => state.user);
   const [currentExercise, setCurrentExercise] = useState(0);
@@ -25,29 +24,26 @@ const CognitiveQuiz = ({isInitialAssessment}: {isInitialAssessment?: boolean}) =
   const { initialAssessment, setInitialAssessment } = useInitialAssessmentStore();
 
   useEffect(() => {
-    if (isInitialAssessment) {
-      fetchedExercises();
+    const fetchedExercises = async() => {
+      try {
+        setIsLoading(true);
+        const fetchedExercises = await exercisesAPI.getByArea('speech');
+        const exercisesWithComponents = fetchedExercises.data.map((exercise:Exercise) => ({
+          ...exercise,
+          component: getExerciseComponent(exercise.type as ExerciseType)
+        }));
+        setExercises(exercisesWithComponents);
+      } catch (error) {
+        console.error('Error fetching exercises:', error);
+      } finally {
+        setIsLoading(false);
+      }
     }
-  }, [isInitialAssessment]);
+    fetchedExercises();
+  }, []);
 
-  const fetchedExercises = async() => {
-    try {
-      setIsLoading(true);
-      const fetchedExercises = await exercisesAPI.getByArea('cognitive');
-      const exercisesWithComponents = fetchedExercises.data.map((exercise:Exercise) => ({
-        ...exercise,
-        component: getExerciseComponent(exercise.type as ExerciseType)
-      }));
-      setExercises(exercisesWithComponents);
-    } catch (error) {
-      console.error('Error fetching exercises:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
-  const handleExerciseComplete = useCallback((score: Score) => {
-    const newScores = { ...scores, [exercises[currentExercise].type]: score.score };
+  const handleExerciseComplete = (result: { score: number; metrics?: { accuracy: number; timeInSeconds: number; attempts: number; } | undefined }) => {
+    const newScores = { ...scores, [exercises[currentExercise].type]: result.score };
     setScores(newScores);
     
     if (currentExercise < exercises.length - 1) {
@@ -58,34 +54,30 @@ const CognitiveQuiz = ({isInitialAssessment}: {isInitialAssessment?: boolean}) =
       setFinalScore(averageScore);
       setShowResults(true);
     }
-  }, [currentExercise, exercises, scores]);
+  };
 
   const handleContinue = () => {
     setShowResults(false)
-    if (isInitialAssessment) {
-      setInitialAssessment({
-        userId: user?._id || '',
-        areas: {
-          ...initialAssessment?.areas,
-          cognitive: { ...initialAssessment?.areas?.cognitive, isCompleted: true, score: finalScore }
-        }
-      })
-      if (initialAssessment?.areas.ot.isCompleted && 
+    setInitialAssessment({
+      userId: user?._id || '',
+      areas: {
+        ...initialAssessment?.areas,
+        speech: { ...initialAssessment?.areas?.speech, isCompleted: true, score: finalScore }
+      }
+    })
+    if (initialAssessment?.areas.ot.isCompleted && 
         initialAssessment?.areas.speech.isCompleted && 
         initialAssessment?.areas.cognitive.isCompleted) {
-        router.push('/training');
-      } else {
-        router.push('/initial-assessment');
-      }
-    } else {
       router.push('/training');
+    } else {
+      router.push('/initial-assessment');
     }
   };
 
   const CurrentExerciseComponent = exercises[currentExercise]?.component;
 
   return (
-    <div className="max-w-4xl mx-auto px-4 cognitive">
+    <div className="max-w-4xl mx-auto px-4 ot h-150">
       <AnimatePresence mode="wait">
         {showIntro ? (
           <motion.div
@@ -93,15 +85,15 @@ const CognitiveQuiz = ({isInitialAssessment}: {isInitialAssessment?: boolean}) =
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="text-center flex flex-col items-center justify-center"
+            className="text-center flex flex-col items-center justify-center pt-20"
           >
             <Image src={owl} alt="owl" width={100} height={100} />
             <h2 className="text-3xl font-bold text-gray-900 mb-4 text-darkPurple">
-              Welcome to the Cognitive Assessment
+              Welcome to the Speech Assessment
             </h2>
             <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto text-darkPurple">
-              Hi {user?.name}! You'll complete three fun exercises to test your memory,
-              attention, and problem-solving skills. Each exercise is designed to be
+              Hi {user?.name}! You'll complete three fun exercises to test your fine motor skills, 
+              coordination and reaction time. Each exercise is designed to be
               engaging and age-appropriate.
             </p>
             <motion.button
@@ -122,7 +114,7 @@ const CognitiveQuiz = ({isInitialAssessment}: {isInitialAssessment?: boolean}) =
             exit={{ opacity: 0 }}
             className="text-center py-8"
           >
-            <p>Loading exercises...</p>
+            <span className="loader"></span>
           </motion.div>
         ) : CurrentExerciseComponent ? (
           <motion.div
@@ -131,7 +123,7 @@ const CognitiveQuiz = ({isInitialAssessment}: {isInitialAssessment?: boolean}) =
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -100 }}
           >
-            <CurrentExerciseComponent onComplete={handleExerciseComplete} isTest={true} difficultyLevel={user?.areasProgress?.cognitive?.difficultyLevel} />
+            <CurrentExerciseComponent onComplete={handleExerciseComplete} isTest={true} difficultyLevel={user?.areasProgress?.ot?.difficultyLevel} />
           </motion.div>
         ) : null}
       </AnimatePresence>
@@ -141,7 +133,7 @@ const CognitiveQuiz = ({isInitialAssessment}: {isInitialAssessment?: boolean}) =
           isOpen={showResults}
           onClose={handleContinue}
           score={finalScore}
-          area="cognitive"
+          area="speech"
           exerciseResults={scores}
         />
       )}
@@ -149,4 +141,4 @@ const CognitiveQuiz = ({isInitialAssessment}: {isInitialAssessment?: boolean}) =
   );
 };
 
-export default CognitiveQuiz;
+export default SpeechQuiz;

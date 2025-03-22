@@ -65,7 +65,6 @@ const TrainingSession = ({ session, onComplete }: TrainingSessionProps) => {
       ...session, 
       exercises: updatedExercises, 
       completedExercises: (session.completedExercises || 0) + 1, 
-      isCompleted: nextExerciseIndex === exercises.length
     };
     updateSession(updatedSession);
     

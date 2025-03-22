@@ -12,6 +12,7 @@ export const areaTypes: { [key: string]: AreaType } = {
     description: 'Evaluate memory, attention, and problem-solving skills',
     color: 'pastelYellow',
     backgroundColor: 'pastelLightYellow',
+    chartColor: '#FFD700',
   },
   speech: {
     id: 'speech',
@@ -21,6 +22,7 @@ export const areaTypes: { [key: string]: AreaType } = {
     description: 'Assess communication and language abilities',
     color: 'pastelRed',
     backgroundColor: 'pastelLightRed',
+    chartColor: '#FF6B6B',
   },
   ot: {
     id: 'ot',
@@ -30,5 +32,6 @@ export const areaTypes: { [key: string]: AreaType } = {
     description: 'Evaluate motor skills and sensory processing',
     color: 'pastelBlue',
     backgroundColor: 'pastelLightBlue',
+    chartColor: '#007BFF',
   },
 };

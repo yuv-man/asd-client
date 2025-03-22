@@ -25,8 +25,8 @@ export function LanguageSelector() {
   return (
     <Listbox value={locale} onChange={handleLanguageChange}>
       <div className="relative w-[180px]">
-        <Listbox.Button className="relative w-full cursor-pointer rounded-lg bg-white py-2 pl-3 pr-10 text-left border focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2">
-          <span className="block truncate">
+        <Listbox.Button className="relative w-full cursor-pointer rounded-lg bg-purple-500 py-2 pl-3 pr-10 text-left border focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2">
+          <span className="block truncate ">
             {languages.find(lang => lang.value === locale)?.label || 'Select language'}
           </span>
           <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">

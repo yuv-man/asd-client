@@ -144,6 +144,7 @@ export interface AreaType {
   color: string;
   backgroundColor: string;
   class: string;
+  chartColor: string;
 }
 
 export interface Avatar {
@@ -168,7 +169,7 @@ export interface BalloonType {
   popped: boolean;
 }
 
-export type ExerciseType = 'attention' | 'memory' | 'problem-solving' | 'catch-objects' | 'shape-tracing' | 'balloon-game';
+export type ExerciseType = 'attention' | 'memory' | 'problem-solving' | 'catch-objects' | 'shape-tracing' | 'balloon-game' | 'follow-word';
   
 export interface InitialAssessment {
   userId: string;
@@ -187,3 +188,10 @@ export interface InitialAssessment {
     }
   }
 } 
+
+export type AreaData = {
+  dates: string[];
+  scores: number[];
+  times: number[];
+  exercisesCompleted: number[];
+};

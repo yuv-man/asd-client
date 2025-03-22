@@ -27,6 +27,7 @@ const CatchObjects: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyL
   const gameAreaRef = useRef<HTMLDivElement>(null);
   const requestRef = useRef<number | null>(null);
   const objectsGenerated = useRef(0);
+  const [rawScore, setRawScore] = useState(0);
 
   // Memoize startGame function
   const startGame = useCallback(() => {
@@ -125,6 +126,18 @@ const CatchObjects: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyL
     return () => clearInterval(generatorInterval);
   }, [gameActive, difficulty]);
 
+  // Calculate normalized score based on age and difficulty
+  const calculateNormalizedScore = (rawScore: number): number => {
+    const difficultyKey = difficultyEnum[difficulty as 1 | 2 | 3] as DifficultyLevel;
+    const currentSettings = catchObjectSettings[difficultyKey];
+    
+    // Maximum possible score in 30 seconds based on spawn rate
+    const maxPossibleScore = Math.floor(30000 / currentSettings.spawnRate);
+    
+    // Calculate score out of 1000
+    return Math.round((rawScore / maxPossibleScore) * 1000);
+  };
+
   // Memoize updateGameState function
   const updateGameState = useCallback(() => {
     setFallingObjects(prevObjects => {
@@ -140,7 +153,7 @@ const CatchObjects: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyL
           const basketRight = basketPosition + 15;
           
           if (objectCenter >= basketLeft && objectCenter <= basketRight) {
-            setScore(prevScore => prevScore + 1);
+            setRawScore(prevScore => prevScore + 1);
             return { ...obj, caught: true };
           }
         }
@@ -170,11 +183,13 @@ const CatchObjects: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyL
     };
   }, [gameActive, updateGameState]);
 
+  // Update the game over effect
   useEffect(() => {
     if (gameOver) {
-      onComplete?.({ score });
+      const normalizedScore = calculateNormalizedScore(rawScore);
+      onComplete?.({ score: normalizedScore });
     }
-  }, [gameOver, onComplete, score]);
+  }, [gameOver, onComplete, rawScore]);
 
   return (
     <div className="container">
@@ -259,7 +274,7 @@ const CatchObjects: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyL
         )}
         {gameActive && (
             <div className="stats">
-              <div className="score">Score: {score}</div>
+              <div className="score">Score: {rawScore}</div>
               <div className="time">Time: {timeLeft}s</div>
             </div>
           )}

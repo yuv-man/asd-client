@@ -1,4 +1,4 @@
-import { Session, User } from './types';
+import { Session, User, AreaData } from './types';
 
 export interface TherapyAreaProps {
     title: string;
@@ -24,6 +24,18 @@ export interface TherapyAreaProps {
 
   export interface DashboardProps {
     user: User | null;
+    area: string;
+    value: {
+      averageScore: number;
+      timeSpentMinutes: number;
+      exercisesCompleted: number;
+    };
+    recentData: {
+      dates: string[];
+      scores: number[];
+      times: number[];
+      exercisesCompleted: number[];
+    };
   }
 
   export interface ProfileProps {

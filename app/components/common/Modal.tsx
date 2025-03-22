@@ -1,4 +1,5 @@
 import zebra from '@/assets/animals/zebra.svg'
+import lion from '@/assets/animals/lion.svg'
 import Image from 'next/image';
 
 interface ModalProps {
@@ -25,7 +26,7 @@ export default function Modal({ title, isOpen, onClose, children }: ModalProps) 
         </div>
         <div className="flex flex-col items-center">
           <div className='flex flex-row items-center justify-center mb-4' >
-            <Image src={zebra} alt="turtle" width={50} height={50} />
+            <Image src={title === 'Quiz' ? lion : zebra} alt="zebra" width={50} height={50} />
             <h1 className="text-2xl">{title}</h1>
           </div>
           {children}
