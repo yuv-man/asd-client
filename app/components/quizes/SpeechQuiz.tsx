@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useUserStore, useInitialAssessmentStore } from '@/store/userStore';
 import { Exercise, ExerciseType } from '@/types/types';
-import owl from '@/assets/animals/owl.svg';
+import toucan from '@/assets/animals/toucan.svg';
 import { getExerciseComponent } from '../../helpers/exerciseComponents';
 import { exercisesAPI } from '@/services/api'
 import ResultsModal from '@/app/components/common/ResultsModal';
@@ -77,7 +77,7 @@ const SpeechQuiz = ({isInitialAssessment}: {isInitialAssessment?: boolean}) => {
   const CurrentExerciseComponent = exercises[currentExercise]?.component;
 
   return (
-    <div className="max-w-4xl mx-auto px-4 ot h-150">
+    <div className="max-w-4xl mx-auto px-4 speech h-150">
       <AnimatePresence mode="wait">
         {showIntro ? (
           <motion.div
@@ -87,7 +87,7 @@ const SpeechQuiz = ({isInitialAssessment}: {isInitialAssessment?: boolean}) => {
             exit={{ opacity: 0, y: -20 }}
             className="text-center flex flex-col items-center justify-center pt-20"
           >
-            <Image src={owl} alt="owl" width={100} height={100} />
+            <Image src={toucan} alt="toucan" width={100} height={100} />
             <h2 className="text-3xl font-bold text-gray-900 mb-4 text-darkPurple">
               Welcome to the Speech Assessment
             </h2>

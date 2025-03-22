@@ -37,5 +37,16 @@
       "Cancel": "ביטול",
       "Save": "שמור", 
       "Enabled": "פעיל"
+    },
+    "speech": {
+      "title": "משחק תרפיית דיבור",
+      "instruction": "אמור את המילה:",
+      "startButton": "התחל לדבר",
+      "listening": "מקשיב...",
+      "youSaid": "אמרת:",
+      "score": "ניקוד:",
+      "correct": "נכון!",
+      "incorrect": "נסה שוב!",
+      "browserError": "זיהוי דיבור אינו נתמך בדפדפן זה. אנא השתמש בכרום."
     }
 }

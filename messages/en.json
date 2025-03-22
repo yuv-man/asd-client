@@ -37,5 +37,16 @@
       "Cancel": "Cancel",
       "Save": "Save",
       "Enabled": "Enabled"
+    },
+    "speech": {
+      "title": "Speech Therapy Game",
+      "instruction": "Say the word:",
+      "startButton": "Start Speaking",
+      "listening": "Listening...",
+      "youSaid": "You said:",
+      "score": "Score:",
+      "correct": "Correct!",
+      "incorrect": "Try again!",
+      "browserError": "Speech recognition is not supported in this browser. Please use Chrome."
     }
   }
