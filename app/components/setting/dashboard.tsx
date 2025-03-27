@@ -16,17 +16,18 @@ const Dashboard = ({ user }: { user: User | null }) => {
       if(recentData?.data?.length > 0) {
         const data = recentData.data;
         
-        // Create a set of all unique dates from the data
-        const allDates = new Set(data.map((item: any) => 
-          new Date(item.date).toLocaleDateString()
-        ));
-        
-        // Initialize data structures with null values for all dates
+        // Create an array of the last 7 days
+        const last7Days = Array.from({length: 7}, (_, i) => {
+          const date = new Date();
+          date.setDate(date.getDate() - i);
+          return date.toLocaleDateString();
+        }).reverse();
+
         const createEmptyDataSet = () => ({
-          dates: Array.from(allDates).sort(),
-          scores: Array(allDates.size).fill(null),
-          times: Array(allDates.size).fill(null),
-          exercisesCompleted: Array(allDates.size).fill(null)
+          dates: last7Days,
+          scores: Array(7).fill(null),
+          times: Array(7).fill(null),
+          exercisesCompleted: Array(7).fill(null)
         });
 
         const otData = createEmptyDataSet();

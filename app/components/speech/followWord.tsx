@@ -225,14 +225,14 @@ const FollowWord: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyLev
     console.log("Answer correct?", isCorrect);
     
     // Check if test is complete based on attempts
-    if (isTest && newAttempts >= 5) {
+    if (score >= wordList.length) {
       // Test is complete, call onComplete with final score
       setTimeout(() => {
         const finalScore = isCorrect ? score + 1 : score;
         onComplete?.({
           score: finalScore,
           metrics: {
-            accuracy: (finalScore / newAttempts) * 100,
+            accuracy: (finalScore / wordList.length) * 100,
             timeInSeconds: 0,
             attempts: newAttempts
           }

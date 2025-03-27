@@ -123,7 +123,7 @@ const SpeechQuiz = ({isInitialAssessment}: {isInitialAssessment?: boolean}) => {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -100 }}
           >
-            <CurrentExerciseComponent onComplete={handleExerciseComplete} isTest={true} difficultyLevel={user?.areasProgress?.ot?.difficultyLevel} />
+            <CurrentExerciseComponent onComplete={handleExerciseComplete} isTest={true} difficultyLevel={user?.areasProgress?.speech?.difficultyLevel} />
           </motion.div>
         ) : null}
       </AnimatePresence>

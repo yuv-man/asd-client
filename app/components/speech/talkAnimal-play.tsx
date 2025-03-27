@@ -5,9 +5,10 @@ import { useRouter } from 'next/navigation';
 import './styles/talkAnimals.scss';
 import { gameContent } from './talkAnimalsGameContent';
 import { SpeechRecognitionInstance } from '@/types/types';
-import { useUserStore } from '@/store/userStore';
+import { ExerciseProps } from '@/types/props';
 import { langEnum } from '@/enums/enumLang';
 import { useLocale } from 'next-intl';
+import { levenshteinDistance } from '@/app/helpers/talkAnimal-helper';
 
 // Speech recognition setup
 const setupSpeechRecognition = () => {
@@ -23,9 +24,8 @@ const setupSpeechRecognition = () => {
   return null;
 };
 
-export default function Play() {
+export default function Play({ isTest, difficultyLevel, onComplete }: ExerciseProps) {
   const router = useRouter();
-  const {user} = useUserStore();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [transcript, setTranscript] = useState('');
   const [feedback, setFeedback] = useState('');
@@ -39,7 +39,7 @@ export default function Play() {
   const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
 
   // Get current game content based on user's difficulty level
-  const currentGameContent = gameContent[user?.areasProgress.speech.difficultyLevel as keyof typeof gameContent];
+  const currentGameContent = gameContent[difficultyLevel as keyof typeof gameContent];
 
   // Initialize speech recognition
   useEffect(() => {
@@ -179,16 +179,49 @@ export default function Play() {
     
     setAttempts(prev => prev + 1);
     
+    // Calculate accuracy score (out of 600)
+    const calculateAccuracyScore = () => {
+      let bestMatchScore = 0;
+      expectedAnswers.forEach(expected => {
+        // Calculate Levenshtein distance
+        const distance = levenshteinDistance(spokenText, expected.toLowerCase());
+        const maxLength = Math.max(spokenText.length, expected.length);
+        const similarity = 1 - (distance / maxLength);
+        bestMatchScore = Math.max(bestMatchScore, similarity);
+      });
+      return Math.round(bestMatchScore * 600);
+    };
+
+    // Calculate complexity score (out of 400)
+    const calculateComplexityScore = () => {
+      const wordCount = spokenText.split(' ').length;
+      const uniqueWords = new Set(spokenText.split(' ')).size;
+      const avgWordLength = spokenText.length / wordCount;
+      
+      // Complexity factors
+      const wordCountScore = Math.min(150, wordCount * 30); // Max 150 points
+      const uniqueWordsScore = Math.min(150, uniqueWords * 30); // Max 150 points
+      const wordLengthScore = Math.min(100, avgWordLength * 10); // Max 100 points
+      
+      return Math.round(wordCountScore + uniqueWordsScore + wordLengthScore);
+    };
+
     // Check if any expected phrases are in the answer
     const foundMatch = expectedAnswers.some(expected => 
       spokenText.includes(expected)
     );
     
     if (foundMatch) {
+      // Calculate final score
+      const accuracyScore = calculateAccuracyScore();
+      const complexityScore = calculateComplexityScore();
+      const attemptsDeduction = Math.max(0, (attempts - 1) * 100); // Deduct 100 points per additional attempt
+      const finalScore = Math.max(0, Math.min(1000, accuracyScore + complexityScore - attemptsDeduction));
+      
       // Play success feedback
       playAudio('/audio/yay.mp3', 'Yay!');
       setFeedback(currentQuestion.feedback.good);
-      setScore(prev => prev + currentQuestion.points);
+      setScore(prev => prev + finalScore);
       setStars(prev => [...prev, currentQuestion.id]);
       setShowFeedback(true);
       
@@ -209,7 +242,6 @@ export default function Play() {
       );
     }
   };
-
   // Move to the next question
   const moveToNextQuestion = () => {
     const nextIndex = currentQuestionIndex + 1;
@@ -217,9 +249,8 @@ export default function Play() {
     if (nextIndex >= currentGameContent.length) {
       // Game completed
       setGameCompleted(true);
-      
-      // Play completion audio
       playAudio('/audio/game-complete.mp3', 'Wow! You did it! You talked to all our animal friends! Great job!');
+      onComplete?.({ score: score, metrics: { accuracy: score, timeInSeconds: 0, attempts: attempts } });
     } else {
       // Move to next question
       setCurrentQuestionIndex(nextIndex);
@@ -247,7 +278,6 @@ export default function Play() {
     playAudio('/audio/play-again.mp3', 'Let\'s play again with our animal friends!');
   };
 
-  // Go home
   const goHome = () => {
     playAudio('/audio/goodbye.mp3', 'Goodbye! See you next time!');
     

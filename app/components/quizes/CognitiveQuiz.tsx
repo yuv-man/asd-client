@@ -115,15 +115,9 @@ const CognitiveQuiz = ({isInitialAssessment}: {isInitialAssessment?: boolean}) =
             </motion.button>
           </motion.div>
         ) : isLoading ? (
-          <motion.div
-            key="loading"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="text-center py-8"
-          >
-            <p>Loading exercises...</p>
-          </motion.div>
+          <div className='flex items-center justify-center h-screen'>
+            <span className='loader'></span>
+          </div>
         ) : CurrentExerciseComponent ? (
           <motion.div
             key="exercise"
