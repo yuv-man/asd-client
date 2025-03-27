@@ -13,7 +13,7 @@ export default async function LocaleLayout({
   children, 
   params 
 }: LocaleLayoutProps) {
-  const { locale } = await params;  // Explicitly await params
+  const { locale } = await params; 
   
   // Validate locale early
   if (!locale) notFound();

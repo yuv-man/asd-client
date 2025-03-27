@@ -6,6 +6,7 @@ import ShapeTracing from '../components/ot/shapeTracing';
 import { ExerciseType } from '@/types/types';
 import BalloonGame from '../components/ot/balloonGame';
 import FollowWord from '../components/speech/followWord';
+import TalkAnimals from '../components/speech/talkAnimals';
 export const exerciseComponents = {
   'memory': MemoryExercise,
   'attention': AttentionExercise,
@@ -14,6 +15,7 @@ export const exerciseComponents = {
   'shape-tracing': ShapeTracing,
   'balloon-game': BalloonGame,
   'follow-word': FollowWord,
+  'talk-animals': TalkAnimals,
 } as const;
 
 export const getExerciseComponent = (type: ExerciseType) => {

@@ -204,7 +204,7 @@ export const TrailMap: React.FC<TrailMapProps> = ({
               <div className="progressIndicator">
                 <FaCloud size={24} color="white" />
                 <div className="progressText">
-                  {completedExercises}/{session.exercises.length}
+                  {completedExercises}/{session.exercises.length || 3}
                 </div>
               </div>
             </motion.div>

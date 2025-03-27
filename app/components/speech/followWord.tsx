@@ -4,6 +4,7 @@ import useLanguageStore from "@/store/languageStore";
 import { wordsIcons } from "./wordsIcons";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
+import { langEnum } from "@/enums/enumLang";
 
 interface SpeechRecognitionInstance extends EventTarget {
   lang: string;
@@ -49,6 +50,14 @@ const FollowWord: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyLev
   const { locale } = useLanguageStore();
   const t = useTranslations();
 
+  // Add state to track if we're on client side
+  const [isBrowser, setIsBrowser] = useState(false);
+
+  // Add this useEffect at the beginning
+  useEffect(() => {
+    setIsBrowser(true);
+  }, []);
+
   // Set words based on difficulty level
   useEffect(() => {
     const words = wordsByLevel[difficultyLevel as keyof typeof wordsByLevel] || wordsByLevel.easy;
@@ -88,6 +97,8 @@ const FollowWord: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyLev
 
   // Setup speech recognition
   useEffect(() => {
+    if (!isBrowser) return; // Only run on client side
+
     if (!("webkitSpeechRecognition" in window || "SpeechRecognition" in window)) {
       setError(t("speech.browserError"));
       return;
@@ -102,7 +113,7 @@ const FollowWord: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyLev
       }
       
       recognitionRef.current = new SpeechRecognition();
-      recognitionRef.current.lang = locale === "en" ? "en-US" : "he-IL";
+      recognitionRef.current.lang = langEnum[locale as keyof typeof langEnum];
       recognitionRef.current.continuous = false;
       recognitionRef.current.interimResults = false;
       
@@ -144,10 +155,10 @@ const FollowWord: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyLev
         recognitionRef.current.onend = () => null;
       }
     };
-  }, [locale, t]);
+  }, [locale, t, isBrowser]); // Add isBrowser to dependencies
 
   const startListening = () => {
-    if (!recognitionRef.current || isProcessing || isListening) return;
+    if (!isBrowser || !recognitionRef.current || isProcessing || isListening) return;
     
     setIsListening(true);
     setError(""); // Reset error on new attempt

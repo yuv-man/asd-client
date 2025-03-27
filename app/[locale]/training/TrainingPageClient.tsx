@@ -5,7 +5,7 @@ import { TrailMap } from '@/app/components/trailMap/TrailMap';
 import { useRouter } from 'next/navigation';
 import Modal from '@/app/components/common/Modal';
 import { Session, Quiz } from '@/types/types'
-import { useSessions } from '@/store/userStore'
+import { useSessions, useUserStore } from '@/store/userStore'
 import { exercisesAPI } from '@/services/api';
 import { areaTypesEnum } from '@/enums/enumArea';
 
@@ -15,7 +15,23 @@ export default function TrainingPageClient() {
     const [selectedSession, setSelectedSession] = useState<Session | null>(null);
     const [selectedQuiz, setSelectedQuiz] = useState<Quiz | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const { sessions, setCurrentSession } = useSessions();
+    const [isHydrated, setIsHydrated] = useState(false);
+    const user = useUserStore((state) => state.user);
+    const { sessions, setCurrentSession, initializeSessions } = useSessions();
+
+    useEffect(() => {
+      if (user !== undefined) {
+        setIsHydrated(true);
+      }
+    }, [user]);
+
+    useEffect(() => {
+      if(!isHydrated) return;
+      if(!sessions || sessions.length === 0) {
+        initializeSessions();
+      }
+    }, [sessions, initializeSessions, isHydrated, user]);
+
   
     useEffect(() => {
       const idx = sessions.findIndex(s => s.isCompleted === false)

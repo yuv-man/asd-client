@@ -1,5 +1,16 @@
 import { ExerciseProps } from './props';
 
+export interface SpeechRecognitionInstance extends EventTarget {
+  start: () => void;
+  stop: () => void;
+  onresult: (event: any) => void;
+  onerror: (event: any) => void;
+  onend: (event: any) => void;
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+}
+
 export interface User {
     _id?: string;
     name: string;

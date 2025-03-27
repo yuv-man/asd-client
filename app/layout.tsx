@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import SocketInitializer from "./components/common/SocketInitializer";
 import { Lilita_One, Wendy_One, Fredoka } from "next/font/google";
 import "./globals.css";
 import './styles/globals.scss';
@@ -18,8 +19,6 @@ const fredoka = Fredoka({
   subsets: ['hebrew'],
 });
 
-
-
 export const metadata: Metadata = {
   title: "WonderKid",
   description: "WonderKid",
@@ -33,13 +32,13 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-
   return (
     <html>
       <body
         className={`${lilitaOne.className} ${wendyOne.className} ${fredoka.className} antialiased`}
         suppressHydrationWarning
       >
+        <SocketInitializer />
         {children}
       </body>
     </html>
