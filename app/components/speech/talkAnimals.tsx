@@ -7,11 +7,13 @@ import './styles/talkAnimals.scss';
 import TalkAnimalsParentInfo from './TalkAnimalsParentInfo';
 import Image from 'next/image';
 import parentButton from '@/assets/help.svg';
+import Play from './talkAnimal-play';
 
-const TalkAnimals: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyLevel = "easy" }) => {
+const TalkAnimals: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyLevel = 1 }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [isParentModalOpen, setIsParentModalOpen] = useState(false);
+  const [gameStarted, setGameStarted] = useState(false);
 
   useEffect(() => {
     // Play welcome message after a short delay
@@ -56,9 +58,17 @@ const TalkAnimals: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyLe
   const startGame = async () => {
     await speak('Let\'s play with our animal friends!');
     setTimeout(() => {
-      router.push('/speech/animalGame');
+      setGameStarted(true);
     }, 1500);
   };
+
+  if (gameStarted) {
+    return <Play 
+      isTest={isTest} 
+      difficultyLevel={difficultyLevel} 
+      onComplete={onComplete} 
+    />;
+  }
 
   return (
     <div className="container">
