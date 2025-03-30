@@ -14,7 +14,7 @@ import ResultsModal from '@/app/components/common/ResultsModal';
 const SpeechQuiz = ({isInitialAssessment}: {isInitialAssessment?: boolean}) => {
   const router = useRouter();
   const user = useUserStore((state) => state.user);
-  const [currentExercise, setCurrentExercise] = useState(1);
+  const [currentExercise, setCurrentExercise] = useState(2);
   const [scores, setScores] = useState<Record<string, number>>({});
   const [showIntro, setShowIntro] = useState(true);
   const [exercises, setExercises] = useState<Exercise[]>([]);

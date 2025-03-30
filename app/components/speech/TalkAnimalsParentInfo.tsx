@@ -1,9 +1,9 @@
-// pages/training/quiz/speech/parents.js
+'use client'
 import React from 'react';
 import ParentModal from '@/app/components/common/ParentModal';
 import InfoCard from '@/app/components/common/InfoCard';
 import SkillsTable from '@/app/components/common/SkillTable';
-import './styles/talkAnimals.scss';
+import '@/app/styles/talkAnimals.scss';
 
 // Animal Friends game skills data
 const animalFriendsSkills = [

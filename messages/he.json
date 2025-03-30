@@ -48,5 +48,12 @@
       "correct": "נכון!",
       "incorrect": "נסה שוב!",
       "browserError": "זיהוי דיבור אינו נתמך בדפדפן זה. אנא השתמש בכרום."
-    }
+    },
+    "Hello": "שלום",
+    "Training Session": "מטלה יומית",
+    "Let's Start!": "בואו נתחיל!",
+    "Back to Training": "חזרה למסלול",
+    "Exercise Completed!": "בוצע בהצלחה!",
+    "Great job! You've completed this exercise. Ready to continue your journey?": "מצוין! השלמת את המשחק בהצלחה, נמשיך במסלול?",
+    "Continue to Trail Map": "המשיך למסלול"
 }

@@ -1,0 +1,27 @@
+$pastel-red: #FF6060;
+$pastel-blue: #295F98;
+
+.profile-bubble {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 20px;
+    align-items: center;
+    justify-content: center;
+
+    .avatar-section {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        overflow: hidden;
+    }
+
+    .details-section {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        color: $pastel-blue;
+        font-size: 20px;
+    }
+}

@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/navigation';
-import './styles/talkAnimals.scss';
+import '@/app/styles/talkAnimals.scss';
 import { gameContent } from './talkAnimalsGameContent';
 import { SpeechRecognitionInstance } from '@/types/types';
 import { ExerciseProps } from '@/types/props';

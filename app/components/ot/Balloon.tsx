@@ -1,6 +1,6 @@
 // components/Balloon.js
 import { useState, useEffect } from 'react';
-import './styles/balloon.scss';
+import '@/app/styles/balloon.scss';
 import { BalloonProps } from '@/types/props';
 import BalloonSVG from './BalloonSVG';
 

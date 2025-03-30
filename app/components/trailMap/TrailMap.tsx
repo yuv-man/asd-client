@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
-import './TrailMap.scss';
+import '@/app/styles/TrailMap.scss';
 import Image from 'next/image';
 import balloon from '@/assets/airballoon.svg';
 import { FaCloud, FaCog } from 'react-icons/fa';
@@ -19,8 +19,16 @@ export const TrailMap: React.FC<TrailMapProps> = ({
   const containerRef = React.useRef<HTMLDivElement>(null);
   const [windowHeight, setWindowHeight] = React.useState(0);
   
-  // Fixed session height
-  const sessionHeight = 100;
+  // Updated responsive session height based on device size
+  const sessionHeight = Math.min(windowHeight * 0.2, 150);
+  const buttonSize = React.useMemo(() => {
+    if (window.innerWidth < 768) { // Mobile
+      return Math.min(60, window.innerWidth * 0.15);
+    } else if (window.innerWidth < 1024) { // Tablet
+      return Math.min(90, window.innerWidth * 0.2);
+    }
+    return Math.min(80, window.innerWidth * 0.2); // Desktop
+  }, []);
   
   // Initialize window height on client side
   useEffect(() => {
@@ -83,20 +91,20 @@ export const TrailMap: React.FC<TrailMapProps> = ({
         width: '100%'
       }}
     >
-      {/* Settings button */}
+      {/* Settings button with updated responsive sizing */}
       <motion.div
         className="settingsButton"
         onClick={onSettingsClick}
         whileHover={{ scale: 1.1 }}
         style={{
           position: 'absolute',
-          top: '10px',
-          left: '10px',
+          top: 'clamp(10px, 2vh, 20px)',
+          left: 'clamp(10px, 2vw, 20px)',
+          width: 'clamp(32px, 8vw, 44px)',
+          height: 'clamp(32px, 8vw, 44px)',
           backgroundColor: 'lightBlue',
           border: 'none',
           borderRadius: '50%',
-          width: '40px',
-          height: '40px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -105,7 +113,7 @@ export const TrailMap: React.FC<TrailMapProps> = ({
           boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
         }}
       >
-        <FaCog size={20} color="white" />
+        <FaCog size={Math.min(18, window.innerWidth * 0.035)} color="white" />
       </motion.div>
 
       {/* Scrollable content */}
@@ -127,14 +135,38 @@ export const TrailMap: React.FC<TrailMapProps> = ({
           paddingBottom: windowHeight / 2 - sessionHeight / 2
         }}
       >
-        {/* Animal buttons */}
+        {/* Animal buttons with updated responsive positioning */}
         {Object.values(areaTypes).map((area, index) => {
-          const positions = [
-            { left: '25%', top: '70%' },
-            { left: '75%', top: '40%' },
-            { left: '25%', top: '10%' }
-          ];
-          
+          const positions = {
+            mobile: [
+              { left: '15%', top: '60%' },
+              { left: '85%', top: '40%' },
+              { left: '15%', top: '20%' }
+            ],
+            tablet: [
+              { left: '20%', top: '60%' },
+              { left: '80%', top: '40%' },
+              { left: '20%', top: '20%' }
+            ],
+            desktop: [
+              { left: '25%', top: '60%' },
+              { left: '75%', top: '40%' },
+              { left: '25%', top: '20%' }
+            ]
+          };
+
+          const getPosition = () => {
+            if (window.innerWidth < 768) return positions.mobile[index];
+            if (window.innerWidth < 1024) return positions.tablet[index];
+            return positions.desktop[index];
+          };
+
+          const iconSize = React.useMemo(() => {
+            if (window.innerWidth < 768) return Math.min(40, window.innerWidth * 0.12);
+            if (window.innerWidth <= 1024) return Math.min(70, window.innerWidth * 0.2);
+            return Math.min(60, window.innerWidth * 0.15);
+          }, []);
+
           return (
             <motion.div
               key={area.title}
@@ -142,7 +174,7 @@ export const TrailMap: React.FC<TrailMapProps> = ({
               onClick={() => handleQuizSelect(area.id)}
               style={{
                 position: 'absolute',
-                ...positions[index],
+                ...getPosition(),
                 cursor: 'pointer',
                 zIndex: 2,
                 borderRadius: '50%',
@@ -157,16 +189,24 @@ export const TrailMap: React.FC<TrailMapProps> = ({
               }}
               whileTap={{ scale: 0.95 }}
             >
-              <Image src={area.icon} alt={area.title} width={60} height={60} />  
+              <Image src={area.icon} alt={area.title} width={iconSize} height={iconSize} />  
             </motion.div>
           );
         })}
 
-        {/* Session buttons */}
+        {/* Session buttons with updated responsive positioning */}
         {[...displayedSessions].reverse().map((session, index) => {
           const isEven = (displayedSessions.length - 1 - index) % 2 === 0;
           const completedExercises = session.exercises.filter(ex => ex.isCompleted).length;
           const progressPercentage = (completedExercises / session.exercises.length) * 100;
+          const getHorizontalPosition = () => {
+            if (window.innerWidth < 768) {
+              return isEven ? '30%' : '70%';
+            } else if (window.innerWidth < 1024) {
+              return isEven ? '35%' : '65%';
+            }
+            return isEven ? '40%' : '60%';
+          };
 
           return (
             <motion.div
@@ -176,7 +216,7 @@ export const TrailMap: React.FC<TrailMapProps> = ({
               } ${session.isAvailable ? 'available' : 'locked'}`}
               style={{
                 position: 'absolute',
-                left: isEven ? '45%' : '55%',
+                left: getHorizontalPosition(),
                 top: `${index * sessionHeight}px`,
                 transform: 'translate(-50%, -50%)',
                 opacity: 1,
@@ -188,22 +228,24 @@ export const TrailMap: React.FC<TrailMapProps> = ({
                     ? 'linear-gradient(135deg, #63B3ED 0%, #4299E1 100%)'
                     : 'linear-gradient(135deg, #CBD5E0 0%, #A0AEC0 100%)',
                 display: 'flex',
+                border: '2px solid darkBlue',
                 flexDirection: 'column',
                 alignItems: 'center',
                 gap: '8px',
-                padding: '16px',
+                padding: 'clamp(2vh, 3vh, 4vh)',
                 borderRadius: '50%',
                 boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-                width: '60px',
-                height: '60px'
+                width: `${buttonSize}px`,
+                height: `${buttonSize}px`
               }}
               initial={{ scale: 1 }}
               whileHover={session.isAvailable ? { scale: 1.1 } : {}}
               onClick={() => session.isAvailable && onSessionSelect(session.id)}
             >
               <div className="progressIndicator">
-                <FaCloud size={24} color="white" />
-                <div className="progressText">
+                <FaCloud size={Math.min(28, window.innerWidth * 0.05)} color="white" /> 
+                <div className="progressText" 
+                  style={{ fontSize: `clamp(14px, 3vw, 18px)` }}> 
                   {completedExercises}/{session.exercises.length || 3}
                 </div>
               </div>
@@ -211,18 +253,26 @@ export const TrailMap: React.FC<TrailMapProps> = ({
           );
         })}
 
-        {/* Balloon */}
+        {/* Balloon with updated responsive sizing */}
         <motion.div
           className="balloon"
           animate={{
-            left: `${currentPosition % 2 === 0 ? '50%' : '60%'}`,
+            left: `${currentPosition % 2 === 0 ? 
+              (window.innerWidth < 768 ? '35%' : '40%') : 
+              (window.innerWidth < 768 ? '65%' : '60%')}`,
             top: `${(displayedSessions.length - currentPosition - 1) * sessionHeight}px`,
             transform: 'translate(-50%, -50%)'
           }}
           transition={{ duration: 1, type: 'spring' }}
           style={{ position: 'absolute', pointerEvents: 'none', zIndex: 3 }}
         >
-          <Image src={balloon} alt="Hot air balloon" width={75} height={75} priority/>
+          <Image 
+            src={balloon} 
+            alt="Hot air balloon" 
+            width={Math.min(80, window.innerWidth * 0.18)}
+            height={Math.min(80, window.innerWidth * 0.18)}
+            priority
+          />
         </motion.div>
       </motion.div>
     </div>

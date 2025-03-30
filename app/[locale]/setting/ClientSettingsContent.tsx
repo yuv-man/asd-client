@@ -8,6 +8,7 @@ import { useTranslations, useLocale } from 'next-intl';
 import Link from 'next/link';
 import Image from 'next/image';
 import logo from '@/public/wonderkid.svg';
+import '@/app/styles/setting.scss';
 
 
 const ClientSettingsContent = () => {
@@ -32,38 +33,29 @@ const ClientSettingsContent = () => {
   
     if (!isHydrated) return <p>Loading...</p>;
     return (
-      <div className="min-h-screen bg-gray-100">
-        {/* Navigation Bar */}
-        <nav className="bg-white shadow-sm">
-          <div className="max-w-7xl mx-auto px-4">
-            <div className="flex items-center py-4">
-              <div className="flex flex-row justify-between w-500 items-center">
-                  <div className="flex space-x-8" >
-                    <Image src={logo} alt="logo" width={15} height={15} />
-                      <button
-                          className={`${
-                          activeTab === 'profile'
-                              ? 'active'
-                              : 'text-gray-500 hover:text-gray-700'
-                          } px-3 py-2 font-medium nav`}
-                          onClick={() => setActiveTab('profile')}
-                      >
-                          {t('setting.profile')}
-                      </button>
-                      <button
-                          className={`nav ${
-                          activeTab === 'dashboard'
-                              ? 'active'
-                              : ''
-                          } px-3 py-2 font-medium`}
-                          onClick={() => setActiveTab('dashboard')}
-                      >
-                          {t('setting.dashboard')}
-                      </button>
+      <div className="settings-container">
+        <nav>
+          <div className="nav-container">
+            <div className="nav-content">
+              <div className="nav-items">
+                <div className="nav-buttons">
+                  <Image src={logo} alt="logo" width={15} height={15} />
+                  <button
+                    className={`nav-button ${activeTab === 'profile' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('profile')}
+                  >
+                    {t('setting.profile')}
+                  </button>
+                  <button
+                    className={`nav-button ${activeTab === 'dashboard' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('dashboard')}
+                  >
+                    {t('setting.dashboard')}
+                  </button>
                 </div>
                 <Link
                   href={`/${locale}/training`}
-                  className="text-gray-500 hover:text-gray-700 mr-6"
+                  className="back-link"
                 >
                   <span className="flex items-center">
                     <span className="ml-1">{t('setting.back')}</span>
@@ -74,8 +66,7 @@ const ClientSettingsContent = () => {
           </div>
         </nav>
   
-        {/* Content Area */}
-        <div className="max-w-7xl mx-auto px-4 py-6">
+        <div className="content-area">
           {activeTab === 'profile' && (
             <div>
               <Profile user={user} onSave={handleProfileSave}/>

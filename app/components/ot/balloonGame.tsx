@@ -1,6 +1,5 @@
-// components/BalloonGame.js
 import { useState, useEffect, useCallback } from 'react';
-import './styles/catchObjects.scss';
+import '@/app/styles/catchObjects.scss';
 import Balloon from './Balloon';
 import { BalloonType } from '@/types/types';
 import { balloonGameSettings } from '@/app/helpers/difficultySettings';

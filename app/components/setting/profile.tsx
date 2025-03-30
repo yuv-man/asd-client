@@ -6,6 +6,7 @@ import { ProfileProps } from '@/types/props';
 import { Avatar } from '@/types/types';
 import { LanguageSelector } from '../common/languageSelector';
 import { useTranslations } from 'next-intl';
+import '@/app/styles/profile.scss';
 
 function Profile({ user, onSave }: ProfileProps) {
   const t = useTranslations();
@@ -63,14 +64,14 @@ function Profile({ user, onSave }: ProfileProps) {
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-4">
-      <div className='flex justify-between items-center'>
-        <h1 className="title text-2xl font-bold mb-6">{t('setting.Profile_Settings')}</h1>
+    <div className="profile-container">
+      <div className="header">
+        <h1 className="title text-2xl font-bold">{t('setting.Profile_Settings')}</h1>
         <LanguageSelector />
       </div>
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="flex flex-col items-center gap-4">
-          <div className="flex flex-wrap gap-4 items-center">
+        <div className="avatar-section">
+          <div className="avatar-grid">
             {/* Selected avatar - larger size */}
             <div className="relative w-32 h-32">
               <Image
@@ -83,7 +84,7 @@ function Profile({ user, onSave }: ProfileProps) {
 
             {/* Avatar selection grid - only shown when editing */}
             {isEditing && (
-              <div className="flex flex-wrap gap-2">
+              <div className="avatar-selection">
                 {avatars.map((avatar, index) => (
                   <button
                     key={index}
@@ -99,14 +100,13 @@ function Profile({ user, onSave }: ProfileProps) {
                     />
                   </button>
                 ))}
-                
               </div>
             )}
           </div>
         </div>
 
-        <div className="flex gap-8">
-          <div className="w-1/2 space-y-4">
+        <div className="form-layout">
+          <div className="form-column">
             <h2 className="title text-lg font-semibold">{t('setting.Personal_Information')}</h2>
             <div>
               <label htmlFor="name" className="block text-sm font-medium">
@@ -118,7 +118,7 @@ function Profile({ user, onSave }: ProfileProps) {
                   id="name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                  className="input-field"
                   required
                 />
               ) : (
@@ -135,7 +135,7 @@ function Profile({ user, onSave }: ProfileProps) {
                   id="age"
                   value={age}
                   onChange={(e) => setAge(parseInt(e.target.value))}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                  className="input-field"
                 />
               ) : (
                 <p className="mt-1">{age || 4}</p>
@@ -151,7 +151,7 @@ function Profile({ user, onSave }: ProfileProps) {
                   id="email"
                   value={parentEmail}
                   onChange={(e) => setParentEmail(e.target.value)}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                  className="input-field"
                 />
               ) : (
                 <p className="mt-1">{parentEmail || 'Not set'}</p>
@@ -167,15 +167,15 @@ function Profile({ user, onSave }: ProfileProps) {
                   id="phone"
                   value={parentPhone}
                   onChange={(e) => setParentPhone(e.target.value)}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-                    />
+                  className="input-field"
+                />
               ) : (
                 <p className="mt-1">{parentPhone || 'Not set'}</p>
               )}
             </div>
           </div>
 
-          <div className="w-1/2 space-y-4">
+          <div className="form-column">
             <h2 className="title text-lg font-semibold">{t('setting.Therapy_Areas')}</h2>
             
             <div className="grid gap-4">
@@ -213,8 +213,8 @@ function Profile({ user, onSave }: ProfileProps) {
                   id="numOfExercises"
                   value={numOfExercises}
                   onChange={(e) => setNumOfExercises(parseInt(e.target.value))}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-                    />
+                  className="input-field"
+                />
               ) : (
                 <p className="mt-1">{numOfExercises || 3}</p>
               )}
@@ -222,7 +222,8 @@ function Profile({ user, onSave }: ProfileProps) {
             </div>
           </div>
         </div>
-        <div className="flex justify-end gap-4">
+
+        <div className="button-group">
           {isEditing ? (
             <>
               <button

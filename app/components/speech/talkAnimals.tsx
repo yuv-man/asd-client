@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/navigation';
 import { ExerciseProps } from '@/types/props';
-import './styles/talkAnimals.scss';
+import '@/app/styles/talkAnimals.scss';
 import TalkAnimalsParentInfo from './TalkAnimalsParentInfo';
 import Image from 'next/image';
 import parentButton from '@/assets/help.svg';

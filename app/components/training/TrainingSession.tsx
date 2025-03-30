@@ -7,6 +7,9 @@ import { getExerciseComponent } from '../../helpers/exerciseComponents';
 import { useUserStore, useSessions } from '@/store/userStore'
 import { useRouter } from 'next/navigation';
 import { exercisesAPI } from '@/services/api';
+import ProfileDetails from '../common/ProfileBubble';
+import '@/app/styles/TrainingSession.scss';
+import { useTranslations, useLocale } from 'next-intl';
 
 interface TrainingSessionProps {
   session: Session;
@@ -24,6 +27,7 @@ const TrainingSession = ({ session, onComplete }: TrainingSessionProps) => {
   const [isHydrated, setIsHydrated] = useState(false);
   const { updateSession } = useSessions()
   const router = useRouter();
+  const t = useTranslations();
 
   useEffect(() => {
     if (session?.exercises) {
@@ -97,7 +101,7 @@ const TrainingSession = ({ session, onComplete }: TrainingSessionProps) => {
 
   if (!isHydrated) return <p>Loading...</p>;
   return (
-    <div className="max-w-4xl mx-auto px-4">
+    <div className="training-session">
       <AnimatePresence mode="wait">
         {showIntro ? (
           <motion.div
@@ -105,31 +109,32 @@ const TrainingSession = ({ session, onComplete }: TrainingSessionProps) => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="text-center flex flex-col items-center justify-center"
+            className="intro-container"
           >
-            <h2 className="text-3xl font-bold text-gray-900 mb-4 text-darkPurple">
-              {exercises[currentExercise]?.title || 'Training Session'}
+            {user && <ProfileDetails user={user} />}
+            <h2>
+              {t(exercises[currentExercise]?.title)}
             </h2>
-            <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto text-darkPurple">
-              Hi {user?.name}! {exercises[currentExercise]?.description}
+            <p>
+              {t(exercises[currentExercise]?.description)}
             </p>
-            <div className="flex gap-4">
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => router.push('/training')}
-                className="bg-purple-500 px-8 py-3 rounded-full hover:bg-gray-300 flex items-center"
-              >
-                Back to Training
-              </motion.button>
+            <div className="button-container">
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={startExercise}
-                className="bg-purple-600 text-white px-8 py-3 rounded-full hover:bg-purple-700 flex items-center"
+                className="primary"
               >
-                Start Exercise
-                <ArrowRight className="ml-2 w-4 h-4" />
+                {t('Let\'s Start!')}
+                <ArrowRight className="icon" />
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => router.push('/training')}
+                className="secondary"
+              >
+                {t('Back to Training')}
               </motion.button>
             </div>
           </motion.div>
@@ -153,21 +158,20 @@ const TrainingSession = ({ session, onComplete }: TrainingSessionProps) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+            className="completion-modal"
           >
-            <div className="bg-white p-8 rounded-lg max-w-md w-full">
-              <h3 className="text-2xl font-bold text-darkPurple mb-4">Exercise Completed!</h3>
-              <p className="text-gray-600 mb-6">
-                Great job! You've completed this exercise. Ready to continue your journey?
+            <div className="modal-content">
+              <h3>{t('Exercise Completed!')}</h3>
+              <p>
+                {t('Great job! You\'ve completed this exercise. Ready to continue your journey?')}
               </p>
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={handleContinue}
-                className="bg-purple-600 text-white px-8 py-3 rounded-full hover:bg-purple-700 flex items-center mx-auto"
               >
-                Continue to Trail Map
-                <ArrowRight className="ml-2 w-4 h-4" />
+                {t('Continue to Trail Map')}
+                <ArrowRight className="icon" />
               </motion.button>
             </div>
           </motion.div>

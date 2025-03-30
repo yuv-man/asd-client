@@ -19,24 +19,24 @@
       "back": "Back",
       "profile": "Profile",
       "dashboard": "Dashboard",
-      "Profile_Settings": "Profile Settings",
-      "Personal_Information": "Personal Information",
-      "Name": "Name",
-      "Email": "Email",
-      "Phone": "Phone",
-      "Age": "Age",
-      "Therapy_Areas": "Therapy Areas",
-      "Cognitive_Therapy": "Cognitive Therapy",
-      "Speech_Therapy": "Speech Therapy",
-      "Occupational_Therapy": "Occupational Therapy",
-      "Number_of_Exercises": "Number of Exercises per Session",
-      "Level": "Level",
-      "English": "English",
-      "Hebrew": "Hebrew",
-      "Edit_Profile": "Edit Profile",
-      "Cancel": "Cancel",
-      "Save": "Save",
-      "Enabled": "Enabled"
+      "profileSettings": "Profile Settings",
+      "personalInformation": "Personal Information",
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "age": "Age",
+      "therapyAreas": "Therapy Areas",
+      "cognitiveTherapy": "Cognitive Therapy",
+      "speechTherapy": "Speech Therapy",
+      "occupationalTherapy": "Occupational Therapy",
+      "exercisesPerSession": "Number of Exercises per Session",
+      "level": "Level",
+      "english": "English",
+      "hebrew": "Hebrew",
+      "editProfile": "Edit Profile",
+      "cancel": "Cancel",
+      "save": "Save",
+      "enabled": "Enabled"
     },
     "speech": {
       "title": "Speech Therapy Game",
@@ -48,5 +48,14 @@
       "correct": "Correct!",
       "incorrect": "Try again!",
       "browserError": "Speech recognition is not supported in this browser. Please use Chrome."
+    },
+    "general": {
+      "hello": "Hello",
+      "trainingSession": "Training Session",
+      "letsStart": "Let's Start!",
+      "backToTraining": "Back to Training",
+      "exerciseCompleted": "Exercise Completed!",
+      "exerciseCompletedMessage": "Great job! You've completed this exercise. Ready to continue your journey?",
+      "continueToTrailMap": "Continue to Trail Map"
     }
-  }
+}

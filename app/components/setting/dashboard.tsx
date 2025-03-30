@@ -4,6 +4,7 @@ import { Award, ArrowRight, Star } from 'lucide-react';
 import { WeeklySummary, User } from '@/types/types';
 import { weeklySummariesAPI, dailySummariesAPI } from '@/services/api';
 import AreaAnalyses from './areaAnalyses';
+import '@/app/styles/setting.scss';
 
 const Dashboard = ({ user }: { user: User | null }) => {
   const [userProgress, setUserProgress] = useState<WeeklySummary>();
@@ -111,21 +112,23 @@ const Dashboard = ({ user }: { user: User | null }) => {
   }, [user]);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
-      <div className="mb-12">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+    <div className="dashboard">
+      <div className="dashboard__header">
+        <h1 className="dashboard__title">
           Welcome back, {user?.name || 'User'}! 👋
         </h1>
-        <p className="text-gray-600">
+        <p className="dashboard__subtitle">
           Track your progress and continue your learning journey.
         </p>
       </div>
 
       {isLoading ? (
-        <div className="text-center py-8">Loading your progress data...</div>
+        <div>
+          <span className="loader"></span>
+          </div>
       ) : (
         userProgress && recentData && (
-          <div className="grid md:grid-cols-3 gap-6 mb-6">
+          <div className="dashboard__areas">
             {Object.entries(userProgress.areaBreakdown || {}).map(([area, value]) => (
               <AreaAnalyses 
                 key={area} 
@@ -139,43 +142,42 @@ const Dashboard = ({ user }: { user: User | null }) => {
         )
       )}
 
-      <div className="grid md:grid-cols-2 gap-6">
-        <div className="bg-white rounded-xl shadow-lg p-6">
-          <h3 className="text-xl font-semibold mb-4">Recent Activities</h3>
-          <div className="space-y-4">
+      <div className="dashboard__content">
+        <div className="dashboard__card">
+          <h3 className="dashboard__card-title">Recent Activities</h3>
+          <div className="dashboard__activities">
             {userProgress?.recentExercises && userProgress.recentExercises.length > 0 ? (
               userProgress.recentExercises.slice(0, 10).map((activity, index) => (
-                <div
-                  key={index}
-                  className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
-                >
-                  <div>
-                    <h4 className={`font-medium ${activity.area}`}>{activity.title}</h4>
+                <div key={index} className="activity-item">
+                  <div className="activity-item__title">
+                    <h4 className={`${activity.area}`}>{activity.title}</h4>
                   </div>
-                  <p className="text-sm text-gray-600">
-                    {new Date(activity.timestamp).toLocaleDateString()}
-                  </p>
-                  <div className="flex items-center">
-                    <Star className="w-4 h-4 mr-1" />
-                    <div>{activity.score}</div>
-                  </div>
-                  <div className="text-purple-600 flex items-center">
-                    <Award className="w-4 h-4 mr-1" />
-                    {activity.difficultyLevel}
+                  <div className="activity-item__details">
+                    <p className="activity-item__date">
+                      {new Date(activity.timestamp).toLocaleDateString()}
+                    </p>
+                    <div className="activity-item__score">
+                      <Star className="activity-item__icon" />
+                      <div>{activity.score}</div>
+                    </div>
+                    <div className="activity-item__difficulty">
+                      <Award className="activity-item__icon" />
+                      {activity.difficultyLevel}
+                    </div>
                   </div>
                 </div>
               ))
             ) : (
-              <div className="text-center text-gray-500 py-4">
+              <div className="dashboard__empty">
                 No recent activities found
               </div>
             )}
           </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-lg p-6">
-          <h3 className="text-xl font-semibold mb-4">Recommended Exercises</h3>
-          <div className="space-y-4">
+        <div className="dashboard__card">
+          <h3 className="dashboard__card-title">Recommended Exercises</h3>
+          <div className="dashboard__exercises">
             {[
               {
                 title: 'Advanced Pattern Recognition',

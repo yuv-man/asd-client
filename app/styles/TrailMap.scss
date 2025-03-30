@@ -13,7 +13,7 @@
 .scrollContainer {
   position: relative; 
   width: 100%;
-  height: 100%;
+  height: 100vh;
   cursor: grab;
   
   &:active {
@@ -35,8 +35,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #8B7355;  // Stone-like color
-  border: 3px solid #6F4E37;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 

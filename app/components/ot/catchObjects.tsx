@@ -6,7 +6,7 @@ import fish from '@/assets/memoryIcons/fish.svg';
 import steak from '@/assets/memoryIcons/steak.svg';
 import poachEgg from '@/assets/memoryIcons/poached-eggs.svg';
 import Head from 'next/head';
-import './styles/catchObjects.scss';
+import '@/app/styles/catchObjects.scss';
 import { catchObjectSettings } from '../../helpers/difficultySettings';
 import { FallingObject } from '@/types/types';
 import { ExerciseProps } from '@/types/props';
@@ -233,7 +233,7 @@ const CatchObjects: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyL
         {gameActive && (
           <div 
             ref={gameAreaRef}
-            className={`gameArea ${gameActive ? 'active' : ''}`}
+            className={`catchObjects gameArea ${gameActive ? 'active' : ''}`}
           >
           {gameActive && fallingObjects.map(obj => (
             <div 
