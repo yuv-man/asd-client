@@ -4,7 +4,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import '@/app/styles/rythemGame.scss';
-import { RHYMING_SETS, characters } from './rythemGame-helper';
+import { RHYMING_SETS } from './rythemGame-helper';
 import speakerIcon from '@/assets/speaker.svg';
 import star from '@/assets/rythemGame/star.svg';
 
@@ -19,7 +19,7 @@ interface RhymingSet {
   options: { word: string; image: string; correct: boolean; }[];
 }
 
-export default function Play({ isTest, difficultyLevel, onComplete, character }: any) {
+export default function Play({ isTest, difficultyLevel, onComplete }: any) {
   const router = useRouter();
 
   const [score, setScore] = useState(0);
@@ -28,16 +28,13 @@ export default function Play({ isTest, difficultyLevel, onComplete, character }:
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [message, setMessage] = useState('');
   const [rounds, setRounds] = useState(0);
-  const [attempts, setAttempts] = useState(0);  // New: track attempts
-  const [timer, setTimer] = useState(0);  // New: track time
+  const [attempts, setAttempts] = useState(0);  // Track attempts
+  const [timer, setTimer] = useState(0);  // Track time
   const [usedSets, setUsedSets] = useState<number[]>([]);
-  const [characterData, setCharacterData] = useState(characters[character]);
   
   const speechSynthRef = useRef<SpeechSynthesis | null>(null);
   const audioContext = useRef<AudioContext | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
-
-  // Add timer interval ref
   const timerIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   // Initialize audio and speech synthesis
@@ -48,16 +45,14 @@ export default function Play({ isTest, difficultyLevel, onComplete, character }:
       audioContext.current = new (window.AudioContext || window.webkitAudioContext)();
     }
 
-    // If loaded, start the game
-    const charIndex = parseInt(character as string) || 0;
-    setCharacterData(characters[charIndex]);
     startGame();
     
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
+      if (timerIntervalRef.current) clearInterval(timerIntervalRef.current);
       if (speechSynthRef.current) speechSynthRef.current.cancel();
     };
-  }, [ difficultyLevel, character]);
+  }, [difficultyLevel]);
 
   // Speak text using speech synthesis
   const speak = (text: string, callback?: () => void) => {
@@ -144,7 +139,7 @@ export default function Play({ isTest, difficultyLevel, onComplete, character }:
     return randomSet;
   };
 
-  // New: Start timer when game starts
+  // Start timer when game starts
   useEffect(() => {
     if (gameState === 'playing') {
       timerIntervalRef.current = setInterval(() => {
@@ -159,7 +154,7 @@ export default function Play({ isTest, difficultyLevel, onComplete, character }:
     };
   }, [gameState]);
 
-  // Modify startGame to reset timer and attempts
+  // Start the game
   const startGame = () => {
     setGameState('intro');
     setTimer(0);
@@ -173,8 +168,7 @@ export default function Play({ isTest, difficultyLevel, onComplete, character }:
     setMessage('');
     
     // Welcome message
-    const charIndex = parseInt(character as string) || 0;
-    speak(`Let's find rhyming words with ${characters[charIndex].name}!`, () => {
+    speak(`Let's find rhyming words!`, () => {
       timerRef.current = setTimeout(() => {
         setGameState('playing');
         speak(`What rhymes with ${newSet.target.word}? Click each picture to hear the word.`, undefined);
@@ -182,7 +176,7 @@ export default function Play({ isTest, difficultyLevel, onComplete, character }:
     });
   };
 
-  // Modify handleOptionClick to track attempts and calculate final score
+  // Handle option click
   const handleOptionClick = (index: number) => {
     if (gameState !== 'playing' || !currentSet) return;
     
@@ -200,7 +194,7 @@ export default function Play({ isTest, difficultyLevel, onComplete, character }:
       
       // Only proceed to next round or game over if answer was correct
       timerRef.current = setTimeout(() => {
-        if (rounds >= 2) { // Changed from 4 to 2 (for 3 rounds total)
+        if (rounds >= 2) { // 3 rounds total
           setGameState('gameover');
           // Calculate final score based on accuracy and time
           const accuracy = (score + 1) / attempts;
@@ -242,140 +236,130 @@ export default function Play({ isTest, difficultyLevel, onComplete, character }:
   };
 
   return (
-    <div className='rythemGame-play'>
-        <div className='container' style={{ backgroundColor: characterData.color }}>
+    <div className="rythemGame-play">
+      <div className="container" style={{ backgroundColor: '#FFD6E0' }}>
         <Head>
-            <title>Rhyme Time - {difficultyLevel} level</title>
-            <meta name="description" content="Find words that rhyme" />
+          <title>Rhyme Time - Level {difficultyLevel}</title>
+          <meta name="description" content="Find words that rhyme" />
         </Head>
 
-        <main className='main'>
-            <div className='gameHeader'>
-            <h1 className='title'>Rhyme Time</h1>
-            <div className='scoreBoard'>
-                <div className='score'>
-                <Image src={star} alt="Score" width={30} height={30} />
-                <span>{score}</span>
+        <main className="main">
+          <div className="gameHeader">
+            <h1 className="title">Rhyme Time</h1>
+            <div className="scoreBoard">
+              <div className="stats-container">
+                <div className="stats-item score">
+                  <Image src={star} alt="Score" width={30} height={30} />
+                  <span>{score}</span>
                 </div>
-                <div className='round'>
-                <span>Round: {rounds + 1}/3</span>
+                <div className="stats-item round">
+                  <span>Round: {rounds + 1}/3</span>
                 </div>
-                <div className='attempts'>
-                <span>Attempts: {attempts}</span>
+                <div className="stats-item attempts">
+                  <span>Attempts: {attempts}</span>
                 </div>
-                <div className='timer'>
-                <span>Time: {Math.floor(timer / 60)}:{(timer % 60).toString().padStart(2, '0')}</span>
+                <div className="stats-item timer">
+                  <span>Time: {Math.floor(timer / 60)}:{(timer % 60).toString().padStart(2, '0')}</span>
                 </div>
+              </div>
             </div>
-            </div>
+          </div>
 
-            <div className='gameArea'>
-            <div className='characterContainer'>
-                <Image 
-                src={characterData.image} 
-                alt={characterData.name} 
-                width={100} 
-                height={100}
-                className='characterImage'
-                />
-            </div>
-
+          <div className="gameArea">
             {gameState === 'intro' && (
-                <div className='messageBox'>
+              <div className="messageBox">
                 <p>Get ready to find rhyming words!</p>
-                </div>
+              </div>
             )}
 
             {(gameState === 'playing' || gameState === 'feedback') && currentSet && (
-                <>
-                <div className='targetContainer'>
-                    <p className='question'>What rhymes with:</p>
-                    <div className='targetWord'>
-                    <div className='wordCard'>
-                        <Image 
+              <>
+                <div className="targetContainer">
+                  <p className="question">What rhymes with:</p>
+                  <div className="targetWord">
+                    <div className="wordCard">
+                      <Image 
                         src={currentSet.target.image} 
                         alt={currentSet.target.word} 
-                        width={120} 
-                        height={120} 
-                        />
-                        <button 
-                        className='speakerButton'
+                        width={120}
+                        height={120}
+                      />
+                      <button 
+                        className="speakerButton"
                         onClick={(e) => speakWord(currentSet.target.word, e)}
-                        >
-                        <Image src={speakerIcon} alt="Listen" width={30} height={30} />
-                        </button>
+                      >
+                        <Image src={speakerIcon} alt="Listen" width={24} height={24} />
+                      </button>
                     </div>
-                    </div>
+                  </div>
                 </div>
 
-                <div className='optionsContainer'>
-                    {currentSet.options.map((option, index) => (
+                <div className="optionsContainer">
+                  {currentSet.options.map((option, index) => (
                     <div 
-                        key={index} 
-                        className={`option ${selectedOption === index ? (option.correct ? 'correctOption' : 'incorrectOption') : ''}`}
-                        onClick={() => gameState === 'playing' && handleOptionClick(index)}
+                      key={index} 
+                      className={`option ${selectedOption === index ? (option.correct ? 'correctOption' : 'incorrectOption') : ''}`}
+                      onClick={() => gameState === 'playing' && handleOptionClick(index)}
                     >
-                        <div className='wordCard'>
+                      <div className="wordCard">
                         <Image 
-                            src={option.image} 
-                            alt={option.word} 
-                            width={100} 
-                            height={100} 
+                          src={option.image} 
+                          alt={option.word} 
+                          width={100} 
+                          height={100}
                         />
                         <button 
-                            className='speakerButton'
-                            onClick={(e) => speakWord(option.word, e)}
+                          className="speakerButton"
+                          onClick={(e) => speakWord(option.word, e)}
                         >
-                            <Image src={speakerIcon} alt="Listen" width={25} height={25} />
+                          <Image src={speakerIcon} alt="Listen" width={20} height={20} />
                         </button>
-                        </div>
+                      </div>
                     </div>
-                    ))}
+                  ))}
                 </div>
-                </>
+              </>
             )}
 
             {gameState === 'feedback' && (
-                <div className={`feedbackMessage ${message.includes('Good') ? 'goodMessage' : 'oopsMessage'}`}>
+              <div className={`feedbackMessage ${message.includes('Good') ? 'goodMessage' : 'oopsMessage'}`}>
                 {message}
-                </div>
+              </div>
             )}
 
             {gameState === 'gameover' && (
-                <div className='gameoverArea'>
+              <div className="gameoverArea">
                 <h2>Game Over!</h2>
                 <p>You found {score} rhyming words!</p>
-                <div className='starsContainer'>
-                    {Array.from({ length: score }).map((_, i) => (
-                    <Image key={i} src="/images/star.png" alt="Star" width={40} height={40} />
-                    ))}
+                <div className="starsContainer">
+                  {Array.from({ length: score }).map((_, i) => (
+                    <Image key={i} src={star} alt="Star" width={40} height={40} />
+                  ))}
                 </div>
-                <div className='buttonsContainer'>
-                    <button 
-                    className='playAgainButton'
+                <div className="buttonsContainer">
+                  <button 
+                    className="playAgainButton"
                     onClick={() => {
-                        setScore(0);
-                        setRounds(0);
-                        setUsedSets([]);
-                        startGame();
+                      setScore(0);
+                      setRounds(0);
+                      setUsedSets([]);
+                      startGame();
                     }}
-                    >
-                    <Image src="/images/replay.png" alt="Play Again" width={40} height={40} />
+                  >
                     <span>Play Again</span>
-                    </button>
-                    <button 
-                    className='homeButton'
+                  </button>
+                  <button 
+                    className="homeButton"
                     onClick={() => router.push('/')}
-                    >
-                    <Image src="/images/home.png" alt="Home" width={40} height={40} />
+                  >
                     <span>Home</span>
-                    </button>
+                  </button>
                 </div>
-                </div>
+              </div>
             )}
-            </div>
+          </div>
         </main>
-        </div>
+      </div>
     </div>
   );
 }

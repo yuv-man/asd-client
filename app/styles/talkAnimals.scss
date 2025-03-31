@@ -793,3 +793,97 @@
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 999;
   }
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 1rem;
+  }
+
+  .main {
+    padding: 1rem 0;
+    max-width: 100%;
+  }
+
+  .buttonContainer {
+    max-width: 100%;
+    padding: 0 1rem;
+  }
+
+  .characterCard {
+    width: 95%;
+    padding: 1.5rem;
+  }
+
+  .speechBubble {
+    width: 95%;
+  }
+
+  .completionScreen {
+    width: 95%;
+    padding: 1.5rem;
+  }
+
+  .starsContainer {
+    gap: 1rem;
+  }
+
+  .completionButtons {
+    flex-direction: column;
+    width: 100%;
+    gap: 0.75rem;
+  }
+
+  .playAgainButton, .homeButton {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 1.75rem;
+    margin: 0 0 1.5rem;
+  }
+
+  .progressBar {
+    padding: 0.25rem;
+  }
+
+  .progressStep {
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 1.25rem;
+    margin: 0 0.25rem;
+  }
+
+  .characterEmoji {
+    font-size: 3.5rem;
+  }
+
+  .question {
+    font-size: 1.25rem;
+  }
+
+  .controlsArea {
+    width: 100%;
+    padding: 0 1rem;
+  }
+
+  .speakButton, .listeningButton, .helpButton, .tryAgainButton {
+    padding: 0.6rem 1.25rem;
+    font-size: 0.9rem;
+  }
+
+  .completionTitle {
+    font-size: 1.75rem;
+  }
+
+  .characterCircle {
+    width: 3.5rem;
+    height: 3.5rem;
+    font-size: 2rem;
+  }
+
+  .starBadge {
+    font-size: 1.25rem;
+  }
+}

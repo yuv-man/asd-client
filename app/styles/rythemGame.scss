@@ -1,423 +1,620 @@
-/* styles/Home.module.css */
+// styles/rythemGame.scss
+
+/* Home page styles */
 .rythemGame-container {
     .container {
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        align-items: center;
-        padding: 1rem;
-        transition: background-color 0.3s ease;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      transition: background-color 0.3s ease;
     }
     
     .main {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        max-width: 800px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      max-width: 800px;
     }
     
     .title {
-        font-size: 2.5rem;
-        margin-bottom: 1rem;
-        text-align: center;
-        color: #333;
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      text-align: center;
+      color: #333;
     }
     
     .highlight {
-        color: #FF6B6B;
+      color: #FF6B6B;
     }
     
     .instructions {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        margin-bottom: 1.5rem;
-        background-color: white;
-        padding: 1rem;
-        border-radius: 1rem;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      background-color: white;
+      padding: 1rem;
+      border-radius: 1rem;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
     
     .instructions p {
-        margin: 0;
-        font-size: 1.2rem;
-        color: #333;
+      margin: 0;
+      font-size: 1.2rem;
+      color: #333;
     }
     
     .characterContainer {
-        display: flex;
-        justify-content: center;
-        gap: 2rem;
-        margin: 1.5rem 0;
-        flex-wrap: wrap;
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin: 1.5rem 0;
+      flex-wrap: wrap;
     }
     
     .character {
-        position: relative;
-        background-color: white;
-        border-radius: 1rem;
-        padding: 1rem;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        cursor: pointer;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-    
-    .character:hover {
+      position: relative;
+      background-color: white;
+      border-radius: 1rem;
+      padding: 1rem;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      
+      &:hover {
         transform: scale(1.05);
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+      }
     }
     
     .selectedCharacter {
-        border: 4px solid #FF6B6B;
-        transform: scale(1.05);
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+      border: 4px solid #FF6B6B;
+      transform: scale(1.05);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
     }
     
     .characterImage {
-        margin-bottom: 0.5rem;
+      margin-bottom: 0.5rem;
     }
     
     .speakerButton {
-        background: none;
-        border: none;
-        cursor: pointer;
-        padding: 0.3rem;
-        border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: #f0f0f0;
-        transition: background-color 0.2s ease;
-    }
-    
-    .speakerButton:hover {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.3rem;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #f0f0f0;
+      transition: background-color 0.2s ease;
+      
+      &:hover {
         background-color: #e0e0e0;
+      }
     }
     
     .levelContainer {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-        width: 100%;
-        max-width: 350px;
-        margin-top: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      width: 100%;
+      max-width: 350px;
+      margin-top: 2rem;
     }
     
     .levelButton {
-        display: flex;
-        align-items: center;
-        padding: 1rem;
-        border: none;
-        border-radius: 1rem;
-        cursor: pointer;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-        background-color: white;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-    
-    .levelButton:hover {
+      display: flex;
+      align-items: center;
+      padding: 1rem;
+      border: none;
+      border-radius: 1rem;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      background-color: white;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      
+      &:hover {
         transform: scale(1.03);
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-    }
-    
-    .levelButton span {
+      }
+      
+      span {
         flex: 1;
         text-align: center;
         font-size: 1.3rem;
         font-weight: bold;
         color: #333;
+      }
     }
     
     .easy {
-        border-left: 8px solid #4FACFE;
+      border-left: 8px solid #4FACFE;
     }
     
     .medium {
-        border-left: 8px solid #FF8C42;
+      border-left: 8px solid #FF8C42;
     }
     
     .hard {
-        border-left: 8px solid #FF6B6B;
+      border-left: 8px solid #FF6B6B;
     }
     
     .footer {
-        width: 100%;
-        padding: 1rem 0;
-        text-align: center;
-        color: #666;
+      width: 100%;
+      padding: 1rem 0;
+      text-align: center;
+      color: #666;
     }
-}
   
-  /* styles/Game.module.css */
+    @media (max-width: 768px) {
+      .main {
+        padding: 0 1rem;
+      }
+  
+      .title {
+        font-size: 2rem;
+      }
+  
+      .instructions {
+        flex-direction: column;
+        text-align: center;
+        padding: 0.75rem;
+      }
+  
+      .characterContainer {
+        gap: 1rem;
+      }
+  
+      .levelContainer {
+        max-width: 100%;
+        padding: 0 1rem;
+      }
+  
+      .levelButton span {
+        font-size: 1.1rem;
+      }
+      
+      .character {
+        width: calc(50% - 1rem);
+        padding: 0.75rem;
+      }
+    }
+  
+    @media (max-width: 480px) {
+      .character {
+        width: 100%;
+      }
+      
+      .title {
+        font-size: 1.8rem;
+      }
+    }
+  }
+  
+  /* Game page styles */
   .rythemGame-play {
     .container {
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 1rem;
-        transition: background-color 0.3s ease;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1rem;
+      transition: background-color 0.3s ease;
     }
     
     .main {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        width: 100%;
-        max-width: 800px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem;
     }
     
     .gameHeader {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin-bottom: 1.5rem;
-        width: 100%;
-    }
-    
-    .title {
-        font-size: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      width: 100%;
+      
+      .title {
+        font-size: clamp(1.5rem, 4vw, 2.5rem);
+        text-align: center;
         margin-bottom: 1rem;
         color: #333;
+      }
     }
     
     .scoreBoard {
-        display: flex;
-        justify-content: space-between;
-        width: 100%;
-        max-width: 400px;
-        background-color: white;
-        padding: 0.75rem 1.5rem;
-        border-radius: 1rem;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      max-width: 600px;
+      background-color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 1rem;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
     
-    .score {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
+    .stats-container {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      width: 100%;
     }
     
-    .score span {
-        font-size: 1.2rem;
+    .stats-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      
+      span {
+        font-size: 1rem;
         font-weight: bold;
         color: #333;
-    }
-    
-    .round {
-        font-weight: bold;
-        color: #333;
+        white-space: nowrap;
+      }
     }
     
     .gameArea {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        background-color: white;
-        padding: 1.5rem;
-        border-radius: 1.5rem;
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-        width: 100%;
-        max-width: 600px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-color: white;
+      padding: 1.5rem;
+      border-radius: 1.5rem;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
     }
     
     .characterContainer {
-        display: flex;
-        justify-content: center;
-        margin-bottom: 1rem;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 1rem;
     }
     
     .characterImage {
-        border-radius: 50%;
-        background-color: #f5f5f5;
-        padding: 0.5rem;
+      border-radius: 50%;
+      background-color: #f5f5f5;
+      padding: 0.5rem;
     }
     
     .messageBox {
-        background-color: #f8f9fa;
-        padding: 1rem;
-        border-radius: 1rem;
-        margin: 1rem 0;
-        text-align: center;
-        font-size: 1.2rem;
-        color: #333;
-        border: 2px dashed #ccc;
+      background-color: #f8f9fa;
+      padding: 1rem;
+      border-radius: 1rem;
+      margin: 1rem 0;
+      text-align: center;
+      font-size: 1.2rem;
+      color: #333;
+      border: 2px dashed #ccc;
     }
     
     .targetContainer {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin: 1rem 0;
-    }
-    
-    .question {
-        font-size: 1.3rem;
-        margin-bottom: 0.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 1rem 0;
+      text-align: center;
+      
+      .question {
+        font-size: clamp(1rem, 3vw, 1.5rem);
+        margin-bottom: 1rem;
         color: #333;
+      }
     }
     
     .targetWord {
-        background-color: #FFE9A0;
-        padding: 1rem;
-        border-radius: 1rem;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: center;
+      background-color: #FFE9A0;
+      padding: 1rem;
+      border-radius: 1rem;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
     
     .wordCard {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 0.5rem;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      background: white;
+      border-radius: 12px;
+      padding: 0.5rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s;
+      cursor: pointer;
+      
+      &:hover {
+        transform: scale(1.05);
+      }
+      
+      img {
+        display: block;
+        margin: 0 auto;
+        object-fit: contain;
+      }
+    }
+    
+    /* Fixed optionsContainer for all screen sizes */
+    .optionsContainer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 2rem;
+      width: 100%;
+      padding: 0 0.5rem;
     }
     
     .option {
-        background-color: #f5f5f5;
-        padding: 1rem;
-        border-radius: 1rem;
-        cursor: pointer;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    
-    .option:hover {
+      background-color: #f5f5f5;
+      padding: 1rem;
+      border-radius: 1rem;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      /* Fixed width for consistent layout */
+      width: calc(33.333% - 10px);
+      max-width: 150px;
+      min-width: 100px;
+      
+      &:hover {
         transform: scale(1.05);
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
     }
     
     .correctOption {
-        background-color: #D8F8E1;
-        border: 4px solid #4CAF50;
+      background-color: #D8F8E1;
+      border: 4px solid #4CAF50;
     }
     
     .incorrectOption {
-        background-color: #FFD6D6;
-        border: 4px solid #FF6B6B;
+      background-color: #FFD6D6;
+      border: 4px solid #FF6B6B;
+    }
+    
+    .speakerButton {
+      position: absolute;
+      bottom: 5px;
+      right: 5px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 50%;
+      padding: 5px;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      
+      &:hover {
+        background: rgba(255, 255, 255, 1);
+      }
     }
     
     .feedbackMessage {
-        margin: 1.5rem 0;
-        padding: 1rem;
-        border-radius: 1rem;
-        font-size: 1.5rem;
-        font-weight: bold;
-        text-align: center;
-    }
-    
-    .goodMessage {
+      margin: 1.5rem 0;
+      padding: 1rem;
+      border-radius: 1rem;
+      font-size: clamp(1rem, 3vw, 1.5rem);
+      font-weight: bold;
+      text-align: center;
+      
+      &.goodMessage {
         background-color: #D8F8E1;
         color: #4CAF50;
-    }
-    
-    .oopsMessage {
+      }
+      
+      &.oopsMessage {
         background-color: #FFD6D6;
         color: #FF6B6B;
+      }
     }
     
     .gameoverArea {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        margin: 1rem 0;
-    }
-    
-    .gameoverArea h2 {
-        font-size: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      margin: 1rem 0;
+      padding: 1rem;
+      
+      h2 {
+        font-size: clamp(1.5rem, 4vw, 2.5rem);
         color: #FF6B6B;
         margin-bottom: 0.5rem;
-    }
-    
-    .gameoverArea p {
-        font-size: 1.5rem;
+      }
+      
+      p {
+        font-size: clamp(1rem, 3vw, 1.5rem);
         margin-bottom: 1rem;
+      }
     }
     
     .starsContainer {
-        display: flex;
-        gap: 0.5rem;
-        margin: 1rem 0;
+      display: flex;
+      gap: 0.5rem;
+      margin: 1rem 0;
+      flex-wrap: wrap;
+      justify-content: center;
     }
     
     .buttonsContainer {
-        display: flex;
-        gap: 1rem;
-        margin-top: 1.5rem;
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
     }
     
     .playAgainButton, .homeButton {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 0.75rem 1.5rem;
-        border: none;
-        border-radius: 1rem;
-        font-size: 1.2rem;
-        cursor: pointer;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 1rem;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      
+      &:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
     }
     
     .playAgainButton {
-        background-color: #4FACFE;
-        color: white;
+      background-color: #4FACFE;
+      color: white;
     }
     
     .homeButton {
-        background-color: #FF6B6B;
-        color: white;
+      background-color: #FF6B6B;
+      color: white;
     }
-    
-    .playAgainButton:hover, .homeButton:hover {
-        transform: scale(1.05);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-    
-    /* Responsive styles */
-    @media (max-width: 600px) {
-        .title {
-        font-size: 1.8rem;
-        }
-        
-        .optionsContainer {
-        flex-direction: column;
-        gap: 1rem;
-        }
-        
-        .option {
-        width: 100%;
-        }
-        
-        .wordCard img {
-        width: 80px;
-        height: 80px;
-        }
-        
-        .targetWord img {
-        width: 100px;
-        height: 100px;
-        }
-        
-        .gameArea {
+  
+    @media (max-width: 768px) {
+      .main {
+        padding: 0 1rem;
+      }
+  
+      .gameHeader {
+        margin-bottom: 1rem;
+      }
+  
+      .title {
+        font-size: 1.5rem;
+      }
+  
+      .scoreBoard {
+        padding: 0.5rem 1rem;
+      }
+  
+      .gameArea {
         padding: 1rem;
-        }
+      }
+  
+      .messageBox {
+        font-size: 1rem;
+        padding: 0.75rem;
+      }
+  
+      .feedbackMessage {
+        font-size: 1.2rem;
+        padding: 0.75rem;
+      }
+  
+      .playAgainButton, .homeButton {
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+      }
+    }
+  
+    @media (max-width: 600px) {
+      .stats-container {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(2, auto);
+        gap: 0.75rem;
+      }
+      
+      /* Adjust option width for tablets */
+      .option {
+        width: calc(50% - 10px);
+      }
+    }
+  
+    @media (max-width: 480px) {
+      .container {
+        padding: 0.5rem;
+      }
+      
+      .scoreBoard {
+        padding: 0.5rem;
+      }
+      
+      .stats-container {
+        gap: 0.5rem;
+      }
+      
+      .stats-item span {
+        font-size: 0.9rem;
+      }
+      
+      .gameArea {
+        padding: 0.75rem;
+        height: 100%;
+      }
+      
+      /* Key mobile fix for options: ensure they display nicely on mobile */
+      .optionsContainer {
+        padding: 0;
+        gap: 8px;
+      }
+      
+      /* Make mobile options consistently sized and spaced */
+      .option {
+        width: calc(50% - 8px);
+        padding: 0.5rem;
+        margin-bottom: 8px;
+        min-width: auto;
+      }
+      
+      .wordCard {
+        padding: 0.25rem;
+      }
+      
+      .speakerButton {
+        padding: 3px;
+        bottom: 2px;
+        right: 2px;
         
-        .buttonsContainer {
-        flex-direction: column;
+        img {
+          width: 18px !important;
+          height: 18px !important;
         }
+      }
+      
+      .targetWord {
+        padding: 0.5rem;
+      }
+      
+      .buttonsContainer {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
     }
     
-    .optionsContainer {
-        display: flex;
-        justify-content: center;
-        gap: 1rem;
-        margin-top: 2rem;
-        flex-wrap: wrap;
+    /* Extra small mobile devices */
+    @media (max-width: 360px) {
+      .option {
+        width: 100%;
+        max-width: none;
+      }
+      
+      .stats-item span {
+        font-size: 0.8rem;
+      }
+      
+      .gameArea {
+        padding: 0.5rem;
+      }
     }
-}
+  }

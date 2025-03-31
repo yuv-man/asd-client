@@ -1,0 +1,99 @@
+$dark-purple: #5546CB;
+$pastel-red: #FF6060;
+
+.speech-quiz {
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  min-height: 600px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  .toucan {
+    margin-bottom: 50px;
+  }
+
+  .intro {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-top: 5rem;
+
+    h2 {
+      font-size: 2rem;
+      font-weight: bold;
+      color: $dark-purple;
+      margin-bottom: 1rem;
+
+      @media (max-width: 768px) {
+        font-size: 1.75rem;
+      }
+    }
+
+    p {
+      font-size: 1.125rem;
+      color: $dark-purple;
+      margin-bottom: 2rem;
+      max-width: 42rem;
+      margin-left: auto;
+      margin-right: auto;
+
+      @media (max-width: 768px) {
+        font-size: 1rem;
+        padding: 0 1rem;
+      }
+    }
+
+    .start-button {
+      background-color: $dark-purple;
+      color: white;
+      padding: 0.75rem 2rem;
+      border-radius: 9999px;
+      display: flex;
+      align-items: center;
+      margin: 0 auto;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+
+      &:hover {
+        background-color: $pastel-red;
+      }
+
+      .icon {
+        margin-left: 0.5rem;
+        width: 1rem;
+        height: 1rem;
+      }
+    }
+  }
+
+  .loading {
+    text-align: center;
+    padding: 2rem 0;
+  }
+
+  .exercise {
+    width: 100%;
+  }
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 640px) {
+  .speech-quiz {
+    padding: 0 0.5rem;
+  }
+} 

@@ -110,9 +110,3 @@ export const RHYMING_SETS = {
       }
     ]
   };
-
- export const characters = [
-    { name: 'Rhyme Rabbit', image: rabbit, color: '#FFD6E0' },
-    { name: 'Word Wolf', image: wolf, color: '#C8E7FF' },
-    { name: 'Sound Snake', image: snake, color: '#D8F8E1' }
-  ];
