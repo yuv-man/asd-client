@@ -4,6 +4,8 @@ import { Timer } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { carsIcons } from '../../helpers/carsIcons';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
+import '@/app/styles/attentionExercise.scss';
 
 const AttentionExercise: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyLevel }) => {
     const [vehicles, setVehicles] = useState<string[]>([]);
@@ -11,11 +13,21 @@ const AttentionExercise: React.FC<ExerciseProps> = ({ onComplete, isTest, diffic
     const [score, setScore] = useState(0);
     const [attempts, setAttempts] = useState(0);
     const [timeLeft, setTimeLeft] = useState(30);
-  
+    const t = useTranslations();
+
+    // Add difficulty configurations
+    const difficultyConfig = {
+      1: { gridSize: 4, interval: 6000 },
+      2: { gridSize: 9, interval: 5000 },
+      3: { gridSize: 16, interval: 4000 }
+    } as const;
+
+    const currentConfig = difficultyConfig[(difficultyLevel || 1) as 1 | 2 | 3];
+
     useEffect(() => {
       const vehicleOptions = carsIcons;
       const generateVehicles = () => {
-        const newVehicles = Array.from({ length: 9 }, () => 
+        const newVehicles = Array.from({ length: currentConfig.gridSize }, () => 
           vehicleOptions[Math.floor(Math.random() * vehicleOptions.length)]
         );
         setVehicles(newVehicles.map(v => v.name));
@@ -23,14 +35,14 @@ const AttentionExercise: React.FC<ExerciseProps> = ({ onComplete, isTest, diffic
       };
   
       generateVehicles();
-      const interval = setInterval(generateVehicles, 5000);
+      const interval = setInterval(generateVehicles, currentConfig.interval);
       const timer = setInterval(() => setTimeLeft(t => t - 1), 1000);
   
       return () => {
         clearInterval(interval);
         clearInterval(timer);
       };
-    }, []);
+    }, [currentConfig]);
   
     const calculateNormalizedScore = useCallback(() => {
       if (attempts === 0) return 0;
@@ -69,40 +81,39 @@ const AttentionExercise: React.FC<ExerciseProps> = ({ onComplete, isTest, diffic
     };
   
     return (
-      <div className="max-w-md mx-auto">
-        <div className="mb-6 text-center">
-          <h3 className="text-2xl font-semibold mb-2 text-pastelOrange">Vehicle Match</h3>
-          <div className="flex flex-col items-center gap-2">
+      <div className="attentionEx container">
+        <div className="header">
+          <h3>{t('attentionExercise.title')}</h3>
+          <div className="targetSection">
             <div className="flex items-center gap-2">
-              <p className="text-secondary">Find this:</p>
+              <p className="text-secondary">{t('attentionExercise.findThis')}</p>
               {targetVehicle && carsIcons.find(v => v.name === targetVehicle)?.icon ? (
                 <Image
                   src={carsIcons.find(v => v.name === targetVehicle)!.icon}
                   alt={targetVehicle}
                   width={40}
                   height={40}
-                  className="w-20 h-20"
+                  className="targetImage"
                 />
               ) : null}
             </div>
             <div className="mt-2 flex justify-center items-center text-secondary">
               <Timer className="w-4 h-4 mr-2 text-pastelOrange" />
-              {timeLeft}s
+              {timeLeft} {t('attentionExercise.seconds')}
             </div>
           </div>
         </div>
   
-        <div className="grid grid-cols-3 gap-4">
+        <div className={`grid grid-cols-${currentConfig.gridSize}`}>
           {vehicles.map((vehicle, index) => (
             <motion.button
               key={index}
-              whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className={`h-24 rounded-lg ${
+              className={`gridItem ${
                 vehicle === 'truck' ? 'bg-red-200' :
                 vehicle === 'car' ? 'bg-blue-200' :
                 'bg-green-200'
-              } hover:bg-gray-200 flex items-center justify-center`}
+              }`}
               onClick={() => handleShapeClick(vehicle)}
             >
               {vehicle && carsIcons.find(v => v.name === vehicle)?.icon ? (
@@ -111,7 +122,7 @@ const AttentionExercise: React.FC<ExerciseProps> = ({ onComplete, isTest, diffic
                   alt={vehicle}
                   width={24}
                   height={24}
-                  className="w-24 h-24"
+                  draggable="false"
                 />
               ) : null}
             </motion.button>

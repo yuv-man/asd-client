@@ -116,5 +116,10 @@
       "welcome": "Welcome to the OT Assessment",
       "instructions": "Hi {name}! You'll complete three fun exercises to test your fine motor skills, coordination and reaction time. Each exercise is designed to be engaging and age-appropriate.",
       "start": "Start Exercises"
+    },
+    "attentionExercise": {
+      "title": "Vehicle Match",
+      "findThis": "Find this:",
+      "seconds": "sec"
     }
 }
