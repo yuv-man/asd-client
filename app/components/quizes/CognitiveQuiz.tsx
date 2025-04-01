@@ -11,6 +11,8 @@ import { getExerciseComponent } from '@/app/helpers/exerciseComponents';
 import { exercisesAPI } from '@/services/api'
 import ResultsModal from '@/app/components/common/ResultsModal';
 import { useInitialAssessmentStore } from '@/store/userStore';
+import { useTranslations } from 'next-intl';
+import '@/app/styles/SpeechQuiz.scss';
 
 const CognitiveQuiz = ({isInitialAssessment}: {isInitialAssessment?: boolean}) => {
   const router = useRouter();
@@ -22,6 +24,7 @@ const CognitiveQuiz = ({isInitialAssessment}: {isInitialAssessment?: boolean}) =
   const [isLoading, setIsLoading] = useState(true);
   const [showResults, setShowResults] = useState(false);
   const [finalScore, setFinalScore] = useState(0);
+  const t = useTranslations();
   const { initialAssessment, setInitialAssessment } = useInitialAssessmentStore();
 
   useEffect(() => {
@@ -85,7 +88,7 @@ const CognitiveQuiz = ({isInitialAssessment}: {isInitialAssessment?: boolean}) =
   const CurrentExerciseComponent = exercises[currentExercise]?.component;
 
   return (
-    <div className="max-w-4xl mx-auto px-4 cognitive">
+    <div className="speech-quiz cognitive">
       <AnimatePresence mode="wait">
         {showIntro ? (
           <motion.div
@@ -97,12 +100,10 @@ const CognitiveQuiz = ({isInitialAssessment}: {isInitialAssessment?: boolean}) =
           >
             <Image src={owl} alt="owl" width={100} height={100} />
             <h2 className="text-3xl font-bold text-gray-900 mb-4 text-darkPurple">
-              Welcome to the Cognitive Assessment
+              {t('cognitiveQuiz.welcome')}
             </h2>
             <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto text-darkPurple">
-              Hi {user?.name}! You'll complete three fun exercises to test your memory,
-              attention, and problem-solving skills. Each exercise is designed to be
-              engaging and age-appropriate.
+              {t('cognitiveQuiz.instructions', { name: user?.name || '' })}
             </p>
             <motion.button
               whileHover={{ scale: 1.02 }}
@@ -110,7 +111,7 @@ const CognitiveQuiz = ({isInitialAssessment}: {isInitialAssessment?: boolean}) =
               onClick={() => setShowIntro(false)}
               className="bg-purple-600 text-white px-8 py-3 rounded-full hover:bg-purple-700 flex items-center mx-auto"
             >
-              Start Exercises
+              {t('cognitiveQuiz.start')}
               <ArrowRight className="ml-2 w-4 h-4" />
             </motion.button>
           </motion.div>

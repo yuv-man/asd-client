@@ -10,6 +10,8 @@ import monkey from '@/assets/animals/monkey.svg';
 import { getExerciseComponent } from '../../helpers/exerciseComponents';
 import { exercisesAPI } from '@/services/api'
 import ResultsModal from '@/app/components/common/ResultsModal';
+import '@/app/styles/SpeechQuiz.scss';
+import { useTranslations } from 'next-intl';
 
 const OTQuiz = ({isInitialAssessment}: {isInitialAssessment?: boolean}) => {
   const router = useRouter();
@@ -22,6 +24,7 @@ const OTQuiz = ({isInitialAssessment}: {isInitialAssessment?: boolean}) => {
   const [showResults, setShowResults] = useState(false);
   const [finalScore, setFinalScore] = useState(0);
   const { initialAssessment, setInitialAssessment } = useInitialAssessmentStore();
+  const t = useTranslations();
 
   useEffect(() => {
     const fetchedExercises = async() => {
@@ -77,7 +80,7 @@ const OTQuiz = ({isInitialAssessment}: {isInitialAssessment?: boolean}) => {
   const CurrentExerciseComponent = exercises[currentExercise]?.component;
 
   return (
-    <div className="max-w-4xl mx-auto px-4 ot h-150">
+    <div className="speech-quiz ot">
       <AnimatePresence mode="wait">
         {showIntro ? (
           <motion.div
@@ -89,12 +92,10 @@ const OTQuiz = ({isInitialAssessment}: {isInitialAssessment?: boolean}) => {
           >
             <Image src={monkey} alt="monkey" width={100} height={100} />
             <h2 className="text-3xl font-bold text-gray-900 mb-4 text-darkPurple">
-              Welcome to the OT Assessment
+              {t('otQuiz.welcome')}
             </h2>
             <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto text-darkPurple">
-              Hi {user?.name}! You'll complete three fun exercises to test your fine motor skills, 
-              coordination and reaction time. Each exercise is designed to be
-              engaging and age-appropriate.
+              {t('otQuiz.instructions', { name: user?.name || '' })}
             </p>
             <motion.button
               whileHover={{ scale: 1.02 }}
@@ -102,20 +103,14 @@ const OTQuiz = ({isInitialAssessment}: {isInitialAssessment?: boolean}) => {
               onClick={() => setShowIntro(false)}
               className="bg-purple-600 text-white px-8 py-3 rounded-full hover:bg-purple-700 flex items-center mx-auto"
             >
-              Start Exercises
+              {t('otQuiz.start')}
               <ArrowRight className="ml-2 w-4 h-4" />
             </motion.button>
           </motion.div>
         ) : isLoading ? (
-          <motion.div
-            key="loading"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="text-center py-8"
-          >
-            <p>Loading exercises...</p>
-          </motion.div>
+          <div className='flex flex-col items-center justify-center h-screen'>
+            <span className='loader'></span>
+          </div>
         ) : CurrentExerciseComponent ? (
           <motion.div
             key="exercise"

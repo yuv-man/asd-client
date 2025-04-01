@@ -11,6 +11,7 @@ import { getExerciseComponent } from '../../helpers/exerciseComponents';
 import { exercisesAPI } from '@/services/api'
 import ResultsModal from '@/app/components/common/ResultsModal';
 import '@/app/styles/SpeechQuiz.scss';
+import { useTranslations } from 'next-intl';
 
 const SpeechQuiz = ({isInitialAssessment}: {isInitialAssessment?: boolean}) => {
   const router = useRouter();
@@ -22,6 +23,7 @@ const SpeechQuiz = ({isInitialAssessment}: {isInitialAssessment?: boolean}) => {
   const [isLoading, setIsLoading] = useState(true);
   const [showResults, setShowResults] = useState(false);
   const [finalScore, setFinalScore] = useState(0);
+  const t = useTranslations();
   const { initialAssessment, setInitialAssessment } = useInitialAssessmentStore();
 
   useEffect(() => {
@@ -59,19 +61,23 @@ const SpeechQuiz = ({isInitialAssessment}: {isInitialAssessment?: boolean}) => {
 
   const handleContinue = () => {
     setShowResults(false)
-    setInitialAssessment({
-      userId: user?._id || '',
-      areas: {
-        ...initialAssessment?.areas,
-        speech: { ...initialAssessment?.areas?.speech, isCompleted: true, score: finalScore }
-      }
-    })
-    if (initialAssessment?.areas.ot.isCompleted && 
-        initialAssessment?.areas.speech.isCompleted && 
-        initialAssessment?.areas.cognitive.isCompleted) {
+    if (!isInitialAssessment) {
       router.push('/training');
     } else {
-      router.push('/initial-assessment');
+      setInitialAssessment({
+        userId: user?._id || '',
+        areas: {
+          ...initialAssessment?.areas,
+          speech: { ...initialAssessment?.areas?.speech, isCompleted: true, score: finalScore }
+        }
+      })
+      if (initialAssessment?.areas.ot.isCompleted && 
+          initialAssessment?.areas.speech.isCompleted && 
+          initialAssessment?.areas.cognitive.isCompleted) {
+        router.push('/training');
+      } else {
+        router.push('/initial-assessment');
+      }
     }
   };
 
@@ -89,11 +95,9 @@ const SpeechQuiz = ({isInitialAssessment}: {isInitialAssessment?: boolean}) => {
             className="intro"
           >
             <Image src={toucan} alt="toucan" width={100} height={100} className='toucan' />
-            <h2>Welcome to the Speech Assessment</h2>
+            <h2>{t('speechQuiz.welcome')}</h2>
             <p>
-              Hi {user?.name}! You'll complete three fun exercises to test your fine motor skills, 
-              coordination and reaction time. Each exercise is designed to be
-              engaging and age-appropriate.
+              {t('speechQuiz.instructions', { name: user?.name || '' })}
             </p>
             <motion.button
               whileHover={{ scale: 1.02 }}
@@ -101,7 +105,7 @@ const SpeechQuiz = ({isInitialAssessment}: {isInitialAssessment?: boolean}) => {
               onClick={() => setShowIntro(false)}
               className="start-button"
             >
-              Start Exercises
+              {t('speechQuiz.start')}
               <ArrowRight className="icon" />
             </motion.button>
           </motion.div>

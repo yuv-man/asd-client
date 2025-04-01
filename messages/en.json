@@ -95,5 +95,26 @@
       "talk": "Talk Now",
       "goodJob": "Amazing Job!",
       "tryAgain": "Try Again"
+    },
+    "assessment": {
+      "startAssessment": "Let's Start Your Assessment",
+      "hello": "Hello",
+      "chooseAssessment": "Choose an assessment type to begin.",
+      "start": "Let's Start"
+    },
+    "speechQuiz": {
+      "welcome": "Welcome to the Speech Assessment",
+      "instructions": "Hi {name}! You'll complete three fun exercises to test your fine motor skills, speech and communication skills. Each exercise is designed to be engaging and age-appropriate.",
+      "start": "Start Exercises"
+    },
+    "cognitiveQuiz": {
+      "welcome": "Welcome to the Cognitive Assessment",
+      "instructions": "Hi {name}! You'll complete three fun exercises to test your memory, attention, and problem-solving skills. Each exercise is designed to be engaging and age-appropriate.",
+      "start": "Start Exercises"
+    },
+    "otQuiz": {
+      "welcome": "Welcome to the OT Assessment",
+      "instructions": "Hi {name}! You'll complete three fun exercises to test your fine motor skills, coordination and reaction time. Each exercise is designed to be engaging and age-appropriate.",
+      "start": "Start Exercises"
     }
 }
