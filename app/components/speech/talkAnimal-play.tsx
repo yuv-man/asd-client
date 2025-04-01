@@ -9,7 +9,7 @@ import { ExerciseProps } from '@/types/props';
 import { langEnum } from '@/enums/enumLang';
 import { useLocale } from 'next-intl';
 import { levenshteinDistance } from '@/app/helpers/talkAnimal-helper';
-
+import { useTranslations } from 'next-intl';
 // Speech recognition setup
 const setupSpeechRecognition = () => {
   const locale = useLocale();
@@ -26,6 +26,7 @@ const setupSpeechRecognition = () => {
 
 export default function Play({ isTest, difficultyLevel, onComplete }: ExerciseProps) {
   const router = useRouter();
+  const t = useTranslations();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [transcript, setTranscript] = useState('');
   const [feedback, setFeedback] = useState('');
@@ -135,7 +136,7 @@ export default function Play({ isTest, difficultyLevel, onComplete }: ExercisePr
       
       try {
         // Play a sound to indicate listening has started
-        playAudio('/audio/listening.mp3', 'I\'m listening!');
+        playAudio('/audio/listening.mp3', t('talkAnimals.listening'));
         
         // Start speech recognition after the prompt
         setTimeout(() => {
@@ -249,7 +250,7 @@ export default function Play({ isTest, difficultyLevel, onComplete }: ExercisePr
     if (nextIndex >= currentGameContent.length) {
       // Game completed
       setGameCompleted(true);
-      playAudio('/audio/game-complete.mp3', 'Wow! You did it! You talked to all our animal friends! Great job!');
+      playAudio('/audio/game-complete.mp3', t('talkAnimals.gameOver'));
       onComplete?.({ score: score, metrics: { accuracy: score, timeInSeconds: 0, attempts: attempts } });
     } else {
       // Move to next question
@@ -262,39 +263,13 @@ export default function Play({ isTest, difficultyLevel, onComplete }: ExercisePr
     }
   };
 
-  // Play again
-  const playAgain = () => {
-    setCurrentQuestionIndex(0);
-    setTranscript('');
-    setFeedback('');
-    setScore(0);
-    setGameCompleted(false);
-    setStars([]);
-    setAttempts(0);
-    setShowHint(false);
-    setShowFeedback(false);
-    
-    // Play restart audio
-    playAudio('/audio/play-again.mp3', 'Let\'s play again with our animal friends!');
-  };
-
-  const goHome = () => {
-    playAudio('/audio/goodbye.mp3', 'Goodbye! See you next time!');
-    
-    // Navigate to home after a short delay
-    setTimeout(() => {
-      router.push('/training/quiz/speech');
-    }, 1500);
-  };
-
   const currentQuestion = getCurrentQuestion();
 
   return (
     <div className="container">
       <Head>
-        <title>Play with Animal Friends</title>
+        <title>{t('talkAnimals.title')}</title>
         <meta name="description" content="Speech therapy game for kids" />
-        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main className="main">
@@ -346,12 +321,12 @@ export default function Play({ isTest, difficultyLevel, onComplete }: ExercisePr
                   {isListening ? (
                     <>
                       <span className="micIcon">🎤</span>
-                      <span className="listeningText">I'm Done</span>
+                      <span className="listeningText">{t('talkAnimals.done')}</span>
                     </>
                   ) : (
                     <>
                       <span className="micIcon">🎤</span>
-                      <span className="speakText">Talk Now</span>
+                      <span className="speakText">{t('talkAnimals.talk')}</span>
                     </>
                   )}
                 </button>
@@ -359,7 +334,7 @@ export default function Play({ isTest, difficultyLevel, onComplete }: ExercisePr
                 {!showHint && (
                   <button onClick={showHintWithAudio} className="helpButton">
                     <span className="helpIcon">❓</span>
-                    <span className="helpText">Help</span>
+                    <span className="helpText">{t('talkAnimals.help')}</span>
                   </button>
                 )}
               </div>
@@ -385,7 +360,7 @@ export default function Play({ isTest, difficultyLevel, onComplete }: ExercisePr
                       onClick={startListening} 
                       className="tryAgainButton"
                     >
-                      Try Again
+                      {t('talkAnimals.tryAgain')}
                     </button>
                   )}
                 </div>
@@ -400,7 +375,7 @@ export default function Play({ isTest, difficultyLevel, onComplete }: ExercisePr
           </div>
         ) : (
           <div className="completionScreen">
-            <h1 className="completionTitle">Amazing Job!</h1>
+            <h1 className="completionTitle">{t("talkAnimals.goodJob")}</h1>
             
             <div className="starsContainer">
               {currentGameContent.map((item, index) => (
@@ -416,17 +391,6 @@ export default function Play({ isTest, difficultyLevel, onComplete }: ExercisePr
             </div>
             
             <div className="confetti"></div>
-            
-            <div className="completionButtons">
-              <button onClick={playAgain} className="playAgainButton">
-                <span className="playAgainIcon">🔄</span>
-                Play Again
-              </button>
-              <button onClick={goHome} className="homeButton">
-                <span className="homeIcon">🏠</span>
-                Home
-              </button>
-            </div>
           </div>
         )}
       </main>

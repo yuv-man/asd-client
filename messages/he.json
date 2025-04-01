@@ -55,5 +55,42 @@
     "Back to Training": "חזרה למסלול",
     "Exercise Completed!": "בוצע בהצלחה!",
     "Great job! You've completed this exercise. Ready to continue your journey?": "מצוין! השלמת את המשחק בהצלחה, נמשיך במסלול?",
-    "Continue to Trail Map": "המשיך למסלול"
+    "Continue to Trail Map": "המשיך למסלול",
+    "rythemGame": {
+      "welcome": "היי {name}! בואו נשחק משחק חרוזים!",
+      "start": "בואו נשחק משחק חרוזים!",
+      "instructions": "בואו נשחק משחק חרוזים!",
+      "footer": "עשוי מכל הלב למטרות טיפול תקשורתית",
+      "title": "משחק החרוזים!",
+      "play": "בואו נשחק!"
+    },
+    "rythemPlay": {
+      "welcome": "בואו נמצא מילים מתחרזות!",
+      "instructions": "מה מתחרז עם {word}? לחצו על כל תמונה כדי לשמוע את המילה.",
+      "correct": "מצוין! זה מתחרז!",
+      "incorrect": "אופס! נסה שוב!",
+      "round": "סיבוב: {round}/3",
+      "attempts": "ניסיונות: {attempts}",
+      "timer": "זמן: {timer}",
+      "title": "משחק החרוזים",
+      "intro": "בואו נמצא מילים מתחרזות!",
+      "question": "מה מתחרז עם:",
+      "gameOverMessage": "הניקוד שלך הוא {score}!",
+      "gameOver": "משחק נגמר!"
+    },
+    "talkAnimals": {
+      "welcome": "בואו נשחק משחק חיות!",
+      "title": "חיות מדברות",
+      "start": "בואו נשחק משחק חיות!",
+      "footer": "עשוי מכל הלב למטרות טיפול תקשורתית",
+      "gameOver": "משחק נגמר!",
+      "play": "בואו נשחק!",
+      "listening": "אני מקשיב!",
+      "gameOverMessage": "מצוין! עשית את זה! דיברת עם כל חיות! מצוין!",
+      "done": "סיימתי",
+      "help": "עזרה",
+      "talk": "דבר עכשיו",
+      "tryAgain": "נסה שוב",
+      "goodJob": "מצוין!"
+    }
 }

@@ -57,5 +57,43 @@
       "exerciseCompleted": "Exercise Completed!",
       "exerciseCompletedMessage": "Great job! You've completed this exercise. Ready to continue your journey?",
       "continueToTrailMap": "Continue to Trail Map"
+    },
+    "rythemGame": {
+      "welcome": "Hi {name}! Let's play a rhyming game!",
+      "start": "Let's play a rhyming game!",
+      "instructions": "Let's play a fun rhyming game!",
+      "footer": "Made with ♥ for little rhymers!",
+      "title": "Rhyme Time!",
+      "play": "Let's Play!"
+    },
+    "rythemPlay": {
+      "welcome": "Let's find rhyming words!",
+      "instructions": "What rhymes with {word}? Click each picture to hear the word.",
+      "correct": "Good job! That rhymes!",
+      "incorrect": "Oops! Try again!",
+      "round": "Round: {round}/3",
+      "attempts": "Attempts: {attempts}",
+      "timer": "Time: {timer}",
+      "title": "Rhyme Time",
+      "intro": "Get ready to find rhyming words!",
+      "question": "What rhymes with:",
+      "gameOverMessage": "Your score is {score}!",
+      "gameOver": "Game Over!",
+      "play": "Let's Play!"
+    },
+    "talkAnimals": {
+      "welcome": "Welcome to Animal Friends! Tap the big green button to play!",
+      "title": "Animal Friends",
+      "start": "Let's play with our animal friends!",
+      "footer": "Made with ♥ for little animal lovers!",
+      "gameOver": "Game Over!",
+      "play": "Let's Play!",
+      "listening": "I'm listening!",
+      "gameOverMessage": "Wow! You did it! You talked to all our animal friends! Great job!",
+      "done": "I'm Done",
+      "help": "Help",
+      "talk": "Talk Now",
+      "goodJob": "Amazing Job!",
+      "tryAgain": "Try Again"
     }
 }

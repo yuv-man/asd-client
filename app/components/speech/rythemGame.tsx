@@ -6,12 +6,17 @@ import '@/app/styles/rythemGame.scss';
 import { ExerciseProps } from '@/types/props';
 import Play from './rythemGame-play';
 import speakerIcon from '@/assets/speaker.svg';
+import parentButton from '@/assets/help.svg';
+import RhymeGameParentInfo from './rythemGameParentsInfo';
+import { useTranslations } from 'next-intl';
 
 const rythemGame: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyLevel = 1 }) => {
   const [gameStarted, setGameStarted] = useState(false);
   const [gameCompleted, setGameCompleted] = useState(false);
+  const [isParentModalOpen, setIsParentModalOpen] = useState(false);
   const { user } = useUserStore();
-  
+  const t = useTranslations();
+
   const speechSynthRef = useRef<SpeechSynthesis | null>(null);
 
   useEffect(() => {
@@ -25,7 +30,7 @@ const rythemGame: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyLev
 
   useEffect(() => {
     if (user) {
-      speak(`Hi ${user.name}! Let's play a rhyming game!`);
+      speak(t('rythemGame.welcome', { name: user.name }));
     }
   }, [user]);
 
@@ -40,7 +45,7 @@ const rythemGame: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyLev
   };
 
   const handleStartClick = () => {
-    speak("Let's play a rhyming game!");
+    speak(t('rythemGame.start'));
     setTimeout(() => {
       setGameStarted(true);
     }, 1500);
@@ -58,21 +63,23 @@ const rythemGame: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyLev
     <div className='rythemGame-container'>
       <div className='container'>
         <Head>
-          <title>Rhyme Time - Fun Rhyming Game for Kids</title>
+          <title>Rhyme Time</title>
           <meta name="description" content="A fun rhyming game for kids ages 4-5" />
-          <link rel="icon" href="/favicon.ico" />
         </Head>
 
         <main className='main'>
           <h1 className='title'>
-            <span className='highlight'>Rhyme</span> Time!
+            <span className='highlight'>{t('rythemGame.title')}</span>
+                <div className="parents-help-button-container" onClick={() => setIsParentModalOpen(true)}>
+                    <Image src={parentButton} alt="Parents Help" width={20} height={20} />
+                </div>
           </h1>
             
           <div className='instructions'>
-            <button onClick={() => speak("Let's play a fun rhyming game!")} className='speakerButton'>
+            <button onClick={() => speak(t('rythemGame.instructions'))} className='speakerButton'>
               <Image src={speakerIcon} alt="Listen" width={40} height={40} />
             </button>
-            <p>Are you ready to play?</p>
+            <p>{t('rythemGame.instructions')}</p>
           </div>
 
           <div className='startButtonContainer'>
@@ -80,13 +87,14 @@ const rythemGame: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyLev
               className='startButton'
               onClick={handleStartClick}
             >
-              Let's Start!
+              {t('rythemGame.play')}
             </button>
           </div>
         </main>
+        <RhymeGameParentInfo isOpen={isParentModalOpen} onClose={() => setIsParentModalOpen(false)} />
 
         <footer className='footer'>
-          <p>Made with ♥ for little rhymers!</p>
+          <p>{t('rythemGame.footer')}</p>
         </footer>
       </div>
     </div>

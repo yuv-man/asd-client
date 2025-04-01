@@ -7,6 +7,7 @@ import '@/app/styles/rythemGame.scss';
 import { RHYMING_SETS } from './rythemGame-helper';
 import speakerIcon from '@/assets/speaker.svg';
 import star from '@/assets/rythemGame/star.svg';
+import { useTranslations } from 'next-intl';
 
 declare global {
   interface Window {
@@ -31,7 +32,8 @@ export default function Play({ isTest, difficultyLevel, onComplete }: any) {
   const [attempts, setAttempts] = useState(0);  // Track attempts
   const [timer, setTimer] = useState(0);  // Track time
   const [usedSets, setUsedSets] = useState<number[]>([]);
-  
+  const t = useTranslations();
+
   const speechSynthRef = useRef<SpeechSynthesis | null>(null);
   const audioContext = useRef<AudioContext | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
@@ -168,10 +170,10 @@ export default function Play({ isTest, difficultyLevel, onComplete }: any) {
     setMessage('');
     
     // Welcome message
-    speak(`Let's find rhyming words!`, () => {
+    speak(t('rythemPlay.welcome'), () => {
       timerRef.current = setTimeout(() => {
         setGameState('playing');
-        speak(`What rhymes with ${newSet.target.word}? Click each picture to hear the word.`, undefined);
+        speak(t('rythemPlay.instructions', { word: currentSet?.target.word || '' }), undefined);
       }, 1000);
     });
   };
@@ -189,8 +191,8 @@ export default function Play({ isTest, difficultyLevel, onComplete }: any) {
     if (option.correct) {
       playSuccess();
       setScore(score + 1);
-      setMessage('Good job! That rhymes!');
-      speak('Good job! That rhymes!', undefined);
+      setMessage(t('rythemPlay.correct'));
+      speak(t('rythemPlay.correct'), undefined);
       
       // Only proceed to next round or game over if answer was correct
       timerRef.current = setTimeout(() => {
@@ -200,12 +202,9 @@ export default function Play({ isTest, difficultyLevel, onComplete }: any) {
           const accuracy = (score + 1) / attempts;
           const timeBonus = Math.max(0, 1 - (timer / 180));
           const finalScore = Math.round((accuracy * 0.7 + timeBonus * 0.3) * 100);
-          
-          if (onComplete) {
             onComplete(finalScore);
-          }
           
-          speak(`Game over! Your score is ${finalScore}! Great job!`, undefined);
+          speak(t('rythemPlay.gameOver'), undefined);
         } else {
           setRounds(rounds + 1);
           // Get next rhyming set
@@ -213,13 +212,13 @@ export default function Play({ isTest, difficultyLevel, onComplete }: any) {
           setCurrentSet(newSet);
           setSelectedOption(null);
           setGameState('playing');
-          speak(`What rhymes with ${newSet.target.word}? Click each picture to hear the word.`, undefined);
+          speak(t('rythemPlay.instructions'), undefined);
         }
       }, 3000);
     } else {
       playError();
-      setMessage('Oops! Try again!');
-      speak('Oops! Try again!', undefined);
+      setMessage(t('rythemPlay.incorrect'));
+      speak(t('rythemPlay.incorrect'), undefined);
       
       // For incorrect answers, return to playing state after feedback
       timerRef.current = setTimeout(() => {
@@ -239,13 +238,13 @@ export default function Play({ isTest, difficultyLevel, onComplete }: any) {
     <div className="rythemGame-play">
       <div className="container" style={{ backgroundColor: '#FFD6E0' }}>
         <Head>
-          <title>Rhyme Time - Level {difficultyLevel}</title>
+          <title>{t('rythemPlay.title')} - Level {difficultyLevel}</title>
           <meta name="description" content="Find words that rhyme" />
         </Head>
 
         <main className="main">
           <div className="gameHeader">
-            <h1 className="title">Rhyme Time</h1>
+            <h1 className="title">{t('rythemPlay.title')}</h1>
             <div className="scoreBoard">
               <div className="stats-container">
                 <div className="stats-item score">
@@ -253,13 +252,13 @@ export default function Play({ isTest, difficultyLevel, onComplete }: any) {
                   <span>{score}</span>
                 </div>
                 <div className="stats-item round">
-                  <span>Round: {rounds + 1}/3</span>
+                  <span>{t('rythemPlay.round', { round: rounds + 1, total: 3 })}</span>
                 </div>
                 <div className="stats-item attempts">
-                  <span>Attempts: {attempts}</span>
+                  <span>{t('rythemPlay.attempts', { attempts })}</span>
                 </div>
                 <div className="stats-item timer">
-                  <span>Time: {Math.floor(timer / 60)}:{(timer % 60).toString().padStart(2, '0')}</span>
+                  <span>{t('rythemPlay.timer', { timer: Math.floor(timer / 60) + ':' + (timer % 60).toString().padStart(2, '0') })}</span>
                 </div>
               </div>
             </div>
@@ -268,14 +267,14 @@ export default function Play({ isTest, difficultyLevel, onComplete }: any) {
           <div className="gameArea">
             {gameState === 'intro' && (
               <div className="messageBox">
-                <p>Get ready to find rhyming words!</p>
+                <p>{t('rythemPlay.intro')}</p>
               </div>
             )}
 
             {(gameState === 'playing' || gameState === 'feedback') && currentSet && (
               <>
                 <div className="targetContainer">
-                  <p className="question">What rhymes with:</p>
+                  <p className="question">{t('rythemPlay.question', { word: currentSet.target.word })}</p>
                   <div className="targetWord">
                     <div className="wordCard">
                       <Image 
@@ -329,31 +328,12 @@ export default function Play({ isTest, difficultyLevel, onComplete }: any) {
 
             {gameState === 'gameover' && (
               <div className="gameoverArea">
-                <h2>Game Over!</h2>
-                <p>You found {score} rhyming words!</p>
+                <h2>{t('rythemPlay.gameOver')}</h2>
+                <p>{t('rythemPlay.gameOverMessage', { score })}</p>
                 <div className="starsContainer">
                   {Array.from({ length: score }).map((_, i) => (
                     <Image key={i} src={star} alt="Star" width={40} height={40} />
                   ))}
-                </div>
-                <div className="buttonsContainer">
-                  <button 
-                    className="playAgainButton"
-                    onClick={() => {
-                      setScore(0);
-                      setRounds(0);
-                      setUsedSets([]);
-                      startGame();
-                    }}
-                  >
-                    <span>Play Again</span>
-                  </button>
-                  <button 
-                    className="homeButton"
-                    onClick={() => router.push('/')}
-                  >
-                    <span>Home</span>
-                  </button>
                 </div>
               </div>
             )}

@@ -1,24 +1,23 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import Head from 'next/head';
-import { useRouter } from 'next/navigation';
 import { ExerciseProps } from '@/types/props';
 import '@/app/styles/talkAnimals.scss';
 import TalkAnimalsParentInfo from './TalkAnimalsParentInfo';
 import Image from 'next/image';
 import parentButton from '@/assets/help.svg';
 import Play from './talkAnimal-play';
+import { useTranslations } from 'next-intl';
 
 const TalkAnimals: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyLevel = 1 }) => {
-  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [isParentModalOpen, setIsParentModalOpen] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
+  const t = useTranslations();
 
   useEffect(() => {
     // Play welcome message after a short delay
     const timer = setTimeout(() => {
-      speak('Welcome to Animal Friends! Tap the big green button to play!');
+      speak(t('talkAnimals.welcome'));
     }, 1000);
     
     return () => {
@@ -56,7 +55,7 @@ const TalkAnimals: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyLe
   };
 
   const startGame = async () => {
-    await speak('Let\'s play with our animal friends!');
+    await speak(t('talkAnimals.start'));
     setTimeout(() => {
       setGameStarted(true);
     }, 1500);
@@ -75,7 +74,7 @@ const TalkAnimals: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyLe
       <main className="main">
         <div className="title-container">
           <h1 className="title">
-            Animal Friends
+            {t('talkAnimals.title')}
           </h1>
         <div className="parents-help-button-container" onClick={() => setIsParentModalOpen(true)}>
             <Image src={parentButton} alt="Parents Help" width={20} height={20} />
@@ -95,14 +94,14 @@ const TalkAnimals: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyLe
             onClick={startGame}
           >
             <span className="playIcon">▶️</span>
-            Play
+            {t('talkAnimals.play')}
           </button>
         </div>
       </main>
       <TalkAnimalsParentInfo isOpen={isParentModalOpen} onClose={() => setIsParentModalOpen(false)} />
 
       <footer className="footer">
-        <p>Animal Friends - Speech Therapy Game for Kids</p>
+        <p>{t('talkAnimals.footer')}</p>
       </footer>
     </div>
   );
