@@ -1,9 +1,18 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import MemoryExercise from '../app/components/cognitive/memoryExercise';
+import { NextIntlClientProvider } from 'next-intl';
+import messages from '../messages/en.json';
 
 const meta: Meta<typeof MemoryExercise> = {
   title: 'Cognitive/MemoryExercise',
   component: MemoryExercise,
+  decorators: [
+    (Story) => (
+      <NextIntlClientProvider messages={messages} locale="en">
+        <Story />
+      </NextIntlClientProvider>
+    ),
+  ],
   parameters: {
     layout: 'centered',
   },

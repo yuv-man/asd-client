@@ -120,6 +120,19 @@
     "attentionExercise": {
       "title": "Vehicle Match",
       "findThis": "Find this:",
-      "seconds": "sec"
+      "seconds": "sec",
+      "score": "Score:",
+      "matches": "Matches:",
+      "attempts": "Attempts:"
+    },
+    "memoryExercise": {
+      "title": "Memory Sequence",
+      "watchCarefully": "Watch carefully...",
+      "getReady": "Get ready...",
+      "repeatSequence": "Repeat the sequence",
+      "tryAgain": "Try again!",
+      "shapesToRemember": "Shapes to remember:",
+      "attempts": "Attempts:",
+      "round": "Round: {round}/3"
     }
 }

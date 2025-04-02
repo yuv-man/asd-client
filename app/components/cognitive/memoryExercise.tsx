@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { fruitsWithColors } from '@/app/helpers/memoryShapes';
 import '@/app/styles/memoryExercise.scss';
+import { useTranslations } from 'next-intl';
 
 const MemoryExercise: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyLevel }) => {
   const [sequence, setSequence] = useState<number[]>([]);
@@ -14,6 +15,7 @@ const MemoryExercise: React.FC<ExerciseProps> = ({ onComplete, isTest, difficult
   const [isDisplaying, setIsDisplaying] = useState(false);
   const [currentDisplayIndex, setCurrentDisplayIndex] = useState<number>(-1);
   const [showTryAgain, setShowTryAgain] = useState(false);
+  const t = useTranslations();
 
   const getRandomUniqueIndex = (lastIndex: number) => {
     const maxLength = difficultyLevel === 1 ? 4 : difficultyLevel === 2 ? 9 : 16;
@@ -132,15 +134,15 @@ const MemoryExercise: React.FC<ExerciseProps> = ({ onComplete, isTest, difficult
     <div className="memoryEx">
       <div className="container">
         <div className="header">
-          <h3>Memory Sequence</h3>
+          <h3>{t('memoryExercise.title')}</h3>
           <p className={showTryAgain ? 'error' : ''}>
             {showTryAgain
-              ? 'Try again!'
+              ? t('memoryExercise.tryAgain')
               : showingSequence
               ? isDisplaying
-                ? 'Watch carefully...'
-                : 'Get ready...'
-              : 'Repeat the sequence'}
+                ? t('memoryExercise.watchCarefully')
+                : t('memoryExercise.getReady')
+              : t('memoryExercise.repeatSequence')}
           </p>
         </div>
 
@@ -175,10 +177,10 @@ const MemoryExercise: React.FC<ExerciseProps> = ({ onComplete, isTest, difficult
         </div>
 
         <div className="footer">
-          <div className="round">Round {round}/3</div>
+          <div className="round">{t('memoryExercise.round')} {round}/3</div>
           <div className="stats">
-            Shapes to remember: {sequence.length}
-            {!showingSequence && attempts > 0 && <span className="attempts">Attempt: {attempts}</span>}
+            {t('memoryExercise.shapesToRemember')}: {sequence.length}
+            {!showingSequence && attempts > 0 && <span className="attempts">{t('memoryExercise.attempts')}: {attempts}</span>}
           </div>
         </div>
       </div>

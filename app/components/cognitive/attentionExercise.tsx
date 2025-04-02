@@ -101,10 +101,10 @@ const AttentionExercise: React.FC<ExerciseProps> = ({ onComplete, isTest, diffic
   return (
     <div className="attentionEx container">
       <div className="header">
-        <h3 className='title'>Vehicle Match</h3>
+        <h3 className='title'>{t('attentionExercise.title')}</h3>
         <div className="targetSection">
           <div className="flex items-center gap-2">
-            <p className="text-secondary">Find this:</p>
+            <p className="text-secondary">{t('attentionExercise.findThis')}:</p>
             {targetVehicle && carsIcons.find((v) => v.name === targetVehicle)?.icon ? (
               <Image
                 src={carsIcons.find((v) => v.name === targetVehicle)!.icon}
@@ -147,10 +147,10 @@ const AttentionExercise: React.FC<ExerciseProps> = ({ onComplete, isTest, diffic
 
       <div className="score-container">
         <div className="score">
-          Score: {calculateNormalizedScore()} / 1000
+          {t('attentionExercise.score')}: {calculateNormalizedScore()} / 1000
         </div>
         <div className="matches">
-          Matches: {score} / {attempts} ({Math.round((score / attempts) * 100) || 0}%)
+          {t('attentionExercise.matches')}: {score} / {attempts} ({Math.round((score / attempts) * 100) || 0}%)
         </div>
       </div>
     </div>

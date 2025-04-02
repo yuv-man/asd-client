@@ -117,6 +117,19 @@
     "attentionExercise": {
       "title": "התאמת כלי תחבורה",
       "findThis": "מצא זה:",
-      "seconds": "שניות"
+      "seconds": "שניות",
+      "score": "ניקוד:",
+      "matches": "מצוינים:",
+      "attempts": "ניסיונות:"
+    },
+    "memoryExercise": {
+      "title": "משחק זיכרון",
+      "watchCarefully": "צפה בזהירות...",
+      "getReady": "תורך...",
+      "repeatSequence": "חזור על הסדרה...",
+      "tryAgain": "נסה שוב!",
+      "shapesToRemember": "צורות לזכור:",
+      "attempts": "ניסיונות:",
+      "round": "סיבוב: {round}/3"
     }
 }
