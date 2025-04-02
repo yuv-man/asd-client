@@ -148,5 +148,16 @@
       "accuracy": "Accuracy",
       "avgReactionTime": "Avg Reaction Time",
       "gameOver": "Game Over!"
+    },
+    "catchObjects": {
+      "title": "Catch Falling Objects",
+      "instructions": "Move your mouse or finger to control the basket",
+      "instructions2": "Catch as many objects as you can in 60 seconds!",
+      "score": "Score",
+      "time": "Time",
+      "gameOver": "Game Over!",
+      "startButton": "Start Game",
+      "playAgain": "Play Again",
+      "basket": "Basket"
     }
 }

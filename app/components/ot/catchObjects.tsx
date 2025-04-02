@@ -13,6 +13,7 @@ import { ExerciseProps } from '@/types/props';
 import Image from 'next/image';
 import basket from '@/assets/cars/shopping-card.svg';
 import { difficultyEnum } from '@/enums/enumDifficulty';
+import { useTranslations } from 'next-intl';
 
 type DifficultyLevel = 'easy' | 'medium' | 'hard';
 
@@ -28,6 +29,7 @@ const CatchObjects: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyL
   const requestRef = useRef<number | null>(null);
   const objectsGenerated = useRef(0);
   const [rawScore, setRawScore] = useState(0);
+  const t = useTranslations();
 
   // Memoize startGame function
   const startGame = useCallback(() => {
@@ -41,6 +43,7 @@ const CatchObjects: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyL
 
   // Memoize handleMouseMove function
   const handleMouseMove = useCallback((e: MouseEvent | TouchEvent) => {
+    e.preventDefault(); // Prevent default behavior
     if (!gameAreaRef.current) return;
     
     const gameAreaRect = (gameAreaRef.current as HTMLElement).getBoundingClientRect();
@@ -48,8 +51,8 @@ const CatchObjects: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyL
     
     let newPosition;
     
-    if (e.type === 'touchmove') {
-      const touch = (e as TouchEvent).touches[0];
+    if ('touches' in e) { // Better type checking for TouchEvent
+      const touch = e.touches[0];
       newPosition = ((touch.clientX - gameAreaRect.left) / gameAreaWidth) * 100;
     } else {
       newPosition = ((e as MouseEvent).clientX - gameAreaRect.left) / gameAreaWidth * 100;
@@ -66,8 +69,9 @@ const CatchObjects: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyL
     const gameArea = gameAreaRef.current;
     if (!gameArea) return;
 
-    gameArea.addEventListener('mousemove', handleMouseMove);
-    gameArea.addEventListener('touchmove', handleMouseMove);
+    // Add passive: false to allow preventDefault()
+    gameArea.addEventListener('mousemove', handleMouseMove, { passive: false });
+    gameArea.addEventListener('touchmove', handleMouseMove, { passive: false });
     
     return () => {
       gameArea.removeEventListener('mousemove', handleMouseMove);
@@ -192,93 +196,96 @@ const CatchObjects: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyL
   }, [gameOver, onComplete, rawScore]);
 
   return (
-    <div className="container">
-      <Head>
-        <title className='catchObjects'>Catch Falling Objects</title>
-        <meta name="description" content="Occupational therapy game to help with motor skills" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <div className='catchObjects'>
 
-      <main className="main">
-        <h1 className="title">
-          Catch Falling Objects
-        </h1>
-        {!gameActive && !gameOver && (
-            <div className="instructions">
-              <p>Move your mouse or finger to control the basket</p>
-              <p>Catch as many objects as you can in 60 seconds!</p>
-            </div>
-          )}
-        
-        <div className="gameControls">
+      <div className="container">
+        <Head>
+          <title className='title'>{t('catchObjects.title')}</title>
+          <meta name="description" content="Occupational therapy game to help with motor skills" />
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
+
+        <main className="main">
+          <h1 className="title">
+            {t('catchObjects.title')}
+          </h1>
           {!gameActive && !gameOver && (
-            <>
-              <button className="startButton" onClick={startGame}>
-                Start Game
-              </button>
-            </>
-          )}
+              <div className="instructions">
+                <p>{t('catchObjects.instructions')}</p>
+                <p>{t('catchObjects.instructions2')}</p>
+              </div>
+            )}
           
-          {gameOver && (
-            <div className="gameOver">
-              <h2>Game Over!</h2>
-              <p>Your score: {score}</p>
-              <button className="startButton" onClick={startGame}>
-                Play Again
-              </button>
-            </div>
-          )}
-        </div>
-        
-        {gameActive && (
-          <div 
-            ref={gameAreaRef}
-            className={`catchObjects gameArea ${gameActive ? 'active' : ''}`}
-          >
-          {gameActive && fallingObjects.map(obj => (
-            <div 
-              key={obj.id}
-              className="fallingObject"
-              style={{ 
-                left: `${obj.position}%`, 
-                top: `${obj.top}%`,
-                display: obj.caught || obj.missed ? 'none' : 'block'
-              }}
-            >
-              <Image 
-                src={
-                  {
-                    apple,
-                    fish,
-                    soda,
-                    steak,
-                    poachedEgg: poachEgg
-                  }[obj.type] ?? apple  // Use nullish coalescing to provide a fallback image
-                } 
-                alt={obj.type} 
-                width={100} 
-                height={100} 
-              />
-            </div>
-          ))}
+          <div className="gameControls">
+            {!gameActive && !gameOver && (
+              <>
+                <button className="startButton" onClick={startGame}>
+                  {t('catchObjects.startButton')}
+                </button>
+              </>
+            )}
+            
+            {gameOver && (
+              <div className="gameOver">
+                <h2>{t('catchObjects.gameOver')}</h2>
+                <p>{t('catchObjects.score')}: {score}</p>
+                <button className="startButton" onClick={startGame}>
+                  {t('catchObjects.playAgain')}
+                </button>
+              </div>
+            )}
+          </div>
           
           {gameActive && (
             <div 
-              className="basket"
-              style={{ left: `${basketPosition}%` }}
+              ref={gameAreaRef}
+              className={`catchObjects gameArea ${gameActive ? 'active' : ''}`}
             >
-              <Image src={basket} alt="basket" width={100} height={100} />
+            {gameActive && fallingObjects.map(obj => (
+              <div 
+                key={obj.id}
+                className="fallingObject"
+                style={{ 
+                  left: `${obj.position}%`, 
+                  top: `${obj.top}%`,
+                  display: obj.caught || obj.missed ? 'none' : 'block'
+                }}
+              >
+                <Image 
+                  src={
+                    {
+                      apple,
+                      fish,
+                      soda,
+                      steak,
+                      poachedEgg: poachEgg
+                    }[obj.type] ?? apple  // Use nullish coalescing to provide a fallback image
+                  } 
+                  alt={obj.type} 
+                  width={100} 
+                  height={100} 
+                />
+              </div>
+            ))}
+            
+            {gameActive && (
+              <div 
+                className="basket"
+                style={{ left: `${basketPosition}%` }}
+              >
+                <Image src={basket} alt="basket" width={100} height={100} />
+              </div>
+            )}
             </div>
           )}
-          </div>
-        )}
-        {gameActive && (
-            <div className="stats">
-              <div className="score">Score: {rawScore}</div>
-              <div className="time">Time: {timeLeft}s</div>
-            </div>
-          )}
-      </main>
+          {gameActive && (
+              <div className="stats">
+                <div className="score">{t('catchObjects.score')}: {rawScore}</div>
+                <div className="time">{t('catchObjects.time')}: {timeLeft}s</div>
+              </div>
+            )}
+        </main>
+      </div>
     </div>
   );
 }

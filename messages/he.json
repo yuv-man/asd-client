@@ -145,5 +145,17 @@
       "accuracy": "דיוק:",
       "avgReactionTime": "זמן התגובה הממוצע:",
       "gameOver": "משחק נגמר!"
+    },
+    "catchObjects": {
+      "title": "תפוס את המוצרים",
+      "instructions": "הזז את המקלדת או את האצבע כדי לתפוס מוצרים!",
+      "instructions2": "תפוס כמה שיותר מוצרים ב-30 שניות!",
+      "score": "ניקוד:",
+      "time": "זמן:",
+      "gameOver": "משחק נגמר!",
+      "startButton": "התחל משחק",
+      "playAgain": "שחק שוב",
+      "basket": "קלידה"
     }
+
 }
