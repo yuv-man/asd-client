@@ -18,6 +18,7 @@ import {
   Filler
 } from 'chart.js';
 import { difficultyEnum } from "@/enums/enumDifficulty";
+import '@/app/styles/areaAnalyses.scss';
 
 // Register ChartJS components
 ChartJS.register(
@@ -149,66 +150,58 @@ const AreaAnalyses = ({ user, area, value, recentData }: DashboardProps) => {
             key={areaTypes[area].id}
             whileHover={{ scale: 1.02 }}
             transition={{ duration: 0.3 }}
-            className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100"
+            className="area-analyses"
         >
-            <div className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center">
-                        <div className={`${areaTypes[area].class} w-10 h-10 rounded-lg flex items-center justify-center mr-3`}>
-                            <Image src={areaTypes[area].icon} alt={area} width={20} height={20} className="text-white" />
+            <div className="container">
+                <div className="header">
+                    <div className="header__left">
+                        <div className={`header__left-icon ${areaTypes[area].class}`}>
+                            <Image src={areaTypes[area].icon} alt={area} width={20} height={20} />
                         </div>
-                        <h3 className="text-lg font-semibold text-gray-800">{area}</h3>
+                        <h3 className="header__left-title">{area}</h3>
                     </div>
-                    <div className="flex items-center space-x-2">
-                        <div className="flex items-center">
-                            <Award className="w-4 h-4 mr-1 text-amber-500" />
-                            <span className="text-sm font-medium text-gray-600">
+                    <div className="header__right">
+                        <div className="header__right-level">
+                            <Award className="award-icon" />
+                            <span>
                                 Level {user?.areasProgress[area as keyof typeof user.areasProgress].difficultyLevel}
                             </span>
                         </div>
-                        <div className="h-4 w-px bg-gray-200"></div>
-                        <div className="flex items-center">
-                            <span className="text-sm font-medium text-gray-600 flex items-center">
-                                <span className="w-2 h-2 rounded-full bg-orange-400 mr-1"></span>
-                                Norm: {normScore}
-                            </span>
+                        <div className="header__right-divider"></div>
+                        <div className="header__right-norm">
+                            <span className="norm-dot"></span>
+                            Norm: {normScore}
                         </div>
                     </div>
                 </div>
                 
-                <div className="flex mb-8">
-                    <div className="w-1/2 pr-3">
-                        <div className="flex items-end mb-1">
-                            <span className="text-3xl font-bold text-gray-800">{value.averageScore.toFixed(0)}</span>
-                            <div className="flex ml-2">
-                                {/* <div className={`px-2 py-1 rounded-full text-xs font-medium flex items-center ${isPositiveTrend ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                                    <TrendingUp className={`w-3 h-3 mr-1 ${!isPositiveTrend && 'transform rotate-180'}`} />
-                                    {scoresTrend}%
-                                </div> */}
-                            </div>
+                <div className="metrics">
+                    <div className="metrics__score">
+                        <div className="metrics__score-value">
+                            <span className="number">{value.averageScore.toFixed(0)}</span>
                         </div>
-                        <p className="text-xs text-gray-500">Average Score</p>
+                        <p className="metrics__score-label">Average Score</p>
                     </div>
-                    <div className="w-1/2 pl-3 border-l border-gray-100">
-                        <div className="flex items-end mb-1">
-                            <span className="text-3xl font-bold text-gray-800">{value.timeSpentMinutes.toFixed(0)}</span>
-                            <span className="ml-1 text-gray-600 text-sm mb-1">min</span>
+                    <div className="metrics__time">
+                        <div className="metrics__time-value">
+                            <span className="number">{value.timeSpentMinutes.toFixed(0)}</span>
+                            <span className="unit">min</span>
                         </div>
-                        <div className="flex items-center">
-                            <Clock className="w-3 h-3 mr-1 text-gray-400" />
-                            <p className="text-xs text-gray-500">Total Time Spent</p>
+                        <div className="metrics__time-label">
+                            <Clock className="icon" />
+                            <p>Total Time Spent</p>
                         </div>
                     </div>
                 </div>
                 
                 {recentData && (
-                    <div className="space-y-6">
-                        <div>
-                            <div className="flex items-center justify-between mb-2">
-                                <p className="text-sm font-medium text-gray-700">Performance</p>
-                                <BarChart2 className="w-4 h-4 text-gray-400" />
+                    <div className="charts">
+                        <div className="charts__section">
+                            <div className="charts__section-header">
+                                <p className="title">Performance</p>
+                                <BarChart2 className="icon" />
                             </div>
-                            <div className="relative h-32 w-full">
+                            <div className="charts__section-chart">
                                 <Bar
                                     data={{
                                         labels: recentData.dates.map(date => {
@@ -229,25 +222,22 @@ const AreaAnalyses = ({ user, area, value, recentData }: DashboardProps) => {
                                     options={scoreChartOptions}
                                 />
                                 <div 
-                                    className="absolute border-t-2 border-dashed border-orange-400 w-full left-0 z-10 pointer-events-none"
-                                    style={{ 
-                                        top: `${(1000 - normScore) / 10}%`,
-                                        height: '1px'
-                                    }}
+                                    className="norm-line"
+                                    style={{ top: `${(1000 - normScore) / 10}%` }}
                                 >
-                                    <div className="absolute right-0 -top-3 bg-orange-100 text-orange-800 px-1 py-0.5 text-xs rounded">
+                                    <div className="norm-label">
                                         Norm: {normScore}
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div>
-                            <div className="flex items-center justify-between mb-2">
-                                <p className="text-sm font-medium text-gray-700">Time Dedication</p>
-                                <Clock className="w-4 h-4 text-gray-400" />
+                        <div className="charts__section">
+                            <div className="charts__section-header">
+                                <p className="title">Time Dedication</p>
+                                <Clock className="icon" />
                             </div>
-                            <div className="h-32 w-full">
+                            <div className="charts__section-chart">
                                 <Bar
                                     data={{
                                         labels: recentData.dates.map(date => {

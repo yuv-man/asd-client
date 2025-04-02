@@ -1,7 +1,7 @@
-import '@/app/styles/setting.scss'
+import '@/app/styles/setting.scss';
 import ClientSettingsContent from './ClientSettingsContent';
 
-const SettingsPage = ({ params }: { params: { locale: string } }) => {
+const SettingsPage = () => {
   return <ClientSettingsContent />;
 };
 

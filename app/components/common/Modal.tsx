@@ -1,6 +1,7 @@
 import zebra from '@/assets/animals/zebra.svg'
 import lion from '@/assets/animals/lion.svg'
 import Image from 'next/image';
+import '@/app/styles/Modal.scss';
 
 interface ModalProps {
   title?: string;
@@ -13,21 +14,21 @@ export default function Modal({ title, isOpen, onClose, children }: ModalProps) 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-[rgba(0,0,0,0.50)] flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded-lg max-w-md w-full m-4 text-darkPurple">
-        <div className="flex justify-end">
+    <div className="modal-overlay">
+      <div className="modal-container">
+        <div className="modal-header">
           <button 
             onClick={onClose} 
-            className="close-button hover:text-gray-900 text-md font-bold"
+            className="close-button"
             aria-label="Close modal"
           >
             ✕
           </button>
         </div>
-        <div className="flex flex-col items-center">
-          <div className='flex flex-row items-center justify-center mb-4' >
+        <div className="modal-content">
+          <div className="modal-title">
             <Image src={title === 'Quiz' ? lion : zebra} alt="zebra" width={50} height={50} />
-            <h1 className="text-2xl">{title}</h1>
+            <h1>{title}</h1>
           </div>
           {children}
         </div>

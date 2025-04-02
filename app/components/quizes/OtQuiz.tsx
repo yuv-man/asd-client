@@ -92,27 +92,27 @@ const OTQuiz = ({isInitialAssessment}: {isInitialAssessment?: boolean}) => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="text-center flex flex-col items-center justify-center pt-20"
+            className="intro"
           >
             <Image src={monkey} alt="monkey" width={100} height={100} />
-            <h2 className="text-3xl font-bold text-gray-900 mb-4 text-darkPurple">
+            <h2 className="title">
               {t('otQuiz.welcome')}
             </h2>
-            <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto text-darkPurple">
+            <p className="description">
               {t('otQuiz.instructions', { name: user?.name || '' })}
             </p>
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => setShowIntro(false)}
-              className="bg-purple-600 text-white px-8 py-3 rounded-full hover:bg-purple-700 flex items-center mx-auto"
+              className="start-button"
             >
               {t('otQuiz.start')}
-              <ArrowRight className="ml-2 w-4 h-4" />
+              <ArrowRight className="arrow-icon" />
             </motion.button>
           </motion.div>
         ) : isLoading ? (
-          <div className='flex flex-col items-center justify-center h-screen'>
+          <div className='loader-container'>
             <span className='loader'></span>
           </div>
         ) : CurrentExerciseComponent ? (

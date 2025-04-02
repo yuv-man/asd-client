@@ -94,28 +94,23 @@ const CognitiveQuiz = ({isInitialAssessment}: {isInitialAssessment?: boolean}) =
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="text-center flex flex-col items-center justify-center"
+            className="intro-container"
           >
             <Image src={owl} alt="owl" width={100} height={100} />
-            <h2 className="text-3xl font-bold text-gray-900 mb-4 text-darkPurple">
-              {t('cognitiveQuiz.welcome')}
-            </h2>
-            <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto text-darkPurple">
-              {t('cognitiveQuiz.instructions', { name: user?.name || '' })}
-            </p>
+            <h2>{t('cognitiveQuiz.welcome')}</h2>
+            <p>{t('cognitiveQuiz.instructions', { name: user?.name || '' })}</p>
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => setShowIntro(false)}
-              className="bg-purple-600 text-white px-8 py-3 rounded-full hover:bg-purple-700 flex items-center mx-auto"
             >
               {t('cognitiveQuiz.start')}
-              <ArrowRight className="ml-2 w-4 h-4" />
+              <ArrowRight />
             </motion.button>
           </motion.div>
         ) : isLoading ? (
-          <div className='flex items-center justify-center h-screen'>
-            <span className='loader'>hello world</span>
+          <div className="loading-container">
+            <span className="loader">hello world</span>
           </div>
         ) : CurrentExerciseComponent ? (
           <motion.div
@@ -124,7 +119,11 @@ const CognitiveQuiz = ({isInitialAssessment}: {isInitialAssessment?: boolean}) =
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -100 }}
           >
-            <CurrentExerciseComponent onComplete={handleExerciseComplete} isTest={true} difficultyLevel={user?.areasProgress?.cognitive?.difficultyLevel} />
+            <CurrentExerciseComponent 
+              onComplete={handleExerciseComplete} 
+              isTest={true} 
+              difficultyLevel={user?.areasProgress?.cognitive?.difficultyLevel} 
+            />
           </motion.div>
         ) : null}
       </AnimatePresence>

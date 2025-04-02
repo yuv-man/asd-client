@@ -1,7 +1,7 @@
 .trailMapContainer {
   position: relative;
   width: 100%;
-  height: 10vh;
+  height: 100vh;
   overflow: hidden;
 }
 
@@ -29,13 +29,23 @@
 
 .exerciseButton {
   position: absolute;
-  width: 60px;
-  height: 60px;
+  width: 58px; // Almost same as original
+  height: 58px; // Almost same as original
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  
+  @media (max-width: 1024px) {
+    width: 55px;
+    height: 55px;
+  }
+  
+  @media (max-width: 768px) {
+    width: 50px;
+    height: 50px;
+  }
 }
 
 .completed {
@@ -71,17 +81,35 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: 4px; // Original gap
 }
 
 .progressText {
   color: white;
-  font-size: 12px;
+  font-size: 12px; // Original size
   font-weight: bold;
+  
+  @media (max-width: 768px) {
+    font-size: 10px;
+  }
 }
 
 .settingsButton {
   &:hover {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+  }
+}
+
+// Styles for animal buttons
+.animalButton {
+  transition: transform 0.2s ease;
+  z-index: 5; // Keep animals visible
+  
+  &:hover {
+    transform: scale(1.1);
+  }
+  
+  &:active {
+    transform: scale(0.95);
   }
 }

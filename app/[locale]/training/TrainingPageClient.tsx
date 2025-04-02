@@ -8,6 +8,7 @@ import { Session, Quiz } from '@/types/types'
 import { useSessions, useUserStore } from '@/store/userStore'
 import { exercisesAPI } from '@/services/api';
 import { areaTypesEnum } from '@/enums/enumArea';
+import '@/app/styles/TrainingPage.scss';
 
 export default function TrainingPageClient() {
     const router = useRouter();
@@ -81,7 +82,7 @@ export default function TrainingPageClient() {
     }, [sessions]);
   
     return (
-      <div className="container mx-auto">
+      <div className="container">
         <TrailMap
           sessions={sessions}
           onSessionSelect={handleSessionSelect}
@@ -100,18 +101,18 @@ export default function TrainingPageClient() {
             }}
           >
             {selectedSession && (
-              <div className="mb-4">
+              <div className="session-info">
                 {selectedSession.exercises.map(exercise => (
-                  <div key={`exercise-${exercise._id}`} className="flex items-center gap-2">
+                  <div key={`exercise-${exercise._id}`} className="exercise-item">
                     <span>{exercise.isCompleted ? "✅" : "⭕"}</span>
                     <span>{exercise.title}</span>
                   </div>
                 ))}
-                <p className='mt-4'>Completed exercises: {selectedSession.completedExercises}/{selectedSession.exercises.length}</p>
+                <p className='completed-count'>Completed exercises: {selectedSession.completedExercises}/{selectedSession.exercises.length}</p>
                 {selectedSession.completedExercises < 3 && (
                   <button
                     onClick={handleStartSession}
-                    className="bg-pastelOrange text-white px-4 py-2 rounded hover:bg-blue-600"
+                    className="button"
                   >
                     {selectedSession.completedExercises === 0 ? 'Start Session' : 'Continue Session'}
                   </button>
@@ -120,15 +121,15 @@ export default function TrainingPageClient() {
             )}
             
             {selectedQuiz && (
-              <div className="mb-4 flex flex-col items-center">
-                <p className='text-xl font-bold text-center'>{selectedQuiz.title}</p>
+              <div className="quiz-content">
+                <p className='quiz-title'>{selectedQuiz.title}</p>
                 <p>Are you ready to test your knowledge?</p>
                 <button
                   onClick={() => {
                     setIsModalOpen(false);
                     router.push(`/training/quiz/${selectedQuiz.id}`);
                   }}
-                  className="mt-4 bg-pastelOrange text-white px-4 py-2 rounded hover:bg-blue-600"
+                  className="quiz-button"
                 >
                   Start Quiz
                 </button>

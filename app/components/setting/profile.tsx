@@ -66,37 +66,34 @@ function Profile({ user, onSave }: ProfileProps) {
   return (
     <div className="profile-container">
       <div className="header">
-        <h1 className="title text-2xl font-bold">{t('setting.Profile_Settings')}</h1>
+        <h1 className="title">{t('setting.profileSettings')}</h1>
         <LanguageSelector />
       </div>
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit}>
         <div className="avatar-section">
           <div className="avatar-grid">
-            {/* Selected avatar - larger size */}
-            <div className="relative w-32 h-32">
+            <div className="selected-avatar">
               <Image
                 src={avatarUrl?.src || avatars[0].src}
                 alt="Profile avatar"
                 fill
-                className="rounded-full object-cover"
+                className="avatar-image"
               />
             </div>
 
-            {/* Avatar selection grid - only shown when editing */}
             {isEditing && (
               <div className="avatar-selection">
                 {avatars.map((avatar, index) => (
                   <button
                     key={index}
                     onClick={(e) => pickAvatar(e, avatar)}
-                    className={`image-button relative w-16 h-16 rounded-full overflow-hidden hover:ring-2 hover:ring-primary-500 
-                      ${avatarUrl?.src === avatar.src ? 'ring-2 ring-primary-500' : ''}`}
+                    className={`image-button ${avatarUrl?.src === avatar.src ? 'selected' : ''}`}
                   >
                     <Image
                       src={avatar.src}
                       alt={`Avatar option ${index + 1}`}
                       fill
-                      className="object-cover"
+                      className="avatar-image"
                     />
                   </button>
                 ))}
@@ -107,10 +104,10 @@ function Profile({ user, onSave }: ProfileProps) {
 
         <div className="form-layout">
           <div className="form-column">
-            <h2 className="title text-lg font-semibold">{t('setting.Personal_Information')}</h2>
-            <div>
+            <h2 className="title">{t('setting.personalInformation')}</h2>
+            <div className="input-group">
               <label htmlFor="name" className="block text-sm font-medium">
-                {t('setting.Name')}
+                {t('setting.name')}
               </label>
               {isEditing ? (
                 <input
@@ -125,9 +122,9 @@ function Profile({ user, onSave }: ProfileProps) {
                 <p className="mt-1">{name || 'Not set'}</p>
               )}
             </div>
-            <div>
+            <div className="input-group">
               <label htmlFor="age" className="block text-sm font-medium">
-                {t('setting.Age')}
+                {t('setting.age')}
               </label>
               {isEditing ? (
                 <input
@@ -141,9 +138,9 @@ function Profile({ user, onSave }: ProfileProps) {
                 <p className="mt-1">{age || 4}</p>
               )}
             </div>
-            <div>
+            <div className="input-group">
               <label htmlFor="email" className="block text-sm font-medium">
-                {t('setting.Email')}
+                {t('setting.email')}
               </label>
               {isEditing ? (
                 <input
@@ -157,9 +154,9 @@ function Profile({ user, onSave }: ProfileProps) {
                 <p className="mt-1">{parentEmail || 'Not set'}</p>
               )}
             </div>
-            <div>
+            <div className="input-group">
               <label htmlFor="phone" className="block text-sm font-medium">
-                {t('setting.Phone')}
+                {t('setting.phone')}
               </label>
               {isEditing ? (
                 <input
@@ -176,11 +173,11 @@ function Profile({ user, onSave }: ProfileProps) {
           </div>
 
           <div className="form-column">
-            <h2 className="title text-lg font-semibold">{t('setting.Therapy_Areas')}</h2>
+            <h2 className="title">{t('setting.therapyAreas')}</h2>
             
             <div className="grid gap-4">
               <TherapyArea
-                title={t('setting.Cognitive_Therapy')}
+                title={t('setting.cognitiveTherapy')}
                 enabled={enabledCognitive}
                 level={levelCognitive}
                 isEditing={isEditing}
@@ -188,7 +185,7 @@ function Profile({ user, onSave }: ProfileProps) {
                 onLevelChange={setLevelCognitive}
               />
               <TherapyArea
-                title={t('setting.Occupational_Therapy')}
+                title={t('setting.occupationalTherapy')}
                 enabled={enabledOt}
                 level={levelOt}
                 isEditing={isEditing}
@@ -196,29 +193,29 @@ function Profile({ user, onSave }: ProfileProps) {
                 onLevelChange={setLevelOt}
               />
               <TherapyArea
-                title={t('setting.Speech_Therapy')}
+                title={t('setting.speechTherapy')}
                 enabled={enabledSpeech}
                 level={levelSpeech}
                 isEditing={isEditing}
                 onEnableChange={setEnabledSpeech}
                 onLevelChange={setLevelSpeech}
               />
-              <div>
-              <label htmlFor="numOfExercises" className="block text-sm font-medium">
-                {t('setting.Number_of_Exercises')}
-              </label>
-              {isEditing ? (
-                <input
-                  type="number"
-                  id="numOfExercises"
-                  value={numOfExercises}
-                  onChange={(e) => setNumOfExercises(parseInt(e.target.value))}
-                  className="input-field"
-                />
-              ) : (
-                <p className="mt-1">{numOfExercises || 3}</p>
-              )}
-            </div>
+              <div className="input-group">
+                <label htmlFor="numOfExercises" className="block text-sm font-medium">
+                  {t('setting.number_of_exercises')}
+                </label>
+                {isEditing ? (
+                  <input
+                    type="number"
+                    id="numOfExercises"
+                    value={numOfExercises}
+                    onChange={(e) => setNumOfExercises(parseInt(e.target.value))}
+                    className="input-field"
+                  />
+                ) : (
+                  <p className="mt-1">{numOfExercises || 3}</p>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -229,24 +226,24 @@ function Profile({ user, onSave }: ProfileProps) {
               <button
                 type="button"
                 onClick={() => setIsEditing(false)}
-                className="px-4 py-2 border rounded-md setting-button"
+                className="setting-button secondary"
               >
-                {t('setting.Cancel')}
+                {t('setting.cancel')}
               </button>
               <button
                 type="submit"
-                className="px-4 py-2 bg-blue-500 text-white rounded-md setting-button"
+                className="setting-button primary"
               >
-                {t('setting.Save')}
+                {t('setting.save')}
               </button>
             </>
           ) : (
             <button
               type="button"
               onClick={() => setIsEditing(true)}
-              className="px-4 py-2 bg-blue-500 text-white rounded-md setting-button"
+              className="setting-button primary"
             >
-              {t('setting.Edit_Profile')}
+              {t('setting.editProfile')}
             </button>
           )}
         </div>

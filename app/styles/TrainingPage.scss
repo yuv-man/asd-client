@@ -1,0 +1,46 @@
+.container {
+  margin: 0 auto;
+
+  .exercise-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .session-info {
+    margin-bottom: 1rem;
+
+    .completed-count {
+      margin-top: 1rem;
+    }
+  }
+
+  .button {
+    background-color: var(--pastel-orange);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    
+    &:hover {
+      background-color: #2563eb; // blue-600 equivalent
+    }
+  }
+
+  .quiz-content {
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .quiz-title {
+      font-size: 1.25rem;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .quiz-button {
+      margin-top: 1rem;
+      @extend .button;
+    }
+  }
+} 

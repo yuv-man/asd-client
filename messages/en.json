@@ -31,12 +31,17 @@
       "occupationalTherapy": "Occupational Therapy",
       "exercisesPerSession": "Number of Exercises per Session",
       "level": "Level",
-      "english": "English",
-      "hebrew": "Hebrew",
+      "English": "English",
+      "Hebrew": "Hebrew",
       "editProfile": "Edit Profile",
       "cancel": "Cancel",
       "save": "Save",
-      "enabled": "Enabled"
+      "enabled": "Enabled",
+      "disabled": "Disabled",
+      "number_of_exercises": "Number of Exercises",
+      "speech_therapy": "Speech Therapy",
+      "occupational_therapy": "Occupational Therapy",
+      "cognitive_therapy": "Cognitive Therapy"
     },
     "speech": {
       "title": "Speech Therapy Game",

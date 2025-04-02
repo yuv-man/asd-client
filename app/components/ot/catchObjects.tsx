@@ -202,7 +202,6 @@ const CatchObjects: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyL
         <Head>
           <title className='title'>{t('catchObjects.title')}</title>
           <meta name="description" content="Occupational therapy game to help with motor skills" />
-          <link rel="icon" href="/favicon.ico" />
         </Head>
 
         <main className="main">

@@ -1,0 +1,72 @@
+.language-selector {
+    position: relative;
+    width: 180px;
+  
+    &__button {
+      position: relative;
+      width: 100%;
+      cursor: pointer;
+      background-color: #a855f7; // purple-500
+      padding: 0.5rem 0.75rem 0.5rem 0.75rem;
+      text-align: left;
+      border-radius: 0.5rem;
+      border: 1px solid transparent;
+  
+      &:focus {
+        outline: none;
+        border-color: #6366f1; // indigo-500
+        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.75);
+      }
+    }
+  
+    &__label {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  
+    &__icon {
+      position: absolute;
+      top: 50%;
+      right: 0.5rem;
+      transform: translateY(-50%);
+      pointer-events: none;
+      
+      svg {
+        height: 1.25rem;
+        width: 1.25rem;
+        color: #9ca3af; // gray-400
+      }
+    }
+  
+    &__options {
+      position: absolute;
+      margin-top: 0.25rem;
+      max-height: 15rem;
+      width: 100%;
+      overflow: auto;
+      background-color: white;
+      border-radius: 0.375rem;
+      padding: 0.25rem 0;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+  
+      &:focus {
+        outline: none;
+      }
+    }
+  
+    &__option {
+      position: relative;
+      cursor: pointer;
+      user-select: none;
+      padding: 0.5rem 0.75rem 0.5rem 0.75rem;
+      color: #111827; // gray-900
+  
+      &--active {
+        background-color: #e0e7ff; // indigo-100
+        color: #312e81; // indigo-900
+      }
+    }
+  }

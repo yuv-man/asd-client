@@ -11,7 +11,7 @@ const meta = {
   },
   // Use argTypes to define controls for stories
   argTypes: {
-    onComplete: { action: 'onComplete' }
+    onComplete: { score: 75, metrics: { accuracy: 50, timeInSeconds:30, attempts: 4 } }
   }
 } satisfies Meta<typeof ProblemSolvingExercise>;
 
@@ -31,8 +31,8 @@ export const Default: Story = {
 const ExerciseWithScoreDisplay = () => {
   const [score, setScore] = useState<number | null>(null);
   
-  const handleComplete = (completionScore: number) => {
-    setScore(completionScore);
+  const handleComplete = (result: { score: number; metrics?: { accuracy: number; timeInSeconds: number; attempts: number; } | undefined; }) => {
+    setScore(result.score);
   };
   
   return (

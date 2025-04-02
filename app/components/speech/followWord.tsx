@@ -285,28 +285,25 @@ const FollowWord: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyLev
   const progressPercentage = isTest ? (score / (isTest ? 5 : 10)) * 100 : 0;
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-blue-100 p-4">
-      <h1 className="text-2xl font-bold mb-6">{t("speech.title")}</h1>
+    <div className="follow-word">
+      <h1>{t("speech.title")}</h1>
       
-      {/* Error message */}
-      {error && <p className="text-red-500 mb-4 p-2 bg-red-100 rounded-lg">{error}</p>}
+      {error && <p className="error-message">{error}</p>}
       
-      {/* Progress bar for test mode */}
       {isTest && (
-        <div className="w-full max-w-md h-4 bg-gray-200 rounded-full mb-6">
+        <div className="progress-bar">
           <div 
-            className="h-full bg-green-500 rounded-full transition-all duration-300"
+            className="progress-bar__fill"
             style={{ width: `${progressPercentage}%` }}
           ></div>
-          <p className="text-sm text-center mt-1">{score}/5</p>
+          <p className="progress-bar__text">{score}/5</p>
         </div>
       )}
       
-      {/* Word and image display */}
-      <div className="flex flex-col items-center bg-white p-6 rounded-xl shadow-md mb-6">
-        <p className="text-lg mb-4">{t("speech.instruction")}</p>
+      <div className="word-display">
+        <p className="word-display__instruction">{t("speech.instruction")}</p>
         {currentWord && wordsIcons[currentWord as keyof typeof wordsIcons] ? (
-          <div className="relative">
+          <div className="word-display__image-container">
             <Image 
               src={wordsIcons[currentWord as keyof typeof wordsIcons]} 
               alt={currentWord} 
@@ -314,37 +311,33 @@ const FollowWord: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyLev
               height={150}
               className="object-contain" 
             />
-            {/* Debug text for development - remove in production */}
-            <p className="text-xs text-gray-500 mt-1">Current word: {currentWord}</p>
-            {/* Hidden text for screen readers */}
+            <p className="debug-text">Current word: {currentWord}</p>
             <span className="sr-only">{currentWord}</span>
           </div>
         ) : (
-          <p className="text-2xl font-bold my-4">{currentWord}</p>
+          <p className="word-display__word">{currentWord}</p>
         )}
       </div>
       
-      {/* Feedback message */}
       {feedback && (
-        <div className={`mb-4 p-2 rounded-lg ${feedback === t("speech.correct") ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
+        <div className={`feedback ${feedback === t("speech.correct") ? 'feedback--correct' : 'feedback--incorrect'}`}>
           {feedback}
         </div>
       )}
       
-      {/* Controls */}
       <button 
         onClick={startListening} 
-        className="mb-6 bg-blue-500 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-blue-700 disabled:bg-gray-400 transition-colors flex items-center"
+        className="control-button"
         disabled={isListening || !!error || isProcessing}
       >
         {isListening ? (
           <>
-            <span className="animate-pulse mr-2">●</span>
+            <span className="listening-indicator">●</span>
             {t("speech.listening")}
           </>
         ) : (
           <>
-            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <svg className="mic-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
             </svg>
             {t("speech.startButton")}
@@ -352,10 +345,11 @@ const FollowWord: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyLev
         )}
       </button>
       
-      {/* User's speech and score */}
-      <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-md">
-        <p className="text-gray-700">{t("speech.youSaid")} <span className="font-semibold">{spokenWord || "—"}</span></p>
-        <p className="mt-2 text-lg font-bold">{t("speech.score")} {score} / {attempts}</p>
+      <div className="results-panel">
+        <p className="results-panel__text">
+          {t("speech.youSaid")} <span className="results-panel__spoken-word">{spokenWord || "—"}</span>
+        </p>
+        <p className="results-panel__score">{t("speech.score")} {score} / {attempts}</p>
       </div>
     </div>
   );

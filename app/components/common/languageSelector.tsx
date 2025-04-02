@@ -5,6 +5,7 @@ import { userAPI } from '@/services/api';
 import { Listbox } from '@headlessui/react';
 import { HiChevronUpDown } from "react-icons/hi2";
 import { useRouter, usePathname } from 'next/navigation';
+import '@/app/styles/languageSelector.scss';
 
 
 export function LanguageSelector() {
@@ -24,24 +25,22 @@ export function LanguageSelector() {
 
   return (
     <Listbox value={locale} onChange={handleLanguageChange}>
-      <div className="relative w-[180px]">
-        <Listbox.Button className="relative w-full cursor-pointer rounded-lg bg-purple-500 py-2 pl-3 pr-10 text-left border focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2">
-          <span className="block truncate ">
+      <div className="language-selector">
+        <Listbox.Button className="language-selector__button">
+          <span className="language-selector__label">
             {languages.find(lang => lang.value === locale)?.label || 'Select language'}
           </span>
-          <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-            <HiChevronUpDown className="h-5 w-5 text-gray-400" aria-hidden="true" />
+          <span className="language-selector__icon">
+            <HiChevronUpDown aria-hidden="true" />
           </span>
         </Listbox.Button>
-        <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none">
+        <Listbox.Options className="language-selector__options">
           {languages.map((lang) => (
             <Listbox.Option
               key={lang.value}
               value={lang.value}
               className={({ active }) =>
-                `relative cursor-pointer select-none py-2 pl-3 pr-9 ${
-                  active ? 'bg-indigo-100 text-indigo-900' : 'text-gray-900'
-                }`
+                `language-selector__option ${active ? 'language-selector__option--active' : ''}`
               }
             >
               {lang.label}
