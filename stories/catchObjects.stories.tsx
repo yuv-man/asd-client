@@ -1,9 +1,18 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import CatchObjects from '../app/components/ot/catchObjects';
+import { NextIntlClientProvider } from 'next-intl';
+import messages from '../messages/en.json';
 
 const meta: Meta<typeof CatchObjects> = {
   title: 'OT/CatchObjects',
   component: CatchObjects,
+  decorators: [
+    (Story) => (
+      <NextIntlClientProvider messages={messages} locale="en">
+        <Story />
+      </NextIntlClientProvider>
+    ),
+  ],
   parameters: {
     layout: 'fullscreen',
   },

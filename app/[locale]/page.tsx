@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { sessionStore, useUserStore } from '@/store/userStore';
 import { useTranslations } from 'next-intl';  
+import '@/app/styles/mainPage.scss';
 
 export default function Home() {
   const router = useRouter();
@@ -28,5 +29,5 @@ export default function Home() {
     }
   }, [isHydrated, user, router, sessionStore]);
 
-  return <div className="min-h-screen bg-pastelLightYellow" />;
+  return <div className="home-container" />;
 }
