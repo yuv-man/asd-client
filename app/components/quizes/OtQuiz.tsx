@@ -61,19 +61,23 @@ const OTQuiz = ({isInitialAssessment}: {isInitialAssessment?: boolean}) => {
 
   const handleContinue = () => {
     setShowResults(false)
-    setInitialAssessment({
-      userId: user?._id || '',
-      areas: {
-        ...initialAssessment?.areas,
-        ot: { ...initialAssessment?.areas?.ot, isCompleted: true, score: finalScore }
-      }
-    })
-    if (initialAssessment?.areas.ot.isCompleted && 
-        initialAssessment?.areas.speech.isCompleted && 
-        initialAssessment?.areas.cognitive.isCompleted) {
-      router.push('/training');
+    if (isInitialAssessment) {
+      setInitialAssessment({
+        userId: user?._id || '',
+        areas: {
+          ...initialAssessment?.areas,
+          ot: { ...initialAssessment?.areas?.ot, isCompleted: true, score: finalScore }
+        }
+      })
+      if (initialAssessment?.areas.ot.isCompleted && 
+          initialAssessment?.areas.speech.isCompleted && 
+          initialAssessment?.areas.cognitive.isCompleted) {
+        router.push('/training');
+      } else {
+          router.push('/initial-assessment');
+        }
     } else {
-      router.push('/initial-assessment');
+      router.push('/training');
     }
   };
 

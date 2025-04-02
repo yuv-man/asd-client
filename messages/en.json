@@ -134,5 +134,19 @@
       "shapesToRemember": "Shapes to remember:",
       "attempts": "Attempts:",
       "round": "Round: {round}/3"
+    },
+    "balloonGame": {
+      "title": "Balloon Pop Challenge",
+      "description": "Pop the balloons that match the target color!",
+      "startButton": "Start Game",
+      "targetColor": "Pop the",
+      "balloons": "balloons!",
+      "score": "Score",
+      "time": "Time",
+      "hits": "Hits",
+      "misses": "Misses",
+      "accuracy": "Accuracy",
+      "avgReactionTime": "Avg Reaction Time",
+      "gameOver": "Game Over!"
     }
 }

@@ -1,9 +1,18 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import BalloonGame from '@/app/components/ot/balloonGame';
+import { NextIntlClientProvider } from 'next-intl';
+import messages from '../messages/en.json';
 
 const meta: Meta<typeof BalloonGame> = {
   title: 'OT/BalloonGame',
   component: BalloonGame,
+  decorators: [
+    (Story) => (
+      <NextIntlClientProvider messages={messages} locale="en">
+        <Story />
+      </NextIntlClientProvider>
+    ),
+  ],
   parameters: {
     layout: 'centered',
   },

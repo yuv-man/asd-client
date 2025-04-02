@@ -131,5 +131,19 @@
       "shapesToRemember": "צורות לזכור:",
       "attempts": "ניסיונות:",
       "round": "סיבוב: {round}/3"
+    },
+    "balloonGame": {
+      "title": "משחק בולונים",
+      "description": "בולונים מתפוצצים!",
+      "startButton": "התחל משחק",
+      "targetColor": "לפוצץ בלון בצבע!",
+      "balloons": "בולונים!",
+      "score": "ניקוד:",
+      "time": "זמן:",
+      "hits": "פגיעות:",
+      "misses": "נסיונות:",
+      "accuracy": "דיוק:",
+      "avgReactionTime": "זמן התגובה הממוצע:",
+      "gameOver": "משחק נגמר!"
     }
 }

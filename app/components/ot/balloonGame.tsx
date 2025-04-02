@@ -1,10 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
-import '@/app/styles/catchObjects.scss';
+import '@/app/styles/balloon.scss';
 import Balloon from './Balloon';
 import { BalloonType } from '@/types/types';
 import { balloonGameSettings } from '@/app/helpers/difficultySettings';
 import { ExerciseProps } from '@/types/props';
 import { difficultyEnum } from '@/enums/enumDifficulty';
+import { useTranslations } from 'next-intl';
 
 const COLORS = ['red', 'blue', 'green', 'yellow', 'purple'];
 
@@ -22,7 +23,7 @@ const BalloonGame: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyLe
   const [avgReactionTime, setAvgReactionTime] = useState(0);
   const [reactionTimes, setReactionTimes] = useState<number[]>([]);
   const [lastTargetTime, setLastTargetTime] = useState<number | null>(null);
-
+  const t = useTranslations();
   // Generate random position within the game area
   const getRandomPosition = useCallback(() => {
     return {
@@ -232,72 +233,74 @@ const BalloonGame: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyLe
   }, [timeLeft, hits, misses, avgReactionTime, calculateNormalizedScore, onComplete]);
 
   return (
-    <div className="gameContainer">
-      {!gameStarted ? (
-        <div className="startScreen">
-          <h2>Balloon Pop Challenge</h2>
-          <p>Pop the balloons that match the target color!</p>
-          
-          <button className="startButton" onClick={startGame}>
-            Start Game
-          </button>
-        </div>
-      ) : (
-        <>
-          <div className="gameInfo">
-            <div className="targetColor">
-              <span>Pop the</span>
-              <div 
-                className="colorIndicator" 
-                style={{
-                  backgroundColor: targetColor,
-                  boxShadow: `0 0 15px ${targetColor}`, // Add glow effect
-                  padding: '15px',
-                  border: '2px solid white',
-                  borderRadius: '50%',
-                  width: '50px',
-                  height: '50px'
-                }}
-              ></div>
-              <span>balloons!</span>
+    <div className='balloonGame'>
+      <div className="gameContainer">
+        {!gameStarted ? (
+          <div className="startScreen">
+            <h2>{t('balloonGame.title')}</h2>
+            <p>{t('balloonGame.description')}</p>
+            
+            <button className="startButton" onClick={startGame}>
+              {t('balloonGame.startButton')}
+            </button>
+          </div>
+        ) : (
+          <>
+            <div className="gameInfo">
+              <div className="targetColor">
+                <span>{t('balloonGame.targetColor')}</span>
+                <div 
+                  className="colorIndicator" 
+                  style={{
+                    backgroundColor: targetColor,
+                    boxShadow: `0 0 15px ${targetColor}`, // Add glow effect
+                    padding: '15px',
+                    border: '2px solid white',
+                    borderRadius: '50%',
+                    width: '50px',
+                    height: '50px'
+                  }}
+                ></div>
+                <span>{t('balloonGame.balloons')}</span>
+              </div>
+              
             </div>
             
-          </div>
-          
-          <div className="gameArea" style={{ cursor: 'crosshair' }}> {/* Add custom cursor */}
-            {balloons.map(balloon => (
-              <Balloon
-                key={balloon.id}
-                id={balloon.id}
-                color={balloon.color}
-                size={balloon.size}
-                position={balloon.position}
-                popped={balloon.popped}
-                onClick={handleBalloonClick}
-              />
-            ))}
-          </div>
-          <div className="gameInfo">
-          <div className="scoreAndTime">
-              <span>Score: {score}</span>
-              <span>Time: {timeLeft}s</span>
+            <div className="gameArea">
+              {balloons.map(balloon => (
+                <Balloon
+                  key={balloon.id}
+                  id={balloon.id}
+                  color={balloon.color}
+                  size={balloon.size}
+                  position={balloon.position}
+                  popped={balloon.popped}
+                  onClick={handleBalloonClick}
+                />
+              ))}
+            </div>
+            <div className="gameInfo">
+            <div className="scoreAndTime">
+                <span>{t('balloonGame.score')}: {score}</span>
+                <span>{t('balloonGame.time')}: {timeLeft}s</span>
+              </div>
+            </div>
+          </>
+        )}
+        
+        {!gameStarted && timeLeft === 0 && (
+          <div className="gameResults">
+            <h2>{t('balloonGame.gameOver')}</h2>
+            <div className="resultsGrid">
+              <div>{t('balloonGame.score')}: {calculateNormalizedScore()}</div>
+              <div>{t('balloonGame.hits')}: {hits}</div>
+              <div>{t('balloonGame.misses')}: {misses}</div>
+              <div>{t('balloonGame.accuracy')}: {hits > 0 ? Math.round((hits / (hits + misses)) * 100) : 0}%</div>
+              <div>{t('balloonGame.avgReactionTime')}: {avgReactionTime.toFixed(2)}s</div>
             </div>
           </div>
-        </>
-      )}
-      
-      {!gameStarted && timeLeft === 0 && (
-        <div className="gameResults">
-          <h2>Game Over!</h2>
-          <div className="resultsGrid">
-            <div>Score: {calculateNormalizedScore()}</div>
-            <div>Hits: {hits}</div>
-            <div>Misses: {misses}</div>
-            <div>Accuracy: {hits > 0 ? Math.round((hits / (hits + misses)) * 100) : 0}%</div>
-            <div>Avg Reaction Time: {avgReactionTime.toFixed(2)}s</div>
-          </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }
