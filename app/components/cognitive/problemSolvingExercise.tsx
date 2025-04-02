@@ -1,29 +1,39 @@
 import Image from 'next/image';
 import puzzleImage from '@/assets/images/puzzle.png';
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { PuzzlePiece } from '@/types/types';
-import { ExerciseProps } from '@/types/props'
+import { ExerciseProps } from '@/types/props';
 import { Timer } from 'lucide-react';
+import '@/app/styles/puzzle.scss';
 
-const ProblemSolvingExercise: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyLevel }) => {
+const ProblemSolvingExercise: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyLevel = 1 }) => {
+    // Convert difficultyLevel to grid size
+    const gridSize = difficultyLevel + 2; // Level 1 = 3x3, Level 2 = 4x4, Level 3 = 5x5
+    
     const [image, setImage] = useState(puzzleImage.src);
     const [pieces, setPieces] = useState<PuzzlePiece[]>([]);
     const [shuffledPieces, setShuffledPieces] = useState<PuzzlePiece[]>([]);
     const [time, setTime] = useState(0);
     const [moves, setMoves] = useState(0);
     const [solved, setSolved] = useState(false);
+    const [selectedPieceIndex, setSelectedPieceIndex] = useState<number | null>(null);
+    const [draggedPieceIndex, setDraggedPieceIndex] = useState<number | null>(null);
 
-    // Initialize puzzle on component mount
+    // Initialize puzzle on component mount or when difficulty changes
     useEffect(() => {
         generatePuzzle(puzzleImage.src);
-    }, []);
+        // Reset game state when difficulty changes
+        setTime(0);
+        setMoves(0);
+        setSolved(false);
+    }, [difficultyLevel]);
 
-    // Generate Puzzle Pieces (Splitting the Image into 9 Parts)
+    // Generate Puzzle Pieces based on grid size
     const generatePuzzle = (imageUrl: string) => {
         let tempPieces = [];
         let id = 0;
-        for (let row = 0; row < 3; row++) {
-            for (let col = 0; col < 3; col++) {
+        for (let row = 0; row < gridSize; row++) {
+            for (let col = 0; col < gridSize; col++) {
                 tempPieces.push({ 
                     id, 
                     row, 
@@ -40,7 +50,12 @@ const ProblemSolvingExercise: React.FC<ExerciseProps> = ({ onComplete, isTest, d
 
     // Shuffle Pieces Randomly
     const shuffleArray = (array: any[]) => {
-        return array.sort(() => Math.random() - 0.5);
+        // More thorough shuffling algorithm
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
     };
 
     // Timer Effect
@@ -51,24 +66,8 @@ const ProblemSolvingExercise: React.FC<ExerciseProps> = ({ onComplete, isTest, d
         }
     }, [time, solved]);
 
-    // Handle Drag and Drop
-    const handleDragStart = (e: React.DragEvent<HTMLDivElement>, index: number) => {
-        e.dataTransfer.setData("dragIndex", index.toString());
-    };
-
-    const handleDrop = (e: React.DragEvent<HTMLDivElement>, dropIndex: number) => {
-        e.preventDefault();
-        const dragIndex = parseInt(e.dataTransfer.getData("dragIndex"));
-        if (dragIndex !== dropIndex) {
-            let temp = [...shuffledPieces];
-            [temp[dragIndex], temp[dropIndex]] = [temp[dropIndex], temp[dragIndex]];
-            setShuffledPieces(temp);
-            setMoves(moves + 1);
-            checkIfSolved(temp);
-        }
-    };
-
-    const checkIfSolved = (puzzle: PuzzlePiece[]) => {
+    // Check if puzzle is solved
+    const checkIfSolved = useCallback((puzzle: PuzzlePiece[]) => {
         if (puzzle.every((piece: PuzzlePiece, index: number) => piece.originalIndex === index)) {
             setSolved(true);
             const finalScore = calculateScore();
@@ -77,92 +76,157 @@ const ProblemSolvingExercise: React.FC<ExerciseProps> = ({ onComplete, isTest, d
                 metrics: {
                     timeInSeconds: time,
                     attempts: moves,
-                    accuracy: 0
+                    accuracy: calculateAccuracy()
                 }
             });
         }
+    }, [time, moves, onComplete]);
+
+    // Calculate accuracy based on moves
+    const calculateAccuracy = () => {
+        // Minimum moves required is number of pieces - 1
+        const minMoves = (gridSize * gridSize) - 1;
+        // Higher accuracy for fewer moves
+        return Math.max(0, Math.min(100, (minMoves / moves) * 100));
     };
 
-    // Calculate Score
+    // Calculate Score based on difficulty
     const calculateScore = () => {
+        // Expected values adjusted by difficulty
+        const maxExpectedTime = 120 * difficultyLevel; // More time allowed for higher difficulties
+        const expectedMoves = 15 * (gridSize * gridSize) / 9; // Scale expected moves by puzzle size
+
         // Time weight (50% of total score)
         const timeWeight = 0.5;
-        const maxExpectedTime = 180; // 3 minutes
         const timeScore = Math.max(0, (1 - time / maxExpectedTime)) * 1000 * timeWeight;
 
         // Moves/attempts weight (50% of total score)
         const movesWeight = 0.5;
-        const expectedMoves = 20; // Expected number of moves for optimal solution
         const movesScore = Math.max(0, (1 - moves / expectedMoves)) * 1000 * movesWeight;
 
-        return Math.round(Math.max(0, Math.min(1000, timeScore + movesScore)));
+        // Apply difficulty multiplier
+        const difficultyMultiplier = 1 + (difficultyLevel - 1) * 0.25; // Level 1 = 1x, Level 2 = 1.25x, Level 3 = 1.5x
+
+        return Math.round(Math.max(0, Math.min(1000, (timeScore + movesScore) * difficultyMultiplier)));
+    };
+
+    // Swap two pieces
+    const swapPieces = (index1: number, index2: number) => {
+        if (index1 === index2) return;
+        
+        let temp = [...shuffledPieces];
+        [temp[index1], temp[index2]] = [temp[index2], temp[index1]];
+        setShuffledPieces(temp);
+        setMoves(moves + 1);
+        checkIfSolved(temp);
+    };
+
+    // Handle piece selection with tap/click (works for both touch and mouse)
+    const handlePieceClick = (index: number) => {
+        if (selectedPieceIndex === null) {
+            // First piece selected
+            setSelectedPieceIndex(index);
+        } else {
+            // Second piece selected, swap them
+            swapPieces(selectedPieceIndex, index);
+            setSelectedPieceIndex(null);
+        }
+    };
+
+    // Reset selection if clicked elsewhere
+    const handleContainerClick = (e: React.MouseEvent<HTMLDivElement>) => {
+        // Only reset if clicking the container but not a piece
+        if ((e.target as HTMLElement).classList.contains('puzzle-container')) {
+            setSelectedPieceIndex(null);
+        }
+    };
+
+    // Add drag and drop handlers
+    const handleDragStart = (e: React.DragEvent<HTMLDivElement>, index: number) => {
+        setDraggedPieceIndex(index);
+        e.currentTarget.classList.add('dragging');
+    };
+
+    const handleDragEnd = (e: React.DragEvent<HTMLDivElement>) => {
+        e.currentTarget.classList.remove('dragging');
+        setDraggedPieceIndex(null);
+    };
+
+    const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+        e.preventDefault(); // Necessary to allow drop
+    };
+
+    const handleDrop = (e: React.DragEvent<HTMLDivElement>, index: number) => {
+        e.preventDefault();
+        if (draggedPieceIndex !== null && draggedPieceIndex !== index) {
+            swapPieces(draggedPieceIndex, index);
+        }
+        setDraggedPieceIndex(null);
     };
 
     return (
-        <div className='flex flex-col items-center justify-center h-screen'>
-            <h1 className='text-2xl font-bold text-pastelOrange mb-4'>Puzzle Game</h1>
+        <div className="puzzle-container" onClick={handleContainerClick}>
+            <h1 className="puzzle-title">Puzzle Game - Level {difficultyLevel}</h1>
             
-            <div className='mb-4'>
+            <div className="puzzle-reference">
                 <Image 
                     src={puzzleImage.src} 
                     alt="Puzzle reference" 
                     width={100} 
-                    height={100} 
-                    className='border border-gray-300 rounded'
+                    height={100}
                 />
             </div>
             
-            <div style={{ 
-                display: "grid", 
-                gridTemplateColumns: "repeat(3, 100px)", 
-                gap: "5px",
-                width: "310px",
-                margin: "0 auto"
-            }}>
+            <div 
+                className="puzzle-grid" 
+                style={{ 
+                    gridTemplateColumns: `repeat(${gridSize}, 1fr)`,
+                    ['--grid-size' as any]: gridSize 
+                }}
+            >
                 {shuffledPieces.map((piece, index) => (
                     <div
                         key={piece.id}
-                        draggable="true"
+                        className={`puzzle-piece ${selectedPieceIndex === index ? 'selected' : ''} ${piece.originalIndex === index ? 'correct-position' : ''}`}
+                        onClick={() => handlePieceClick(index)}
+                        draggable={true}
                         onDragStart={(e) => handleDragStart(e, index)}
+                        onDragEnd={handleDragEnd}
+                        onDragOver={handleDragOver}
                         onDrop={(e) => handleDrop(e, index)}
-                        onDragOver={(e) => e.preventDefault()}
                         style={{
-                            width: "100px",
-                            height: "100px",
                             backgroundImage: `url(${piece.imageUrl})`,
-                            backgroundPosition: `${-piece.col * 100}px ${-piece.row * 100}px`,
-                            backgroundSize: "300px 300px",
-                            border: "1px solid black",
-                            cursor: "grab",
-                            userSelect: "none",
-                            position: "relative"
+                            backgroundPosition: `${-piece.col * (100 / gridSize) * 3}% ${-piece.row * (100 / gridSize) * 3}%`,
+                            backgroundSize: `${gridSize * 100}% ${gridSize * 100}%`,
                         }}
                     >
                         {piece.originalIndex === index && (
-                            <div style={{
-                                position: "absolute",
-                                top: "5px",
-                                right: "5px",
-                                width: "12px",
-                                height: "12px",
-                                borderRadius: "50%",
-                                backgroundColor: "#4CAF50",
-                            }} />
+                            <div className="correct-indicator" />
                         )}
                     </div>
                 ))}
             </div>
-            <div className='flex flex-row items-center justify-center gap-4 mt-4'>
-                <div className='flex flex-row items-center justify-center gap-2'>
-                    <Timer className='w-4 h-4 text-pastelOrange' />
-                    <p className='text-secondary'>{time}s</p>
+
+            <div className="puzzle-instructions">
+                {selectedPieceIndex !== null ? 
+                    "Now tap another piece to swap positions" : 
+                    "Tap a piece to select it"
+                }
+            </div>
+
+            <div className="puzzle-stats">
+                <div className="stat-item">
+                    <Timer className="stat-icon" />
+                    <p>{time}s</p>
                 </div>
-                <p className='text-secondary'>Moves: {moves}</p>
+                <div className="stat-item">
+                    <p>Moves: {moves}</p>
+                </div>
                 {solved && (
-                    <div className='flex gap-2'>
-                        <h2 className='text-secondary'>Score: {calculateScore()}</h2>
-                        <p className='text-secondary'>
-                            (Efficiency: {Math.round((20 / moves) * 100)}%)
+                    <div className="score-container">
+                        <h2>Score: {calculateScore()}</h2>
+                        <p>
+                            (Efficiency: {Math.round(calculateAccuracy())}%)
                         </p>
                     </div>
                 )}

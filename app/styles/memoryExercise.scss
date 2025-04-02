@@ -1,0 +1,94 @@
+.memoryEx {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+
+  .header {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 30px;
+    margin-top: 20px;
+
+    p{
+      font-size: 20px;
+    }
+
+    .targetSection {
+      margin-top: 10px;
+      .flex {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        justify-content: center;
+      }
+      .timer-icon{
+        width: 1rem;
+        height: 1rem;
+        margin-right: 4px;
+        color: orange;
+      }
+    }
+  }
+
+  .grid {
+    display: grid !important;
+    gap: 1rem;
+    margin-bottom: 20px;
+
+    &.grid-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      grid-template-rows: repeat(2, minmax(0, 1fr)) !important;
+      width: calc(2 * (90px + 10px) - 10px);
+    }
+    &.grid-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+      grid-template-rows: repeat(3, minmax(0, 1fr)) !important;
+      width: calc(3 * (90px + 10px) - 10px);
+    }
+    &.grid-4 {
+      grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+      grid-template-rows: repeat(4, minmax(0, 1fr)) !important;
+      width: calc(4 * (90px + 10px) - 10px);
+    }
+
+    .gridItem {
+      opacity: 1;
+      transform: scale(1);
+      transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
+
+      &.highlighted {
+        border: 3px solid #410061;
+        transform: scale(1.2);
+        z-index: 10;
+        opacity: 1;
+      }
+
+      &.disabled {
+        pointer-events: none;
+      }
+
+      &.dimmed {
+        opacity: 0.5;
+      }
+    }
+  }
+  
+  .score-container {
+    margin-top: 20px;
+    text-align: center;
+
+    .score {
+      color: gray;
+    }
+
+    .matches {
+      font-size: 0.875rem;
+      color: darkgray;
+    }
+  }
+}

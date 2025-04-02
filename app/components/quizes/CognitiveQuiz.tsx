@@ -28,10 +28,8 @@ const CognitiveQuiz = ({isInitialAssessment}: {isInitialAssessment?: boolean}) =
   const { initialAssessment, setInitialAssessment } = useInitialAssessmentStore();
 
   useEffect(() => {
-    if (isInitialAssessment) {
-      fetchedExercises();
-    }
-  }, [isInitialAssessment]);
+    fetchedExercises();
+  }, []);
 
   const fetchedExercises = async() => {
     try {
@@ -117,7 +115,7 @@ const CognitiveQuiz = ({isInitialAssessment}: {isInitialAssessment?: boolean}) =
           </motion.div>
         ) : isLoading ? (
           <div className='flex items-center justify-center h-screen'>
-            <span className='loader'></span>
+            <span className='loader'>hello world</span>
           </div>
         ) : CurrentExerciseComponent ? (
           <motion.div
