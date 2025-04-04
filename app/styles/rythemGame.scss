@@ -1,4 +1,4 @@
-// styles/rythemGame.scss
+@import './variables.scss';
 
 /* Home page styles */
 .rythemGame-container {
@@ -20,6 +20,12 @@
       align-items: center;
       width: 100%;
       max-width: 800px;
+    }
+
+    .startButton {
+      background-color: $pastel-orange;
+      color: white;
+      box-shadow: 0 4px 6px rgba(102, 187, 106, 0.3);
     }
     
     .title {
@@ -280,7 +286,6 @@
       padding: 1.5rem;
       border-radius: 1.5rem;
       box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-      width: 100%;
       max-width: 800px;
       margin: 0 auto;
     }
@@ -358,7 +363,7 @@
     /* Fixed optionsContainer for all screen sizes */
     .optionsContainer {
       display: flex;
-      flex-wrap: wrap;
+      //flex-wrap: wrap;
       justify-content: center;
       gap: 10px;
       margin-top: 2rem;

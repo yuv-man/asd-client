@@ -1,7 +1,9 @@
+'use client';
+import dynamic from 'next/dynamic';
 
-import InitialAssessment from '../../components/assessment/assessment';
-
-export const dynamic = 'force-dynamic';
+const InitialAssessment = dynamic(() => import('@/app/components/assessment/assessment'), {
+  ssr: false
+});
 
 export default function InitialAssessmentPage() {
   return <InitialAssessment />;

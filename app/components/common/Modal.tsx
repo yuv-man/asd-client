@@ -2,6 +2,7 @@ import zebra from '@/assets/animals/zebra.svg'
 import lion from '@/assets/animals/lion.svg'
 import Image from 'next/image';
 import '@/app/styles/Modal.scss';
+import { useTranslations } from 'next-intl';
 
 interface ModalProps {
   title?: string;
@@ -11,10 +12,11 @@ interface ModalProps {
 }
 
 export default function Modal({ title, isOpen, onClose, children }: ModalProps) {
+  const t = useTranslations('TrainingPage');
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay">
+    <div className="generic-modal modal-overlay">
       <div className="modal-container">
         <div className="modal-header">
           <button 
@@ -28,7 +30,7 @@ export default function Modal({ title, isOpen, onClose, children }: ModalProps) 
         <div className="modal-content">
           <div className="modal-title">
             <Image src={title === 'Quiz' ? lion : zebra} alt="zebra" width={50} height={50} />
-            <h1>{title}</h1>
+            <h1>{t(title ?? '')}</h1>
           </div>
           {children}
         </div>

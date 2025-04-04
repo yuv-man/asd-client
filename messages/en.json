@@ -44,6 +44,7 @@
       "cognitive_therapy": "Cognitive Therapy"
     },
     "speech": {
+      "followWordTitle": "Follow Word",
       "title": "Speech Therapy Game",
       "instruction": "Say the word:",
       "startButton": "Start Speaking",
@@ -164,5 +165,23 @@
       "startButton": "Start Game",
       "playAgain": "Play Again",
       "basket": "Basket"
+    },
+    "TrainingPage": {
+      "quizReady": "Are you ready to test your knowledge?",
+      "startSession": "Start Session",
+      "continueSession": "Continue Session",
+      "startQuiz": "Start Quiz",
+      "Follow Word": "Follow Word",
+      "Problem Solving": "Problem Solving",
+      "shape tracing": "Shape Tracing",
+      "completedExercises": "Completed exercises",
+      "Quiz": "Quiz",
+      "Today Session": "Today Session",
+      "Cognitive": "Cognitive",
+      "Speech Therapy": "Speech Therapy",
+      "Occupational Therapy": "Occupational Therapy",
+      "Attention": "Attention",
+      "Memory": "Memory",
+      "Balloon": "Balloon"
     }
 }

@@ -70,7 +70,7 @@ const TalkAnimals: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyLe
   }
 
   return (
-    <div className="container">
+    <div className="talkAnimals container">
       <main className="main">
         <div className="title-container">
           <h1 className="title">

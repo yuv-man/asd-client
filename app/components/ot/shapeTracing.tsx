@@ -5,22 +5,23 @@ import { CardProps, CardContentProps, ExerciseProps } from '@/types/props';
 import { shapeTracingSettings } from '@/app/helpers/difficultySettings';
 import { Timer } from 'lucide-react';
 import { difficultyEnum } from '@/enums/enumDifficulty';
+import '@/app/styles/shapeTracing.scss';
 
 type DifficultyLevel = 'easy' | 'medium' | 'hard';
 
 // Update Card component
-const Card: React.FC<CardProps> = ({ className, children }) => {
+const Card: React.FC<CardProps> = ({ children }) => {
   return (
-    <div className={`bg-white rounded-lg border shadow-sm ${className || ''}`}>
+    <div className="shape-tracing-card">
       {children}
     </div>
   );
 };
 
 // Update CardContent component
-const CardContent: React.FC<CardContentProps> = ({ className, children }) => {
+const CardContent: React.FC<CardContentProps> = ({ children }) => {
   return (
-    <div className={`p-6 ${className || ''}`}>
+    <div className="shape-tracing-content">
       {children}
     </div>
   );
@@ -456,53 +457,42 @@ const ShapeTracing: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyL
   }, []);
 
   return (
-    <Card className="w-full max-w-lg mx-auto">
-      <CardContent className="p-6">
-        <div className="flex flex-col justify-between items-center mb-4">
-          <div className="flex gap-2">
-            <h2 className="text-xl font-bold">Learn to Draw!</h2>
+    <Card>
+      <CardContent>
+        <div className="shape-tracing-header">
+          <div className="shape-tracing-title">
+            <h2>Learn to Draw!</h2>
           </div>
-          <div className="flex gap-2">
-            {Object.entries(SHAPES).filter(([key, shape]) => shape.difficulty === difficultyLevel).map(([key, shape]) => {
-              const Icon = shape.icon;
-              return (
-                <button
-                  key={key}
-                  onClick={() => selectShape(key as ShapeKey)}
-                  className={`p-2 rounded-full hover:bg-gray-100 ${
-                    selectedShape === key ? 'bg-gray-100' : ''
-                  } ${
-                    (!completed || accuracy !== null && accuracy < ACCURACY_THRESHOLD) && key !== selectedShape
-                      ? 'opacity-50 cursor-not-allowed'
-                      : ''
-                  }`}
-                  disabled={(!completed || accuracy !== null && accuracy < ACCURACY_THRESHOLD) && key !== selectedShape}
-                  title={shape.name}
-                >
-                  <Icon 
-                    className={`w-6 h-6 ${
-                      selectedShape === key ? 'text-blue-600' : 'text-gray-600'
-                    }`}
-                  />
-                </button>
-              );
-            })}
-            {!isTest && <button 
-              onClick={resetDrawing}
-              className="p-2 rounded-full hover:bg-gray-100"
-              title="Try Again"
-            >
-              <RotateCcw className="w-6 h-6 text-gray-600" />
-            </button>}
+          <div className="shape-tracing-buttons">
+            {Object.entries(SHAPES)
+              .filter(([key, shape]) => shape.difficulty === difficultyLevel)
+              .map(([key, shape]) => {
+                const Icon = shape.icon;
+                return (
+                  <button
+                    key={key}
+                    onClick={() => selectShape(key as ShapeKey)}
+                    className={`${selectedShape === key ? 'selected' : ''}`}
+                    disabled={(!completed || accuracy !== null && accuracy < ACCURACY_THRESHOLD) && key !== selectedShape}
+                    title={shape.name}
+                  >
+                    <Icon />
+                  </button>
+                );
+              })}
+            {!isTest && (
+              <button onClick={resetDrawing} title="Try Again">
+                <RotateCcw />
+              </button>
+            )}
           </div>
         </div>
 
-        <div className="relative flex justify-center items-center">
+        <div className="shape-tracing-canvas-container">
           <canvas
             ref={canvasRef}
             width={300}
             height={300}
-            className="border rounded-lg bg-white cursor-pointer"
             onMouseDown={handleDrawStart}
             onMouseMove={handleDrawMove}
             onMouseUp={handleDrawEnd}
@@ -513,15 +503,15 @@ const ShapeTracing: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyL
           />
           
           {completed && (
-            <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-20 rounded-lg">
-              <div className="bg-white p-4 rounded-lg shadow-lg text-center">
-                <div className="flex items-center gap-2 mb-2">
+            <div className="shape-tracing-completion-overlay">
+              <div className="shape-tracing-completion-card">
+                <div className="shape-tracing-stats">
                   {accuracy !== null && accuracy >= ACCURACY_THRESHOLD ? (
-                    <CheckCircle2 className="w-6 h-6 text-green-500" />
+                    <CheckCircle2 className="text-green-500" />
                   ) : (
-                    <XCircle className="w-6 h-6 text-red-500" />
+                    <XCircle className="text-red-500" />
                   )}
-                  <span className="text-lg font-bold">
+                  <span className="shape-tracing-stats-text">
                     Accuracy: {accuracy}%
                   </span>
                 </div>
@@ -542,13 +532,18 @@ const ShapeTracing: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyL
           )}
         </div>
 
-        <div className="mt-4 text-center text-gray-600">
+        <div className="shape-tracing-footer">
           {!completed ? (
             <div>
-              <div>Drag from point {currentPoint} to point {currentPoint + 1} </div>
-              <div className={`flex flex-row ${isTest ? 'justify-between' : 'justify-center'}`}>
+              <div>Drag from point {currentPoint} to point {currentPoint + 1}</div>
+              <div className={`shape-tracing-attempts ${isTest ? 'with-timer' : ''}`}>
                 <div>Attempts: {attempts}</div>
-                {isTest && <div className="flex flex-row items-center"><Timer className="w-4 h-4 mr-2 text-pastelOrange" /> <span>{timeInSeconds}</span></div>}
+                {isTest && (
+                  <div className="shape-tracing-timer">
+                    <Timer />
+                    <span>{timeInSeconds}</span>
+                  </div>
+                )}
               </div>
             </div>
           ) : accuracy !== null && accuracy >= ACCURACY_THRESHOLD ? (

@@ -266,7 +266,7 @@ export default function Play({ isTest, difficultyLevel, onComplete }: ExercisePr
   const currentQuestion = getCurrentQuestion();
 
   return (
-    <div className="container">
+    <div className="talkAnimals container">
       <Head>
         <title>{t('talkAnimals.title')}</title>
         <meta name="description" content="Speech therapy game for kids" />

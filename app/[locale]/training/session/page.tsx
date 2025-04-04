@@ -1,7 +1,12 @@
 'use client'
 
+import dynamic from 'next/dynamic';
+
+const TrainingSession = dynamic(() => import('@/app/components/training/TrainingSession'), {
+  ssr: false
+});
+
 import { Session } from '@/types/types';
-import TrainingSession from '@/app/components/training/TrainingSession'
 import { useSessions } from '@/store/userStore'
 import { useCallback, useState } from 'react'
 

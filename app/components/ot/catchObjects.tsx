@@ -202,6 +202,7 @@ const CatchObjects: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyL
         <Head>
           <title className='title'>{t('catchObjects.title')}</title>
           <meta name="description" content="Occupational therapy game to help with motor skills" />
+
         </Head>
 
         <main className="main">
@@ -247,7 +248,7 @@ const CatchObjects: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyL
                 style={{ 
                   left: `${obj.position}%`, 
                   top: `${obj.top}%`,
-                  display: obj.caught || obj.missed ? 'none' : 'block'
+                  display: obj.caught || obj.missed ? 'none' : 'block',
                 }}
               >
                 <Image 
@@ -261,8 +262,8 @@ const CatchObjects: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyL
                     }[obj.type] ?? apple  // Use nullish coalescing to provide a fallback image
                   } 
                   alt={obj.type} 
-                  width={100} 
-                  height={100} 
+                  width={50} 
+                  height={50} 
                 />
               </div>
             ))}

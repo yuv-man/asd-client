@@ -5,6 +5,7 @@ import { wordsIcons } from "./wordsIcons";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { langEnum } from "@/enums/enumLang";
+import '@/app/styles/FollowWord.scss';
 
 interface SpeechRecognitionInstance extends EventTarget {
   lang: string;
@@ -286,7 +287,7 @@ const FollowWord: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyLev
 
   return (
     <div className="follow-word">
-      <h1>{t("speech.title")}</h1>
+      <h1>{t("speech.followWordTitle")}</h1>
       
       {error && <p className="error-message">{error}</p>}
       

@@ -1,4 +1,3 @@
-
 // Define custom colors
 $primary-color: #1e40af;
 $secondary-color: #9333ea;
@@ -184,8 +183,10 @@ div, h4 {
   background-size: auto 175px;
   background-repeat: repeat-y;
   animation: colorShift 6s linear infinite;
-}
 
+
+
+}
 .loader:before {
   content: '';
   position: absolute;
@@ -212,7 +213,12 @@ div, h4 {
 }
 
 @keyframes colorShift {
-to {    background-position: 0 175px}
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 0 175px;
+  }
 }
 
 

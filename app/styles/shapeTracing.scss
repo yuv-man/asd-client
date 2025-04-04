@@ -1,0 +1,135 @@
+.shape-tracing {
+  &-card {
+    background-color: white;
+    border-radius: 0.5rem;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    width: 100%;
+    max-width: 32rem;
+    margin: 0 auto;
+  }
+
+  &-content {
+    padding: 1.5rem;
+  }
+
+  &-header {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  &-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+  }
+
+  &-buttons {
+    display: flex;
+    gap: 0.5rem;
+
+    button {
+      padding: 0.5rem;
+      border-radius: 9999px;
+      
+      &:hover {
+        background-color: #f3f4f6;
+      }
+
+      &.selected {
+        background-color: #f3f4f6;
+        
+        svg {
+          color: #2563eb;
+        }
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      svg {
+        width: 1.5rem;
+        height: 1.5rem;
+        color: #4b5563;
+      }
+    }
+  }
+
+  &-canvas-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    canvas {
+      border: 1px solid #e5e7eb;
+      border-radius: 0.5rem;
+      background-color: white;
+      cursor: pointer;
+    }
+  }
+
+  &-completion-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 0.5rem;
+  }
+
+  &-completion-card {
+    background-color: white;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+
+  &-stats {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    justify-content: center;
+
+    &-text {
+      font-size: 1.125rem;
+      font-weight: bold;
+    }
+  }
+
+  &-footer {
+    margin-top: 1rem;
+    text-align: center;
+    color: #4b5563;
+  }
+
+  &-attempts {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+    &.with-timer {
+      justify-content: space-between;
+    }
+  }
+
+  &-timer {
+    display: flex;
+    flex-row: row;
+    align-items: center;
+
+    svg {
+      width: 1rem;
+      height: 1rem;
+      margin-right: 0.5rem;
+      color: #ff9966; // pastelOrange
+    }
+  }
+} 

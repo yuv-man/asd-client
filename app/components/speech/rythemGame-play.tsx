@@ -212,7 +212,6 @@ export default function Play({ isTest, difficultyLevel, onComplete }: any) {
           setCurrentSet(newSet);
           setSelectedOption(null);
           setGameState('playing');
-          speak(t('rythemPlay.instructions'), undefined);
         }
       }, 3000);
     } else {

@@ -1,8 +1,8 @@
+@import './variables.scss';
 // Variables
 $primary-color: #0070f3;
 $background-color: #f0f8ff;
 $balloon-shadow: rgba(0, 0, 0, 0.2);
-$font-family: 'Comic Sans MS', cursive, sans-serif;
 
 // Mixins
 @mixin flex-center {
@@ -97,6 +97,17 @@ $font-family: 'Comic Sans MS', cursive, sans-serif;
     
     @media (max-width: 480px) {
       height: 300px;
+    }
+  }
+
+  .startButton {
+    @include button-base;
+    background-color: $pastel-orange;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    &:hover {
+      background-color: $pastel-red;
     }
   }
 

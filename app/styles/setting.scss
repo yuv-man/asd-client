@@ -1,8 +1,4 @@
-// Variables
-$breakpoint-sm: 640px;
-$breakpoint-md: 768px;
-$breakpoint-lg: 1024px;
-$breakpoint-xl: 1280px;
+@import './variables.scss';
 
 .dashboard {
   max-width: 1280px;
@@ -180,18 +176,6 @@ $breakpoint-xl: 1280px;
     height: 1rem;
   }
 } 
-
-$pastel-yellow: #FDCD60;
-$dark-purple: #5546CB;
-$pastel-orange: #FF8859;
-$pastel-light-yellow: #FEFAE0;
-$pastel-purple: #C7C3FF;
-$pastel-light-purple: #E8E6FF;
-$pastel-red: #FF6060;
-$pastel-light-red: #E5989B;
-$pastel-bordo: #B03052;
-$pastel-blue: #98D8FF;
-
 
 .nav {
     background-color: $pastel-light-red;

@@ -2,6 +2,7 @@ import React from 'react';
 import { Dialog } from '@headlessui/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
+import '@/app/styles/ResultsModal.scss';
 
 interface ResultsModalProps {
   isOpen: boolean;
@@ -14,59 +15,57 @@ interface ResultsModalProps {
 const ResultsModal = ({ isOpen, onClose, score, area, exerciseResults }: ResultsModalProps) => {
   return (
     <AnimatePresence>
-      
-        <Dialog
-          as={motion.div}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 z-50 overflow-y-auto"
-          onClose={onClose}
-          open={isOpen}
-        >
-          <div className="min-h-screen px-4 text-center">
-            <span className="inline-block h-screen align-middle" aria-hidden="true">&#8203;</span>
-            
-            <motion.div
-              initial={{ scale: 0.95 }}
-              animate={{ scale: 1 }}
-              exit={{ scale: 0.95 }}
-              className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl"
-            >
-              <Dialog.Title as="h3" className="text-2xl font-medium leading-6 text-pastelOrange mb-4 text-center">
-                {area.toUpperCase()} Assessment Results
-              </Dialog.Title>
+      <Dialog
+        as={motion.div}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="results-modal"
+        onClose={onClose}
+        open={isOpen}
+      >
+        <div className="modal-container">
+          <span className="screen-reader-text" aria-hidden="true">&#8203;</span>
+          
+          <motion.div
+            initial={{ scale: 0.95 }}
+            animate={{ scale: 1 }}
+            exit={{ scale: 0.95 }}
+            className="modal-content"
+          >
+            <Dialog.Title as="h3" className="modal-title">
+              {area.toUpperCase()} Assessment Results
+            </Dialog.Title>
 
-              <div className="mt-4">
-                <div className="text-center mb-6">
-                  <div className="text-4xl font-bold text-purple-600 mb-2">
-                    {Math.round(score)}%
-                  </div>
-                  <p className="text-gray-600">Overall Score</p>
+            <div className="modal-body">
+              <div className="score-container">
+                <div className="overall-score">
+                  {Math.round(score)}%
                 </div>
-
-                <div className="space-y-3">
-                  {Object.entries(exerciseResults).map(([type, score]) => (
-                    <div key={type} className="flex justify-between items-center">
-                      <span className="text-gray-700">{type}</span>
-                      <span className="font-medium">{Math.round(score)}%</span>
-                    </div>
-                  ))}
-                </div>
-
-                <button
-                  onClick={onClose}
-                  className="mt-6 w-full bg-purple-600 text-white px-4 py-2 rounded-full hover:bg-purple-700 flex items-center justify-center"
-                >
-                  Continue
-                  <ArrowRight className="ml-2 w-4 h-4" />
-                </button>
+                <p className="score-label">Overall Score</p>
               </div>
-            </motion.div>
-          </div>
-        </Dialog>
-        <div className="fixed inset-0 bg-black/50" />
 
+              <div className="results-list">
+                {Object.entries(exerciseResults).map(([type, score]) => (
+                  <div key={type} className="result-item">
+                    <span className="result-type">{type}</span>
+                    <span className="result-score">{Math.round(score)}%</span>
+                  </div>
+                ))}
+              </div>
+
+              <button
+                onClick={onClose}
+                className="continue-button"
+              >
+                Continue
+                <ArrowRight className="button-icon" />
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      </Dialog>
+      <div className="modal-overlay" />
     </AnimatePresence>
   );
 };

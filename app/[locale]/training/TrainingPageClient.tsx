@@ -9,6 +9,7 @@ import { useSessions, useUserStore } from '@/store/userStore'
 import { exercisesAPI } from '@/services/api';
 import { areaTypesEnum } from '@/enums/enumArea';
 import '@/app/styles/TrainingPage.scss';
+import { useTranslations } from 'next-intl';
 
 export default function TrainingPageClient() {
     const router = useRouter();
@@ -19,6 +20,7 @@ export default function TrainingPageClient() {
     const [isHydrated, setIsHydrated] = useState(false);
     const user = useUserStore((state) => state.user);
     const { sessions, setCurrentSession, initializeSessions } = useSessions();
+    const t = useTranslations('TrainingPage');
 
     useEffect(() => {
       if (user !== undefined) {
@@ -105,16 +107,16 @@ export default function TrainingPageClient() {
                 {selectedSession.exercises.map(exercise => (
                   <div key={`exercise-${exercise._id}`} className="exercise-item">
                     <span>{exercise.isCompleted ? "✅" : "⭕"}</span>
-                    <span>{exercise.title}</span>
+                    <span>{t(`${exercise.title}`)}</span>
                   </div>
                 ))}
-                <p className='completed-count'>Completed exercises: {selectedSession.completedExercises}/{selectedSession.exercises.length}</p>
+                <p className='completed-count'>{t('completedExercises')}: {selectedSession.completedExercises}/{selectedSession.exercises.length}</p>
                 {selectedSession.completedExercises < 3 && (
                   <button
                     onClick={handleStartSession}
                     className="button"
                   >
-                    {selectedSession.completedExercises === 0 ? 'Start Session' : 'Continue Session'}
+                    {selectedSession.completedExercises === 0 ? t('startSession') : t('continueSession')}
                   </button>
                 )}
               </div>
@@ -122,8 +124,8 @@ export default function TrainingPageClient() {
             
             {selectedQuiz && (
               <div className="quiz-content">
-                <p className='quiz-title'>{selectedQuiz.title}</p>
-                <p>Are you ready to test your knowledge?</p>
+                <p className='quiz-title'>{t(`${selectedQuiz.title}`)}</p>
+                <p>{t('quizReady')}</p>
                 <button
                   onClick={() => {
                     setIsModalOpen(false);
@@ -131,7 +133,7 @@ export default function TrainingPageClient() {
                   }}
                   className="quiz-button"
                 >
-                  Start Quiz
+                  {t('startQuiz')}
                 </button>
               </div>
             )}

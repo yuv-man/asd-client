@@ -4,10 +4,9 @@ import DirectionController from '../components/common/DirectionController';
 
 interface LocaleLayoutProps {
   children: React.ReactNode;
-  params: {
-    locale: string;
-  };
+  params: Promise<{ locale: string }>;
 }
+
 
 export default async function LocaleLayout({ 
   children, 
