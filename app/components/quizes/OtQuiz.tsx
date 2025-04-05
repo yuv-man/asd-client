@@ -5,7 +5,7 @@ import { ArrowRight } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useUserStore, useInitialAssessmentStore } from '@/store/userStore';
-import { Exercise, ExerciseType } from '@/types/types';
+import { Exercise, Score, ExerciseType } from '@/types/types';
 import monkey from '@/assets/animals/monkey.svg';
 import { getExerciseComponent } from '../../helpers/exerciseComponents';
 import { exercisesAPI } from '@/services/api'
@@ -16,6 +16,7 @@ import { useTranslations } from 'next-intl';
 const OTQuiz = ({isInitialAssessment}: {isInitialAssessment?: boolean}) => {
   const router = useRouter();
   const user = useUserStore((state) => state.user);
+  const [startTime, setStartTime] = useState(new Date());
   const [currentExercise, setCurrentExercise] = useState(0);
   const [scores, setScores] = useState<Record<string, number>>({});
   const [showIntro, setShowIntro] = useState(true);
@@ -48,9 +49,11 @@ const OTQuiz = ({isInitialAssessment}: {isInitialAssessment?: boolean}) => {
   const handleExerciseComplete = (result: { score: number; metrics?: { accuracy: number; timeInSeconds: number; attempts: number; } | undefined }) => {
     const newScores = { ...scores, [exercises[currentExercise].type]: result.score };
     setScores(newScores);
-    
+    fetchAttempt(result);
+
     if (currentExercise < exercises.length - 1) {
       setCurrentExercise(currentExercise + 1);
+      setStartTime(new Date());
     } else {
       // Calculate final score and show results modal
       const averageScore = Object.values(newScores).reduce((a, b) => a + b, 0) / exercises.length;
@@ -58,6 +61,26 @@ const OTQuiz = ({isInitialAssessment}: {isInitialAssessment?: boolean}) => {
       setShowResults(true);
     }
   };
+
+  const fetchAttempt = async (result: Score) => {
+    const now = new Date()
+      const attemp = {
+        userId: user?._id,
+        exerciseId: exercises[currentExercise]._id,
+        difficultyLevel: user?.areasProgress[exercises[currentExercise].area].difficultyLevel,
+        score: result.score,
+        area: exercises[currentExercise].area,
+        isTest: false,
+        startTime: startTime,
+        endTime: now,
+      }
+      exercisesAPI.createExerciseAttempt(attemp)
+  }
+
+  const startQuiz = () => {
+    setStartTime(new Date());
+    setShowIntro(false);
+  }
 
   const handleContinue = () => {
     setShowResults(false)
@@ -104,7 +127,7 @@ const OTQuiz = ({isInitialAssessment}: {isInitialAssessment?: boolean}) => {
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              onClick={() => setShowIntro(false)}
+              onClick={startQuiz}
               className="start-button"
             >
               {t('otQuiz.start')}

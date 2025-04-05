@@ -1,0 +1,14 @@
+.training-session-page {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  align-items: center;
+  padding: 2.5rem;
+
+  h1 {
+    font-size: 1.875rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: #991b1b; // equivalent to text-red-800
+  }
+} 

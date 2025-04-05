@@ -18,6 +18,7 @@ const CognitiveQuiz = ({isInitialAssessment}: {isInitialAssessment?: boolean}) =
   const router = useRouter();
   const user = useUserStore((state) => state.user);
   const [currentExercise, setCurrentExercise] = useState(0);
+  const [startTime, setStartTime] = useState(new Date());
   const [scores, setScores] = useState<Record<string, number>>({});
   const [showIntro, setShowIntro] = useState(true);
   const [exercises, setExercises] = useState<Exercise[]>([]);
@@ -47,12 +48,26 @@ const CognitiveQuiz = ({isInitialAssessment}: {isInitialAssessment?: boolean}) =
     }
   }
 
+  const fetchAttempt = async (result: Score) => {
+    const now = new Date()
+    const attemp = {
+      userId: user?._id,
+      exerciseId: exercises[currentExercise]._id,
+      difficultyLevel: user?.areasProgress[exercises[currentExercise].area].difficultyLevel,
+      score: result.score,
+      area: exercises[currentExercise].area,
+    }
+    exercisesAPI.createExerciseAttempt(attemp)
+  }
+
   const handleExerciseComplete = useCallback((score: Score) => {
     const newScores = { ...scores, [exercises[currentExercise].type]: score.score };
     setScores(newScores);
-    
+    fetchAttempt(score);
+
     if (currentExercise < exercises.length - 1) {
       setCurrentExercise(currentExercise + 1);
+      setStartTime(new Date());
     } else {
       // Calculate final score and show results modal
       const averageScore = Object.values(newScores).reduce((a, b) => a + b, 0) / exercises.length;
@@ -60,6 +75,11 @@ const CognitiveQuiz = ({isInitialAssessment}: {isInitialAssessment?: boolean}) =
       setShowResults(true);
     }
   }, [currentExercise, exercises, scores]);
+
+  const startQuiz = () => {
+    setStartTime(new Date());
+    setShowIntro(false);
+  }
 
   const handleContinue = () => {
     setShowResults(false)
@@ -102,7 +122,7 @@ const CognitiveQuiz = ({isInitialAssessment}: {isInitialAssessment?: boolean}) =
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              onClick={() => setShowIntro(false)}
+              onClick={startQuiz}
             >
               {t('cognitiveQuiz.start')}
               <ArrowRight />
