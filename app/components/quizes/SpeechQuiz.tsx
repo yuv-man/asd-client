@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useUserStore, useInitialAssessmentStore } from '@/store/userStore';
 import { Exercise, ExerciseType, Score } from '@/types/types';
-import toucan from '@/assets/animals/toucan.svg';
+import toucan from '@/assets/stars/parrot.svg';
 import { getExerciseComponent } from '../../helpers/exerciseComponents';
 import { exercisesAPI } from '@/services/api'
 import ResultsModal from '@/app/components/common/ResultsModal';

@@ -1,6 +1,6 @@
-import parrotIcon from '@/assets/animals/toucan.svg';
-import owlIcon from '@/assets/animals/owl.svg'
-import monkeyIcon from '@/assets/animals/monkey.svg';
+import parrotIcon from '@/assets/stars/parrot.svg';
+import owlIcon from '@/assets/stars/owl.svg'
+import monkeyIcon from '@/assets/stars/monkey.svg';
 import { AreaType } from '@/types/types';
 
 export const areaTypes: { [key: string]: AreaType } = {

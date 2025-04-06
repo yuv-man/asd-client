@@ -1,3 +1,5 @@
+@import './variables.scss';
+
 .generic-modal {
   position: fixed;
   inset: 0;
@@ -41,6 +43,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    color: $dark-purple;
   }
 
   .modal-title {
@@ -49,6 +52,7 @@
     align-items: center;
     justify-content: center;
     margin-bottom: 1rem;
+    color: $dark-purple;
 
     h1 {
       font-size: 1.5rem;

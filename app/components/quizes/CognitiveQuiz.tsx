@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useUserStore } from '@/store/userStore';
 import { Exercise, ExerciseType, Score } from '@/types/types';
-import owl from '@/assets/animals/owl.svg';
+import owl from '@/assets/stars/owl.svg';
 import { getExerciseComponent } from '@/app/helpers/exerciseComponents';
 import { exercisesAPI } from '@/services/api'
 import ResultsModal from '@/app/components/common/ResultsModal';

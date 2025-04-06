@@ -36,7 +36,7 @@ export const TrailMap: React.FC<TrailMapProps> = ({
 
   const animalIconSizes = useMemo(() => {
     if (windowWidth < 768) return Math.min(40, windowWidth * 0.12);
-    if (windowWidth < 1024) return Math.min(60, windowWidth * 0.1);
+    if (windowWidth < 1024) return Math.min(80, windowWidth * 0.1);
     return 70;
   }, [windowWidth]);
 
@@ -121,7 +121,9 @@ export const TrailMap: React.FC<TrailMapProps> = ({
     <div 
       className="trailMapContainer"
       style={{
-        background: 'linear-gradient(135deg, #E0C3FC 0%, #8EC5FC 100%)',
+        background: `url(${require('@/assets/stars/bg-stars.svg').default})`,
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
         overflow: 'hidden',
         position: 'relative',
         height: '100vh',
@@ -236,7 +238,7 @@ export const TrailMap: React.FC<TrailMapProps> = ({
                 background: progressPercentage === 100
                   ? 'linear-gradient(135deg, rgb(139, 222, 174) 0%, #38A169 100%)'
                   : session.isAvailable
-                    ? 'linear-gradient(135deg, #63B3ED 0%, #4299E1 100%)'
+                    ? 'linear-gradient(135deg,rgb(170, 211, 240) 0%,rgb(95, 170, 231) 100%)'
                     : 'linear-gradient(135deg, #CBD5E0 0%, #A0AEC0 100%)',
                 display: 'flex',
                 border: '2px solid darkBlue',
@@ -253,7 +255,7 @@ export const TrailMap: React.FC<TrailMapProps> = ({
               onClick={() => session.isAvailable && onSessionSelect(session.id)}
             >
               <div className="progressIndicator">
-                <FaCloud size={Math.min(24, windowWidth * 0.050)} color="white" /> 
+                <FaCloud size={Math.min(30, windowWidth * 0.050)} color="white" /> 
                 <div className="progressText" 
                   style={{ fontSize: 'clamp(12px, 2.5vw, 16px)' }}> 
                   {completedExercises}/{session.exercises.length || 3}
