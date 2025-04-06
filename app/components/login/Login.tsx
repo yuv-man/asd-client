@@ -90,8 +90,7 @@ const Login = () => {
           <Image 
             src={bgLogin} 
             alt="WonderKid Logo" 
-            width={1000} 
-            height={1000} 
+            width={600} 
             priority={true}
             loading="eager"
           />

@@ -1,3 +1,5 @@
+@import './variables.scss';
+
 .login-container {
   min-height: 100vh;
   display: flex;
@@ -20,7 +22,7 @@
   padding: 2rem;
   border-radius: 0.75rem;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-  background-color: var(--pastel-light-yellow);
+  background-color: $pastel-light-yellow;
 
   .header {
     text-align: center;
@@ -32,13 +34,13 @@
       margin-top: 0.75rem;
       font-size: 1.875rem;
       font-weight: 800;
-      color: var(--pastel-orange);
+      color: $pastel-orange;
     }
 
     p {
       margin-top: 0.5rem;
       font-size: 1rem;
-      color: var(--dark-purple);
+      color: $dark-purple;
     }
   }
 }
