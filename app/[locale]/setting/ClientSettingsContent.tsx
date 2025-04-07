@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import Dashboard from '@/app/components/setting/dashboard';
 import Profile from '@/app/components/setting/profile';
 import { useUserStore } from '@/store/userStore'
-import { userAPI } from '@/services/api';
+import { userAPI } from '@/lib/api';
 import { useTranslations, useLocale } from 'next-intl';
 import Link from 'next/link';
 import Image from 'next/image';

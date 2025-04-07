@@ -1,7 +1,7 @@
 import useLanguageStore from '@/store/languageStore';
 import { useTranslations } from 'next-intl';
 import { useUserStore } from '@/store/userStore';
-import { userAPI } from '@/services/api';
+import { userAPI } from '@/lib/api';
 import { Listbox } from '@headlessui/react';
 import { HiChevronUpDown } from "react-icons/hi2";
 import { useRouter, usePathname } from 'next/navigation';

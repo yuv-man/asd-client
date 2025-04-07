@@ -8,7 +8,7 @@ import { useUserStore, useInitialAssessmentStore } from '@/store/userStore';
 import { Exercise, ExerciseType, Score } from '@/types/types';
 import toucan from '@/assets/stars/parrot.svg';
 import { getExerciseComponent } from '../../helpers/exerciseComponents';
-import { exercisesAPI } from '@/services/api'
+import { exercisesAPI } from '@/lib/api'
 import ResultsModal from '@/app/components/common/ResultsModal';
 import '@/app/styles/SpeechQuiz.scss';
 import { useTranslations } from 'next-intl';

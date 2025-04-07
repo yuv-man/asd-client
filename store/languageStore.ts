@@ -3,7 +3,7 @@
 import { create } from 'zustand';
 import { setCookie } from 'cookies-next';
 import type { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import { userAPI } from '@/services/api';
+import { userAPI } from '@/lib/api';
 
 interface LanguageState {
   locale: string;

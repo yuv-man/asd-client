@@ -8,7 +8,7 @@ import { useUserStore } from '@/store/userStore';
 import { Exercise, ExerciseType, Score } from '@/types/types';
 import owl from '@/assets/stars/owl.svg';
 import { getExerciseComponent } from '@/app/helpers/exerciseComponents';
-import { exercisesAPI } from '@/services/api'
+import { exercisesAPI } from '@/lib/api'
 import ResultsModal from '@/app/components/common/ResultsModal';
 import { useInitialAssessmentStore } from '@/store/userStore';
 import { useTranslations } from 'next-intl';

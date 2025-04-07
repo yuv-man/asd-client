@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import Modal from '@/app/components/common/Modal';
 import { Session, Quiz } from '@/types/types'
 import { useSessions, useUserStore } from '@/store/userStore'
-import { exercisesAPI } from '@/services/api';
+import { exercisesAPI } from '@/lib/api';
 import { areaTypesEnum } from '@/enums/enumArea';
 import '@/app/styles/TrainingPage.scss';
 import { useTranslations } from 'next-intl';

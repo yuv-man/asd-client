@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { User, Session } from '../types/types';
-import { exercisesAPI } from '../services/api';
-import { calculatePosition } from '../services/calculatePosition';
+import { exercisesAPI } from '../lib/api';
+import { calculatePosition } from '../lib/calculatePosition';
 import { Exercise, InitialAssessment } from '../types/types';
 
 export const useUserStore = create<{

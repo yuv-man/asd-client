@@ -6,7 +6,7 @@ import { Session, ExerciseType } from '@/types/types';
 import { getExerciseComponent } from '../../helpers/exerciseComponents';
 import { useUserStore, useSessions } from '@/store/userStore'
 import { useRouter } from 'next/navigation';
-import { exercisesAPI } from '@/services/api';
+import { exercisesAPI } from '@/lib/api';
 import ProfileDetails from '../common/ProfileBubble';
 import '@/app/styles/TrainingSession.scss';
 import { useTranslations, useLocale } from 'next-intl';

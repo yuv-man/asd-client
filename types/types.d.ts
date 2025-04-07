@@ -17,13 +17,15 @@ export interface User {
     age: number;
     language: string;
     avatarUrl: string;
-    parentEmail?: string;
+    parentEmail?: string | undefined;
     parentPhone?: string;
     password?: string;
     createdAt?: string;
     updatedAt?: string;
     isActive?: boolean;
     role?: string;
+    googleAuth?: boolean;
+    authProviderId?: string;
     lastLogin?: Date;
     dailyUsage: {
       date: Date;
