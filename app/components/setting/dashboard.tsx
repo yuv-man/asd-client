@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Award, ArrowRight, Star } from 'lucide-react';
 import { WeeklySummary, User } from '@/types/types';
-import { weeklySummariesAPI, dailySummariesAPI } from '@/services/api';
+import { weeklySummariesAPI, dailySummariesAPI } from '@/lib/api';
 import AreaAnalyses from './areaAnalyses';
 import '@/app/styles/setting.scss';
 

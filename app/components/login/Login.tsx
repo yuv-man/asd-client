@@ -10,8 +10,8 @@ import { lilitaOne } from '@/assets/fonts';
 import AgeSelector from '../../ageSelector';
 import { avatars } from '../../helpers/avatars';
 import { User } from '@/types/types';
-import { userAPI } from '@/services/api';
-import '@/app/styles/Login.scss';
+import { userAPI } from '@/lib/api';
+import '@/app/styles/login.scss';
 
 const Login = () => {
   const router = useRouter();

@@ -1,4 +1,4 @@
-@import './variables.scss';
+@use './variables' as *;
 
 .speech-quiz {
   max-width: 1024px;

@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "cross-env VITE_NODE_ENV=development next dev",
-    "build": "cross-env VITE_NODE_ENV=production next build",
-    "start": "cross-env VITE_NODE_ENV=production next start",
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
     "lint": "next lint",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
@@ -55,7 +55,7 @@
     "cross-env": "^7.0.3",
     "css-loader": "^7.1.2",
     "playwright": "^1.50.1",
-    "sass": "^1.85.1",
+    "sass": "^1.86.3",
     "sass-loader": "^16.0.5",
     "storybook": "^8.6.3",
     "style-loader": "^4.0.0",
