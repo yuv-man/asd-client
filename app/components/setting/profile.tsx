@@ -226,13 +226,13 @@ function Profile({ user, onSave }: ProfileProps) {
               <button
                 type="button"
                 onClick={() => setIsEditing(false)}
-                className="setting-button secondary"
+                className="setting-button"
               >
                 {t('setting.cancel')}
               </button>
               <button
                 type="submit"
-                className="setting-button primary"
+                className="setting-button"
               >
                 {t('setting.save')}
               </button>
@@ -241,7 +241,7 @@ function Profile({ user, onSave }: ProfileProps) {
             <button
               type="button"
               onClick={() => setIsEditing(true)}
-              className="setting-button primary"
+              className="setting-button"
             >
               {t('setting.editProfile')}
             </button>

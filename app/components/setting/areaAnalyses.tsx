@@ -156,7 +156,7 @@ const AreaAnalyses = ({ user, area, value, recentData }: DashboardProps) => {
                 <div className="header">
                     <div className="header__left">
                         <div className={`header__left-icon ${areaTypes[area].class}`}>
-                            <Image src={areaTypes[area].icon} alt={area} width={20} height={20} />
+                            <Image src={areaTypes[area].icon} alt={area} width={30} height={30} />
                         </div>
                         <h3 className="header__left-title">{area}</h3>
                     </div>

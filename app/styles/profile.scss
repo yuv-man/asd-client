@@ -134,16 +134,6 @@ $small-screen: 640px;
       padding: 0.5rem 1rem;
       border-radius: 0.375rem;
       cursor: pointer;
-
-      &.primary {
-        background-color: var(--primary-500);
-        color: white;
-      }
-
-      &.secondary {
-        border: 1px solid #ccc;
-        background-color: white;
-      }
     }
   }
 } 

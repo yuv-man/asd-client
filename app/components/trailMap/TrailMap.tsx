@@ -7,6 +7,7 @@ import balloon from '@/assets/airballoon.svg';
 import { FaCloud, FaCog } from 'react-icons/fa';
 import { TrailMapProps } from '@/types/props';
 import { areaTypes } from '@/app/helpers/areas';
+import bgStars from '@/assets/stars/bg-stars.svg';
 
 export const TrailMap: React.FC<TrailMapProps> = ({
   sessions,
@@ -35,7 +36,7 @@ export const TrailMap: React.FC<TrailMapProps> = ({
   }, [windowWidth]);
 
   const animalIconSizes = useMemo(() => {
-    if (windowWidth < 768) return Math.min(40, windowWidth * 0.12);
+    if (windowWidth < 768) return Math.min(60, windowWidth * 0.15);
     if (windowWidth < 1024) return Math.min(80, windowWidth * 0.1);
     return 70;
   }, [windowWidth]);
@@ -79,9 +80,9 @@ export const TrailMap: React.FC<TrailMapProps> = ({
   if (isLoading || !windowHeight || !windowWidth) {
     return (
       <div className="trailMapContainer" style={{
-        background: 'linear-gradient(135deg, #E0C3FC 0%, #8EC5FC 100%)',
-        height: '100vh',
-        width: '100%',
+        background: `url(${bgStars.src})`,
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center'
@@ -110,18 +111,18 @@ export const TrailMap: React.FC<TrailMapProps> = ({
   // Fixed animal positions that are definitely on screen
   const animalPositions = [
     // Left side - mid screen
-    { left: '20%', top: '30%' },
+    { left: '5%', top: '30%' },
     // Right side - mid screen
-    { left: '80%', top: '45%' },
+    { left: '5%', top: '45%' },
     // Top center - upper area but visible
-    { left: '50%', top: '15%' }
+    { left: '5%', top: '15%' }
   ];
 
   return (
     <div 
       className="trailMapContainer"
       style={{
-        background: `url(${require('@/assets/stars/bg-stars.svg').default})`,
+        background: `url(${bgStars.src})`,
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
         overflow: 'hidden',
@@ -152,7 +153,7 @@ export const TrailMap: React.FC<TrailMapProps> = ({
           boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
         }}
       >
-        <FaCog size={Math.min(16, windowWidth * 0.03)} color="white" />
+        <FaCog size={Math.min(16, windowWidth * 0.05)} color="white" />
       </motion.div>
 
       {/* Scrollable content - with increased padding */}

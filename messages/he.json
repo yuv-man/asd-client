@@ -177,6 +177,12 @@
       "Memory": "משחק זיכרון",
       "Balloon": "משחק בולונים",
       "Catch Objects": "משחק תפוס את המוצרים"
+    },
+    "dashboard": {
+      "title": "לוח בקרה",
+      "subtitle": "עקוב אחר התקדמותך והמשיך במסלול ההוראה.",
+      "recentActivities": "פעילויות אחרונות",
+      "recommendedExercises": "תרגילים מומחרים",
+      "noRecentActivities": "לא נמצאו פעילויות אחרונות"
     }
-
 }

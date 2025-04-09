@@ -5,8 +5,10 @@ import { WeeklySummary, User } from '@/types/types';
 import { weeklySummariesAPI, dailySummariesAPI } from '@/lib/api';
 import AreaAnalyses from './areaAnalyses';
 import '@/app/styles/setting.scss';
+import { useTranslations } from 'next-intl';
 
-const Dashboard = ({ user }: { user: User | null }) => {
+  const Dashboard = ({ user }: { user: User | null }) => {
+  const t = useTranslations('dashboard');
   const [userProgress, setUserProgress] = useState<WeeklySummary>();
   const [recentData, setRecentData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -115,10 +117,10 @@ const Dashboard = ({ user }: { user: User | null }) => {
     <div className="dashboard">
       <div className="dashboard__header">
         <h1 className="dashboard__title">
-          Welcome back, {user?.name || 'User'}! 👋
+          {t('title')}
         </h1>
         <p className="dashboard__subtitle">
-          Track your progress and continue your learning journey.
+          {t('subtitle')}
         </p>
       </div>
 
@@ -144,7 +146,7 @@ const Dashboard = ({ user }: { user: User | null }) => {
 
       <div className="dashboard__content">
         <div className="dashboard__card">
-          <h3 className="dashboard__card-title">Recent Activities</h3>
+          <h3 className="dashboard__card-title">{t('recentActivities')}</h3>
           <div className="dashboard__activities">
             {userProgress?.recentExercises && userProgress.recentExercises.length > 0 ? (
               userProgress.recentExercises.slice(0, 10).map((activity, index) => (
@@ -169,14 +171,14 @@ const Dashboard = ({ user }: { user: User | null }) => {
               ))
             ) : (
               <div className="dashboard__empty">
-                No recent activities found
+                {t('noRecentActivities')}
               </div>
             )}
           </div>
         </div>
 
         <div className="dashboard__card">
-          <h3 className="dashboard__card-title">Recommended Exercises</h3>
+          <h3 className="dashboard__card-title">{t('recommendedExercises')}</h3>
           <div className="dashboard__exercises">
             {[
               {
