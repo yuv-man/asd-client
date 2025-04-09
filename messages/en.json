@@ -183,5 +183,12 @@
       "Attention": "Attention",
       "Memory": "Memory",
       "Balloon": "Balloon"
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "subtitle": "Track your progress and continue your learning journey.",
+      "recentActivities": "Recent Activities",
+      "recommendedExercises": "Recommended Exercises",
+      "noRecentActivities": "No recent activities found"
     }
 }
