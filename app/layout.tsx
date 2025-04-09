@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import SocketInitializer from "./components/common/SocketInitializer";
 import { Lilita_One, Wendy_One, Fredoka } from "next/font/google";
 import './styles/globals.scss';
-
 const lilitaOne = Lilita_One({
   weight: '400',
   subsets: ['latin'],
@@ -37,8 +36,8 @@ export default function RootLayout({
         className={`${lilitaOne.className} ${wendyOne.className} ${fredoka.className} antialiased`}
         suppressHydrationWarning
       >
-        <SocketInitializer />
-        {children}
+          <SocketInitializer />
+            {children}
       </body>
     </html>
   );

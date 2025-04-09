@@ -17,7 +17,7 @@ export interface User {
     age: number;
     language: string;
     avatarUrl: string;
-    parentEmail?: string | undefined;
+    email?: string | undefined;
     parentPhone?: string;
     password?: string;
     createdAt?: string;

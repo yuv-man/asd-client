@@ -1,6 +1,7 @@
 import { NextIntlClientProvider } from 'next-intl';
 import { notFound } from 'next/navigation';
 import DirectionController from '../components/common/DirectionController';
+import AuthProvider from '../providers/AuthProvider';
 
 interface LocaleLayoutProps {
   children: React.ReactNode;
@@ -28,7 +29,9 @@ export default async function LocaleLayout({
   return (
     <NextIntlClientProvider messages={messages} locale={locale}>
       <DirectionController>
-        {children}
+        <AuthProvider requireAuth={true}>
+          {children}
+        </AuthProvider> 
       </DirectionController>
     </NextIntlClientProvider>
   );

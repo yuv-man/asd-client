@@ -43,7 +43,7 @@ export interface TherapyAreaProps {
     onSave?: (data: { 
       _id: string;
       name: string; 
-      parentEmail: string; 
+      email: string; 
       parentPhone: string; 
       numOfExercises: number;
       age: number;

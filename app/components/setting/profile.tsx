@@ -11,7 +11,7 @@ import '@/app/styles/profile.scss';
 function Profile({ user, onSave }: ProfileProps) {
   const t = useTranslations();
   const [name, setName] = useState(user?.name || '');
-  const [parentEmail, setParentEmail] = useState(user?.parentEmail || '');
+  const [email, setEmail] = useState(user?.email || '');
   const [parentPhone, setParentPhone] = useState(user?.parentPhone || '')
   const [age, setAge] = useState(user?.age || 4)
   const [avatarUrl, setAvatarUrl] = useState<Avatar | undefined>(undefined);
@@ -42,7 +42,7 @@ function Profile({ user, onSave }: ProfileProps) {
       onSave({ 
         _id: user?._id || '',
         name, 
-        parentEmail, 
+        email, 
         parentPhone, 
         levelCognitive, 
         levelOt, 
@@ -146,12 +146,12 @@ function Profile({ user, onSave }: ProfileProps) {
                 <input
                   type="email"
                   id="email"
-                  value={parentEmail}
-                  onChange={(e) => setParentEmail(e.target.value)}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   className="input-field"
                 />
               ) : (
-                <p className="mt-1">{parentEmail || 'Not set'}</p>
+                <p className="mt-1">{email || 'Not set'}</p>
               )}
             </div>
             <div className="input-group">
