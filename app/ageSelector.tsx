@@ -2,7 +2,7 @@
 
 import React from "react";
 import { wendyOne } from "../assets/fonts";
-import styles from './ageSelector.module.scss';
+import styles from './styles/ageSelector.module.scss';
 
 type AgeSelectorProps = {
   age: number;
