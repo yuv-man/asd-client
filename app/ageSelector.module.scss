@@ -1,0 +1,32 @@
+@use './variables' as *;
+
+.ageSelector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16rem; // 64 in tailwind
+  margin: auto;
+  padding: 1rem;
+  gap: 1rem; // equivalent to space-x-4
+}
+
+.arrowButton {
+  width: 2.5rem; // 10 in tailwind
+  height: 2.5rem;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $dark-purple;
+  background-color: transparent;
+  
+  &:hover {
+    color: $pastel-orange;
+  }
+}
+
+.ageDisplay {
+  font-size: 3.75rem; // text-6xl
+  font-weight: bold;
+  color: $pastel-orange;
+} 

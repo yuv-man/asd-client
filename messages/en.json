@@ -182,7 +182,10 @@
       "Occupational Therapy": "Occupational Therapy",
       "Attention": "Attention",
       "Memory": "Memory",
-      "Balloon": "Balloon"
+      "Balloon": "Balloon",
+      "catch objects": "catch objects",
+      "Talk Animals": "Talk Animals",
+      "Attention Test": "Attention Test"
     },
     "dashboard": {
       "title": "Dashboard",

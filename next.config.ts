@@ -11,7 +11,6 @@ const nextConfig = {
     (config.module.rules = config.module.rules || []).push({
       test: /\.(sass|scss)$/,
       use: [
-        "style-loader",
         "css-loader",
         "sass-loader",
       ],
@@ -30,8 +29,8 @@ const nextConfig = {
     turbo: {
       rules: {
         // Configure loaders for SASS/SCSS
-        '.scss': ['style-loader', 'css-loader', 'sass-loader'],
-        '.sass': ['style-loader', 'css-loader', 'sass-loader'],
+        '.scss': ['css-loader', 'sass-loader'],
+        '.sass': ['css-loader', 'sass-loader'],
       },
     },
   },

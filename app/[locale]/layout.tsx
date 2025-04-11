@@ -29,7 +29,7 @@ export default async function LocaleLayout({
   return (
     <NextIntlClientProvider messages={messages} locale={locale}>
       <DirectionController>
-        <AuthProvider requireAuth={true}>
+        <AuthProvider>
           {children}
         </AuthProvider> 
       </DirectionController>

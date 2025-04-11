@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useUserStore } from '@/store/userStore';
 import bgLogin from '@/assets/background-login.png';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { lilitaOne } from '@/assets/fonts';
 import AgeSelector from '../../ageSelector';
@@ -15,30 +15,17 @@ import '@/app/styles/Login.scss';
 import { signIn, useSession } from 'next-auth/react';
 import googleIcon from '@/assets/icons/google-icon.svg';
 
-const Login = () => {
+const Login = ({stepProp='1'}) => {
   const router = useRouter();
   const { data: session } = useSession();
   const { setUser } = useUserStore();
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(parseInt(stepProp) || 1);
   const [formData, setFormData] = useState({
     name: '',
     age: '4',
     avatarStyle: avatars[0].src,
     email: session?.user?.email || '', // Prefill email if available from OAuth sync
   });
-  const searchParams = useSearchParams();
-  const isNewOAuthUser = searchParams.get('newUser') === 'true';
-
-  useEffect(() => {
-    if (session?.user) {
-      // User is logged in via OAuth
-      if (isNewOAuthUser) {
-        setStep(2); // Proceed to kid info if it's a new OAuth user
-      } else {
-        router.push('/training'); // Redirect to training if existing OAuth user
-      }
-    }
-  }, [session, router, isNewOAuthUser]);
 
   const handleOAuthSignIn = async (provider: 'google') => {
     signIn(provider, { callbackUrl: '/login' }); // Redirect back to login to check newUser param

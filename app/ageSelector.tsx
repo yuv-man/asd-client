@@ -1,7 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { wendyOne } from "../assets/fonts";
+import styles from './ageSelector.module.scss';
+
 type AgeSelectorProps = {
   age: number;
   onChange: (age: number) => void;
@@ -18,22 +20,22 @@ const AgeSelector: React.FC<AgeSelectorProps> = ({ age, onChange }) => {
   };
 
   return (
-    <div className="flex items-center space-x-4 p-4 w-64 justify-center m-auto">
+    <div className={styles.ageSelector}>
       {/* Left Arrow Button */}
       <button
         onClick={decreaseAge}
-        className="p-2 text-darkPurple inline-button w-10 h-10 flex items-center justify-center hover:text-pastelOrange"
+        className={styles.arrowButton}
       >
         ◀
       </button>
 
       {/* Age Display */}
-      <span className={`text-6xl font-bold text-pastelOrange ${wendyOne.className}`}>{age}</span>
+      <span className={`${styles.ageDisplay} ${wendyOne.className}`}>{age}</span>
 
       {/* Right Arrow Button */}
       <button
         onClick={increaseAge}
-        className="p-2 text-darkPurple inline-button w-10 h-10 flex items-center justify-center hover:text-pastelOrange"
+        className={styles.arrowButton}
       >
         ▶
       </button>

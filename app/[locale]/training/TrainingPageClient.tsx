@@ -107,7 +107,7 @@ export default function TrainingPageClient() {
                 {selectedSession.exercises.map(exercise => (
                   <div key={`exercise-${exercise._id}`} className="exercise-item">
                     <span>{exercise.isCompleted ? "✅" : "⭕"}</span>
-                    <span>{t(`${exercise.title}`)}</span>
+                    <span>{t(exercise.title)}</span>
                   </div>
                 ))}
                 <p className='completed-count'>{t('completedExercises')}: {selectedSession.completedExercises}/{selectedSession.exercises.length}</p>

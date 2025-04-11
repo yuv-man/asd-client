@@ -84,6 +84,7 @@ export const authOptions: AuthOptions = {
       
       if (account?.provider) {
         // OAuth Sign-in
+        console.log('OAuth Sign-in');
         try {
           const res = await userAPI.syncOAuth({
             email: profile?.email,

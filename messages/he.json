@@ -176,7 +176,9 @@
       "Attention": "התאמת כלי תחבורה",
       "Memory": "משחק זיכרון",
       "Balloon": "משחק בולונים",
-      "Catch Objects": "משחק תפוס את המוצרים"
+      "catch Objects": "משחק תפוס את המוצרים",
+      "Talk Animals": "משחק דיבור חיות",
+      "Attention Test": "מבדק התאמת כלי תחבורה"
     },
     "dashboard": {
       "title": "לוח בקרה",
