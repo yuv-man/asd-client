@@ -6,8 +6,8 @@ export default async function LoginPage({
   params,
   searchParams 
 }: { 
-  params: { locale: string },
-  searchParams: { step?: string }
+  params: Promise<{ locale: string }>,
+  searchParams: Promise<{ step?: string }>
 }) {
   const { step } = await searchParams; 
   return <Login stepProp={step} />;
