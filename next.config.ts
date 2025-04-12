@@ -6,16 +6,17 @@ const withNextIntl = require('next-intl/plugin')('./i18n.config.js');
 const nextConfig = {
   // Configure webpack for SASS/SCSS files
   webpack(config: Configuration) {
-    // Add configuration for SASS/SCSS files
-    config.module = config.module || { rules: [] };
-    (config.module.rules = config.module.rules || []).push({
-      test: /\.(sass|scss)$/,
-      use: [
-        "css-loader",
-        "sass-loader",
-      ],
-    });
+    if (!config.module) {
+      config.module = { rules: [] };
+    }
+    if (!config.module.rules) {
+      config.module.rules = [];
+    }
 
+    // Next.js already has CSS handling built-in, we just need to
+    // add the SCSS file extensions to the existing rules
+    
+    // Add SVG handling
     config.module.rules.push({
       test: /\.svg$/,
       use: ["@svgr/webpack"],
@@ -24,15 +25,9 @@ const nextConfig = {
     return config;
   },
   
-  // Add Turbopack configuration
+  // Remove the Turbopack custom rules as they're causing issues
   experimental: {
-    turbo: {
-      rules: {
-        // Configure loaders for SASS/SCSS
-        '.scss': ['css-loader', 'sass-loader'],
-        '.sass': ['css-loader', 'sass-loader'],
-      },
-    },
+    // Keep other experimental features if needed
   },
   
   // Add SASS options
