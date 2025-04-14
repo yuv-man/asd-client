@@ -11,7 +11,7 @@ export const useSocketStore = create<SocketState>((set, get) => ({
   initializeSocket: () => {
     if (get().socket) return; // Prevent multiple connections
 
-    const socketInstance = io("http://localhost:5000", {
+    const socketInstance = io(`${process.env.NEXT_PUBLIC_API_URL}`, {
       reconnection: true, // Ensure it tries to reconnect
       reconnectionAttempts: 5, // Limit reconnection attempts
       reconnectionDelay: 2000, // Delay between retries

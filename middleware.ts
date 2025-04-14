@@ -18,7 +18,7 @@ async function getUserByEmail(email: string) {
   }
 
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/profile/email/${email}`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/profile/email/${email}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
