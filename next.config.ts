@@ -13,9 +13,6 @@ const nextConfig = {
       config.module.rules = [];
     }
 
-    // Next.js already has CSS handling built-in, we just need to
-    // add the SCSS file extensions to the existing rules
-    
     // Add SVG handling
     config.module.rules.push({
       test: /\.svg$/,
@@ -25,9 +22,31 @@ const nextConfig = {
     return config;
   },
   
-  // Remove the Turbopack custom rules as they're causing issues
-  experimental: {
-    // Keep other experimental features if needed
+  // Add headers configuration for CSP
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'Content-Security-Policy',
+            value: `
+              default-src 'self';
+              script-src 'self' 'unsafe-inline' 'unsafe-eval' https://accounts.google.com;
+              style-src 'self' 'unsafe-inline';
+              img-src 'self' data: https:;
+              font-src 'self';
+              connect-src 'self' https://*.googleapis.com https://accounts.google.com;
+              frame-src https://accounts.google.com;
+            `.replace(/\s+/g, ' ').trim()
+          },
+          {
+            key: 'X-Frame-Options',
+            value: 'SAMEORIGIN'
+          }
+        ]
+      }
+    ];
   },
   
   // Add SASS options

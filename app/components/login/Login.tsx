@@ -13,7 +13,7 @@ import { User } from '@/types/types';
 import { userAPI } from '@/lib/api';
 import '@/app/styles/Login.scss';
 import { signIn, useSession } from 'next-auth/react';
-import googleIcon from '@/assets/icons/google-icon.svg';
+import googleIcon from '@/public/google-icon.svg';
 
 const Login = ({stepProp='1'}) => {
   const router = useRouter();
