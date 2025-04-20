@@ -104,5 +104,7 @@ export async function middleware(request: NextRequest) {
 
 // Configure which paths the middleware should run on
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|assets|.*\\.svg|.*\\.ico).*)']
-}
+  matcher: [
+    '/((?!api/auth|_next/static|_next/image|assets|.*\\.svg|.*\\.ico).*)',
+  ],
+};
