@@ -1,15 +1,14 @@
 import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { userAPI } from '@/lib/api';
+import axios from 'axios';
 import { AuthOptions } from 'next-auth';
 
-// ✅ TEMP DEBUG: Log env variables
-console.log('ENV CHECK: ', {
-    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
-    GOOGLE_CLIENT_SECRET: !!process.env.GOOGLE_CLIENT_SECRET,
-    NEXTAUTH_SECRET: !!process.env.NEXTAUTH_SECRET,
-    NEXTAUTH_URL: process.env.NEXTAUTH_URL
-  });
+const API_BASE = `${process.env.NEXT_PUBLIC_API_URL}/api`;
+
+const userAPI = {
+  syncOAuth: (user: any ) => axios.post(`${API_BASE}/auth/sync`, user),
+  login: (user: any) => axios.post(`${API_BASE}/auth/login`, user),
+};
 
 export const authOptions: AuthOptions = {
   providers: [
