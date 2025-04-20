@@ -18,30 +18,32 @@ export const authOptions: AuthOptions = {
       async authorize(credentials, req) {
         const { email, password } = credentials || {};
         if (!email || !password) {
+          console.error('CredentialsProvider: Email and password are required');
           throw new Error('Email and password are required');
         }
 
         try {
           const res = await userAPI.login({ email: email, password });
-          
+
           if (!res.data) {
+            console.error('CredentialsProvider: Invalid response from server', res);
             throw new Error('Invalid response from server');
           }
 
           if (res.status === 200 && res.data.user) {
-            // Make sure we return a properly structured user object
+            console.log('CredentialsProvider: Successfully logged in user', res.data.user);
             return {
               id: res.data.user.id,
               email: res.data.user.email,
               name: res.data.user.name,
-              // Add any other required user properties
             };
           }
-          
+
+          console.error('CredentialsProvider: Invalid credentials');
           throw new Error('Invalid credentials');
         } catch (error) {
           console.error('CredentialsProvider error:', error);
-          throw error; // Throw the error instead of returning null
+          throw error;
         }
       },
     }),
@@ -53,8 +55,7 @@ export const authOptions: AuthOptions = {
   callbacks: {
     async jwt({ token, account, profile, user }) {
       console.log('JWT callback:', { token, account, profile, user });
-      
-      // Add more details to the token
+
       if (account) {
         token.accessToken = account.access_token;
         token.provider = account.provider;
@@ -64,27 +65,24 @@ export const authOptions: AuthOptions = {
         token.email = profile.email || user?.email;
       }
       if (user) {
-        // Make sure user data is properly added to the token
         token.id = user.id || token.id;
         token.email = user.email || token.email;
       }
-      
+
       return token;
     },
     async session({ session, token }) {
       console.log('Session callback:', { session, token });
-      
-      // Send properties to the client, like an access_token and user id from a provider.
+
       session.accessToken = token.accessToken as string | undefined;
-      session.user.id = token.id as string; 
+      session.user.id = token.id as string;
       return session;
     },
     async signIn({ account, profile, user, credentials }) {
-      console.log('SignIn callback:', { account, profile, user });
-      
-      if (account?.provider) {
-        // OAuth Sign-in
-        console.log('OAuth Sign-in');
+      console.log('SignIn callback:', { account, profile, user, credentials });
+
+      if (account?.provider === 'google') {
+        console.log('SignIn callback: Google OAuth flow initiated');
         try {
           const res = await userAPI.syncOAuth({
             email: profile?.email,
@@ -92,53 +90,51 @@ export const authOptions: AuthOptions = {
             providerId: profile?.sub,
             provider: account.provider,
           });
-          
-          console.log('syncOAuth response:', res);
-          
+
+          console.log('SignIn callback (Google): syncOAuth response:', res);
+
           if (res.data?.needsRegistration) {
-            // New user that needs to complete registration
-            // Store the email in the state to pre-fill it in the registration form
             const state = Buffer.from(JSON.stringify({
               email: profile?.email,
               step: 2
             })).toString('base64');
-            
+
+            console.log('SignIn callback (Google): Registration required, throwing error');
             throw new Error(`Registration required#${state}`);
           }
-          
-          // Existing user - allow sign in
+
+          console.log('SignIn callback (Google): Sign-in successful');
           return true;
         } catch (error) {
-          console.error('OAuth Sign-in Error:', error);
+          console.error('SignIn callback (Google) Error:', error);
           if (error instanceof Error && error.message.startsWith('Registration required#')) {
-            // This is our custom error for registration flow - let it through
+            console.log('SignIn callback (Google): Propagating registration required error');
             throw error;
           }
+          console.log('SignIn callback (Google): Sign-in failed');
           return false; // Block sign in for other errors
         }
       } else if (credentials) {
-        // Email/Password Sign-in - handled by authorize in CredentialsProvider
+        // Email/Password Sign-in - logs are within the authorize function
+        console.log('SignIn callback: Credentials flow');
         return true;
       }
+
+      console.log('SignIn callback: Unknown provider or flow');
       return true; // Should not reach here usually
     },
     async redirect({ url, baseUrl }) {
       console.log('Redirect callback:', { url, baseUrl });
-      
-      // Handle our custom registration error
+
       if (url.includes('error=Registration%20required%23')) {
         const errorMessage = url.split('error=')[1];
         const state = errorMessage.split('Registration%20required%23')[1];
         return `${baseUrl}/auth/signin?state=${state}`;
       }
-      
-      // If the URL is an absolute URL and belongs to the same site, allow it
+
       if (url.startsWith(baseUrl)) return url;
-      
-      // If the URL starts with /, it's a relative URL, so append it to the base URL
       if (url.startsWith('/')) return `${baseUrl}${url}`;
-      
-      // Otherwise, return the training page
+
       return `${baseUrl}/training`;
     },
   },
@@ -147,12 +143,11 @@ export const authOptions: AuthOptions = {
   },
   events: {
     async createUser({ user }) {
-        // This event fires after a user is created via a provider.
-        console.log('User created:', user);
-      },
-      async signIn({ user, account, profile, isNewUser }) {
-        console.log('Sign-in event:', { user, account, profile, isNewUser });
-      },
+      console.log('User created:', user);
+    },
+    async signIn({ user, account, profile, isNewUser }) {
+      console.log('Sign-in event:', { user, account, profile, isNewUser });
+    },
   },
   debug: process.env.NODE_ENV === 'development',
-}; 
+};
