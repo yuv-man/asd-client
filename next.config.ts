@@ -27,24 +27,33 @@ const nextConfig = {
     return [
       {
         source: '/:path*',
-        headers: [
-          {
-            key: 'Content-Security-Policy',
-            value: `
-              default-src 'self';
-              script-src 'self' 'unsafe-inline' 'unsafe-eval' https://accounts.google.com https://apis.google.com;
-              style-src 'self' 'unsafe-inline';
-              img-src 'self' data: https:;
-              font-src 'self';
-              connect-src 'self' https://*.googleapis.com https://accounts.google.com https://asd-server.onrender.com/;
-              frame-src https://accounts.google.com;
-            `.replace(/\s+/g, ' ').trim()
-          },
-          {
-            key: 'X-Frame-Options',
-            value: 'SAMEORIGIN'
-          }
-        ]
+        async headers() {
+          return [
+            {
+              source: '/:path*',
+              headers: [
+                {
+                  key: 'Content-Security-Policy',
+                  value: `
+                    default-src 'self';
+                    script-src 'self' 'unsafe-inline' 'unsafe-eval' https://accounts.google.com;
+                    style-src 'self' 'unsafe-inline';
+                    img-src 'self' data: https:;
+                    font-src 'self';
+                    connect-src 'self' https://*.googleapis.com https://accounts.google.com 
+                                 https://asd-server.onrender.com http://localhost:5000 
+                                 ws://localhost:5000 wss://asd-server.onrender.com;
+                    frame-src https://accounts.google.com;
+                  `.replace(/\s+/g, ' ').trim()
+                },
+                {
+                  key: 'X-Frame-Options',
+                  value: 'SAMEORIGIN'
+                }
+              ]
+            }
+          ];
+        }
       }
     ];
   },
