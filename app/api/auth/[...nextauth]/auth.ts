@@ -3,7 +3,9 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import axios from 'axios';
 import { AuthOptions } from 'next-auth';
 
-const API_BASE = `${process.env.NEXT_PUBLIC_API_URL}/api`;
+const API_BASE = process.env.NEXT_PUBLIC_API_URL 
+  ? `${process.env.NEXT_PUBLIC_API_URL}/api` 
+  : 'http://localhost:5000/api';
 
 const userAPI = {
   syncOAuth: (user: any ) => axios.post(`${API_BASE}/auth/sync`, user),
@@ -91,35 +93,33 @@ export const authOptions: AuthOptions = {
       if (account?.provider === 'google') {
         console.log('SignIn callback: Google OAuth flow initiated');
         try {
-          const res = await userAPI.syncOAuth({
+          const result = await userAPI.syncOAuth({
             email: profile?.email,
             name: profile?.name,
             providerId: profile?.sub,
             provider: account.provider,
           });
 
-          console.log('SignIn callback (Google): syncOAuth response:', res);
+          if (result.data?.error) {
+            console.error('OAuth sync failed:', result.data.error);
+            return false;
+          }
 
-          if (res.data?.needsRegistration) {
+          if (result.data?.needsRegistration) {
             const state = Buffer.from(JSON.stringify({
               email: profile?.email,
               step: 2
             })).toString('base64');
-
-            console.log('SignIn callback (Google): Registration required, throwing error');
             throw new Error(`Registration required#${state}`);
           }
 
-          console.log('SignIn callback (Google): Sign-in successful');
           return true;
         } catch (error) {
           console.error('SignIn callback (Google) Error:', error);
           if (error instanceof Error && error.message.startsWith('Registration required#')) {
-            console.log('SignIn callback (Google): Propagating registration required error');
             throw error;
           }
-          console.log('SignIn callback (Google): Sign-in failed');
-          return false; // Block sign in for other errors
+          return false;
         }
       } else if (credentials) {
         // Email/Password Sign-in - logs are within the authorize function
