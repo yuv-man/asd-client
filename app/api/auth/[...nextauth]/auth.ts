@@ -3,6 +3,14 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import { userAPI } from '@/lib/api';
 import { AuthOptions } from 'next-auth';
 
+// ✅ TEMP DEBUG: Log env variables
+console.log('ENV CHECK: ', {
+    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+    GOOGLE_CLIENT_SECRET: !!process.env.GOOGLE_CLIENT_SECRET,
+    NEXTAUTH_SECRET: !!process.env.NEXTAUTH_SECRET,
+    NEXTAUTH_URL: process.env.NEXTAUTH_URL
+  });
+
 export const authOptions: AuthOptions = {
   providers: [
     GoogleProvider({
