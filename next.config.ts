@@ -36,7 +36,7 @@ const nextConfig = {
               style-src 'self' 'unsafe-inline';
               img-src 'self' data: https:;
               font-src 'self';
-              connect-src 'self' https://*.googleapis.com https://accounts.google.com https://wonderkid-backend.onrender.com;
+              connect-src 'self' https://*.googleapis.com https://accounts.google.com https://asd-server.onrender.com/;
               frame-src https://accounts.google.com;
             `.replace(/\s+/g, ' ').trim()
           },

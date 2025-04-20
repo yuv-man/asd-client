@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useUserStore } from '@/store/userStore';
 import bgLogin from '@/assets/background-login.png';
@@ -26,6 +26,12 @@ const Login = ({stepProp='1'}) => {
     avatarStyle: avatars[0].src,
     email: session?.user?.email || '', // Prefill email if available from OAuth sync
   });
+
+  useEffect(() => {
+    if (session?.user?.email) {
+      setFormData({ ...formData, email: session.user.email });
+    }
+  }, [session]);
 
   const handleOAuthSignIn = async (provider: 'google') => {
     signIn(provider, { callbackUrl: '/login' }); // Redirect back to login to check newUser param
