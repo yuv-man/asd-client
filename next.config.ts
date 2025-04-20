@@ -4,7 +4,7 @@ const withNextIntl = require('next-intl/plugin')('./i18n.config.js');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Configure webpack for SASS/SCSS files
+  // Configure webpack for SASS/SCSS files and SVG
   webpack(config: Configuration) {
     if (!config.module) {
       config.module = { rules: [] };
@@ -13,10 +13,36 @@ const nextConfig = {
       config.module.rules = [];
     }
 
-    // Add SVG handling
+    // Enhanced SVG handling - transform to React components with customizable options
     config.module.rules.push({
       test: /\.svg$/,
-      use: ["@svgr/webpack"],
+      use: [{
+        loader: '@svgr/webpack',
+        options: {
+          svgoConfig: {
+            plugins: [
+              {
+                name: 'preset-default',
+                params: {
+                  overrides: {
+                    // Don't remove the viewBox attribute - important for responsive SVGs
+                    removeViewBox: false,
+                    // Keep IDs to maintain functionality within SVGs
+                    cleanupIDs: false,
+                  },
+                },
+              },
+            ],
+          },
+          // Additional options for better SVG handling
+          prettier: false,
+          titleProp: true,
+        },
+      }],
+      issuer: {
+        // Only process SVGs imported from these file types
+        and: [/\.(js|ts)x?$/]
+      },
     });
 
     return config;
