@@ -118,7 +118,7 @@ const Login = ({stepProp='1'}) => {
                 className="oauth-button google"
                 onClick={() => handleOAuthSignIn('google')}
               >
-                <Image src={googleIcon} alt="Google" width={20} height={20} unoptimized/>
+                <Image src={googleIcon} alt="Google" width={20} height={20} unoptimized={true}/>
                 <span>Continue with Google</span>
               </motion.button>
             </div>
@@ -223,7 +223,7 @@ const Login = ({stepProp='1'}) => {
                         alt={`${avatar.id} avatar`}
                         width={100}
                         height={100}
-                        unoptimized
+                        unoptimized={true}
                       />
                     </motion.div>
                   ))}
