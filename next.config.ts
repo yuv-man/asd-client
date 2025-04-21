@@ -15,34 +15,9 @@ const nextConfig = {
 
     // Enhanced SVG handling - transform to React components with customizable options
     config.module.rules.push({
-      test: /\.svg$/,
-      use: [{
-        loader: '@svgr/webpack',
-        options: {
-          svgoConfig: {
-            plugins: [
-              {
-                name: 'preset-default',
-                params: {
-                  overrides: {
-                    // Don't remove the viewBox attribute - important for responsive SVGs
-                    removeViewBox: false,
-                    // Keep IDs to maintain functionality within SVGs
-                    cleanupIDs: false,
-                  },
-                },
-              },
-            ],
-          },
-          // Additional options for better SVG handling
-          prettier: false,
-          titleProp: true,
-        },
-      }],
-      issuer: {
-        // Only process SVGs imported from these file types
-        and: [/\.(js|ts)x?$/]
-      },
+      test: /\.svg$/i,
+      issuer: /\.[jt]sx?$/,
+      use: ["@svgr/webpack"], 
     });
 
     return config;
