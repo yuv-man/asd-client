@@ -13,7 +13,6 @@ import { User } from '@/types/types';
 import { userAPI } from '@/lib/api';
 import '@/app/styles/Login.scss';
 import { signIn, useSession } from 'next-auth/react';
-import googleIcon from '@/public/google-icon.svg';
 
 const Login = ({stepProp='1'}) => {
   const router = useRouter();
@@ -118,7 +117,7 @@ const Login = ({stepProp='1'}) => {
                 className="oauth-button google"
                 onClick={() => handleOAuthSignIn('google')}
               >
-                <Image src={googleIcon} alt="Google" width={20} height={20}/>
+                <Image src='/google-icon.svg' alt="Google" width={20} height={20}/>
                 <span>Continue with Google</span>
               </motion.button>
             </div>
