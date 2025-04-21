@@ -13,8 +13,7 @@ import { User } from '@/types/types';
 import { userAPI } from '@/lib/api';
 import '@/app/styles/Login.scss';
 import { signIn, useSession } from 'next-auth/react';
-// Import GoogleIcon as a component
-import GoogleIcon from '@/public/google-icon.svg';
+import googleIcon from '@/public/google-icon.svg';
 
 const Login = ({stepProp='1'}) => {
   const router = useRouter();
@@ -24,8 +23,8 @@ const Login = ({stepProp='1'}) => {
   const [formData, setFormData] = useState({
     name: '',
     age: '4',
-    avatarStyle: avatars[0].id, // Store the avatar ID
-    email: session?.user?.email || '',
+    avatarStyle: avatars[0].src,
+    email: session?.user?.email || '', // Prefill email if available from OAuth sync
   });
 
   useEffect(() => {
@@ -35,7 +34,7 @@ const Login = ({stepProp='1'}) => {
   }, [session]);
 
   const handleOAuthSignIn = async (provider: 'google') => {
-    signIn(provider, { callbackUrl: '/login' });
+    signIn(provider, { callbackUrl: '/login' }); // Redirect back to login to check newUser param
   };
 
   const handleEmailPasswordSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -51,6 +50,7 @@ const Login = ({stepProp='1'}) => {
     });
 
     if (res?.error) {
+      // Handle login error (e.g., display a message)
       console.error('Email/Password Login Error:', res.error);
     } else {
       router.push('/training');
@@ -68,13 +68,10 @@ const Login = ({stepProp='1'}) => {
     } else if (step === 2) {
       setStep(3);
     } else {
-      // Find the selected avatar
-      const selectedAvatar = avatars.find(avatar => avatar.id === formData.avatarStyle) || avatars[0];
-      
       const userData: User = {
         name: formData.name,
         age: parseInt(formData.age),
-        avatarUrl: formData.avatarStyle, // Store the avatar ID
+        avatarUrl: formData.avatarStyle,
         lastLogin: new Date(),
         language: 'en',
         dailyUsage: [{ date: new Date(), totalTimeSpentMinutes: 0, sessionsCount: 1 }],
@@ -83,7 +80,7 @@ const Login = ({stepProp='1'}) => {
           speech: { overallScore: undefined, exercisesCompleted: 0, averageScore: 0, lastActivity: undefined, difficultyLevel: 1, enabled: true },
           cognitive: { overallScore: undefined, exercisesCompleted: 0, averageScore: 0, lastActivity: undefined, difficultyLevel: 1, enabled: true },
         },
-        email: formData.email,
+        email: formData.email, // Use the parent's email from OAuth or entered manually
       };
       const res = await userAPI.create(userData);
       const user = res.data;
@@ -121,8 +118,7 @@ const Login = ({stepProp='1'}) => {
                 className="oauth-button google"
                 onClick={() => handleOAuthSignIn('google')}
               >
-                {/* Use GoogleIcon as a React component */}
-                <GoogleIcon width={20} height={20} />
+                <Image src={googleIcon} alt="Google" width={20} height={20} unoptimized/>
                 <span>Continue with Google</span>
               </motion.button>
             </div>
@@ -212,25 +208,25 @@ const Login = ({stepProp='1'}) => {
               <div>
                 <p>Choose your avatar:</p>
                 <div className="avatar-grid">
-                  {avatars.map((avatar) => {
-                    // Get the SVG Component from the avatar object
-                    const AvatarComponent = avatar.Component;
-                    
-                    return (
-                      <motion.div
-                        key={avatar.id}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        className={`avatar-item ${
-                          formData.avatarStyle === avatar.id ? 'selected' : ''
-                        }`}
-                        onClick={() => setFormData({ ...formData, avatarStyle: avatar.id })}
-                      >
-                        {/* Render the SVG component directly */}
-                        <AvatarComponent width={100} height={100} />
-                      </motion.div>
-                    );
-                  })}
+                  {avatars.map((avatar) => (
+                    <motion.div
+                      key={avatar.id}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className={`avatar-item ${
+                        formData.avatarStyle === avatar.id ? 'selected' : ''
+                      }`}
+                      onClick={() => setFormData({ ...formData, avatarStyle: avatar.id })}
+                    >
+                      <Image
+                        src={avatar.src}
+                        alt={`${avatar.id} avatar`}
+                        width={100}
+                        height={100}
+                        unoptimized
+                      />
+                    </motion.div>
+                  ))}
                 </div>
               </div>
             )}
@@ -255,3 +251,4 @@ const Login = ({stepProp='1'}) => {
 };
 
 export default Login;
+                 
