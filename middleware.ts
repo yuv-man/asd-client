@@ -26,10 +26,22 @@ async function getUserByEmail(email: string) {
     });
     
     if (!response.ok) {
-      throw new Error(`API returned ${response.status}`);
+      console.error(`API returned status ${response.status}`);
+      return null;
     }
     
-    return await response.json();
+    const text = await response.text(); // Get response as text first
+    if (!text) {
+      console.error('Empty response from API');
+      return null;
+    }
+
+    try {
+      return JSON.parse(text); // Then try to parse as JSON
+    } catch (parseError) {
+      console.error('Failed to parse JSON response:', text);
+      return null;
+    }
   } catch (error) {
     console.error('Error fetching user by email:', error);
     return null;

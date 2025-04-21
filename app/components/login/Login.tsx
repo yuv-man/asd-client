@@ -118,7 +118,7 @@ const Login = ({stepProp='1'}) => {
                 className="oauth-button google"
                 onClick={() => handleOAuthSignIn('google')}
               >
-                <img src={googleIcon} alt="Google" width={20} height={20}/>
+                <Image src={googleIcon} alt="Google" width={20} height={20}/>
                 <span>Continue with Google</span>
               </motion.button>
             </div>
@@ -219,7 +219,7 @@ const Login = ({stepProp='1'}) => {
                       onClick={() => setFormData({ ...formData, avatarStyle: avatar.id })}
                     >
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
+                      <Image
                         src={avatar.src}
                         alt={`${avatar.id} avatar`}
                         width={100}
