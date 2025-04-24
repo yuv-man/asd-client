@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import puzzleImage from '@/assets/images/puzzle.png';
+import puzzleImage from '@/public/images/puzzle.png';
 import { useState, useEffect, useCallback } from "react";
 import { PuzzlePiece } from '@/types/types';
 import { ExerciseProps } from '@/types/props';

@@ -2,13 +2,13 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { signIn } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 import { useRouter, useParams } from 'next/navigation';
 import Image from 'next/image';
 import { lilitaOne } from '@/assets/fonts';
-import bgLogin from '@/assets/background-login.png';
+import bgLogin from '@/public/images/background-login.png';
 import '@/app/styles/Login.scss';
-
+import { userAPI } from '@/lib/api';
 type AuthMode = 'initial' | 'signin' | 'signup';
 
 const Login = () => {
@@ -18,13 +18,26 @@ const Login = () => {
   const [authMode, setAuthMode] = useState<AuthMode>('initial');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { data: session } = useSession();
 
   const handleOAuthSignIn = async (provider: 'google') => {
-    signIn(provider, { 
-      callbackUrl: authMode === 'signup' 
-        ? `/${locale}/signup` 
-        : `/${locale}/training` 
-    });
+    if (authMode === 'signup') {
+      signIn(provider, { callbackUrl: `/${locale}/signup` });
+    } else {
+      // Sign in first, then check if user exists
+      const result = await signIn(provider, {
+        redirect: false,
+      });
+      
+      if (result?.ok) {
+        const user = await userAPI.getByEmail(session?.user?.email || '');
+        if (user) {
+          router.push(`/${locale}/training`);
+        } else {
+          router.push(`/${locale}/signup`);
+        }
+      }
+    }
   };
 
   const handleEmailSubmit = async (e: React.FormEvent) => {
@@ -42,7 +55,12 @@ const Login = () => {
         console.error('Sign in error:', result.error);
         // Add error handling UI here
       } else {
-        router.push(`/${locale}/training`);
+        const user = await userAPI.getByEmail(email);
+        if (user) {
+          router.push(`/${locale}/training`);
+        } else {
+          router.push(`/${locale}/signup?email=${email}`);
+        }
       }
     } else if (authMode === 'signup') {
       // Only pass email to signup page via URL params - NEVER pass password in URL
@@ -94,7 +112,7 @@ const Login = () => {
           className="oauth-button google"
           onClick={() => handleOAuthSignIn('google')}
         >
-          <Image src="/google-icon.svg" alt="Google" width={20} height={20} />
+          <Image src="/icons/google-icon.svg" alt="Google" width={20} height={20} />
           <span>Continue with Google</span>
         </motion.button>
       </div>

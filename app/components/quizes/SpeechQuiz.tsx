@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useUserStore, useInitialAssessmentStore } from '@/store/userStore';
 import { Exercise, ExerciseType, Score } from '@/types/types';
-import toucan from '@/assets/stars/parrot.svg';
 import { getExerciseComponent } from '../../helpers/exerciseComponents';
 import { exercisesAPI } from '@/lib/api'
 import ResultsModal from '@/app/components/common/ResultsModal';
@@ -117,7 +116,7 @@ const SpeechQuiz = ({isInitialAssessment}: {isInitialAssessment?: boolean}) => {
             exit={{ opacity: 0, y: -20 }}
             className="intro"
           >
-            <Image src={toucan} alt="toucan" width={100} height={100} className='toucan' />
+            <Image src="/stars/parrot.svg" alt="toucan" width={100} height={100} className='toucan' />
             <h2>{t('speechQuiz.welcome')}</h2>
             <p>
               {t('speechQuiz.instructions', { name: user?.name || '' })}

@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useUserStore, useInitialAssessmentStore } from '@/store/userStore';
 import { Exercise, Score, ExerciseType } from '@/types/types';
-import monkey from '@/assets/stars/monkey.svg';
 import { getExerciseComponent } from '../../helpers/exerciseComponents';
 import { exercisesAPI } from '@/lib/api'
 import ResultsModal from '@/app/components/common/ResultsModal';
@@ -117,7 +116,7 @@ const OTQuiz = ({isInitialAssessment}: {isInitialAssessment?: boolean}) => {
             exit={{ opacity: 0, y: -20 }}
             className="intro"
           >
-            <Image src={monkey} alt="monkey" width={100} height={100} />
+            <Image src="/stars/monkey.svg" alt="monkey" width={100} height={100} />
             <h2 className="title">
               {t('otQuiz.welcome')}
             </h2>

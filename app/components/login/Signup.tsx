@@ -6,7 +6,7 @@ import { useUserStore } from '@/store/userStore';
 import { useRouter, useParams } from 'next/navigation';
 import Image from 'next/image';
 import { lilitaOne } from '@/assets/fonts';
-import bgLogin from '@/assets/background-login.png';
+import bgLogin from '@/public/images/background-login.png';
 import AgeSelector from '../../ageSelector';
 import { avatars } from '../../helpers/avatars';
 import { User } from '@/types/types';

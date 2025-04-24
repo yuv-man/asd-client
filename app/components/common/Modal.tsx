@@ -1,5 +1,3 @@
-import zebra from '@/assets/animals/zebra.svg'
-import lion from '@/assets/animals/lion.svg'
 import Image from 'next/image';
 import '@/app/styles/Modal.scss';
 import { useTranslations } from 'next-intl';
@@ -29,7 +27,7 @@ export default function Modal({ title, isOpen, onClose, children }: ModalProps) 
         </div>
         <div className="modal-content">
           <div className="modal-title">
-            <Image src={title === 'Quiz' ? lion : zebra} alt="zebra" width={50} height={50} />
+            <Image src={title === 'Quiz' ? '/animals/lion.svg' : '/animals/zebra.svg'} alt="zebra" width={50} height={50} />
             <h1>{t(title ?? '')}</h1>
           </div>
           {children}

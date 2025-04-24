@@ -1,6 +1,3 @@
-import parrotIcon from '@/assets/stars/parrot.svg';
-import owlIcon from '@/assets/stars/owl.svg'
-import monkeyIcon from '@/assets/stars/monkey.svg';
 import { AreaType } from '@/types/types';
 
 export const areaTypes: { [key: string]: AreaType } = {
@@ -8,7 +5,7 @@ export const areaTypes: { [key: string]: AreaType } = {
     id: 'cognitive',
     class: 'cognitive',
     title: 'Cognitive Assessment',
-    icon: owlIcon,
+    icon: '/stars/owl.svg',
     description: 'Evaluate memory, attention, and problem-solving skills',
     color: 'pastelYellow',
     backgroundColor: 'pastelLightYellow',
@@ -18,7 +15,7 @@ export const areaTypes: { [key: string]: AreaType } = {
     id: 'speech',
     class: 'speech',
     title: 'Speech Therapy',
-    icon: parrotIcon,
+    icon: '/stars/parrot.svg',
     description: 'Assess communication and language abilities',
     color: 'pastelRed',
     backgroundColor: 'pastelLightRed',
@@ -28,7 +25,7 @@ export const areaTypes: { [key: string]: AreaType } = {
     id: 'ot',
     class: 'ot',
     title: 'Occupational Therapy',
-    icon: monkeyIcon,
+    icon: '/stars/monkey.svg',
     description: 'Evaluate motor skills and sensory processing',
     color: 'pastelBlue',
     backgroundColor: 'pastelLightBlue',

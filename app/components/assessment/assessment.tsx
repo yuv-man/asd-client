@@ -4,7 +4,6 @@ import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { useUserStore } from '@/store/userStore';
 import Image from 'next/image';
-import hello from '@/assets/hello.svg';
 import { areaTypes } from '@/app/helpers/areas';
 import { AreaType } from '@/types/types';
 import { useInitialAssessmentStore } from '@/store/userStore';
@@ -53,7 +52,7 @@ const InitialAssessment = () => {
         className="header"
       >
         <div className="header__greeting">
-          <Image src={hello} alt="Hello" width={50} height={50} />
+          <Image src="/hello.svg" alt="Hello" width={50} height={50} />
           <div>{t('assessment.hello')} <b>{user?.name}</b></div>
         </div>
         <h1 className="header__title">

@@ -5,8 +5,6 @@ import { useUserStore } from '@/store/userStore';
 import '@/app/styles/rythemGame.scss';
 import { ExerciseProps } from '@/types/props';
 import Play from './rythemGame-play';
-import speakerIcon from '@/assets/speaker.svg';
-import parentButton from '@/assets/help.svg';
 import RhymeGameParentInfo from './rythemGameParentsInfo';
 import { useTranslations } from 'next-intl';
 
@@ -71,13 +69,13 @@ const rythemGame: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyLev
           <h1 className='title'>
             <span className='highlight'>{t('rythemGame.title')}</span>
                 <div className="parents-help-button-container" onClick={() => setIsParentModalOpen(true)}>
-                    <Image src={parentButton} alt="Parents Help" width={20} height={20} />
+                    <Image src="/icons/help.svg" alt="Parents Help" width={20} height={20} />
                 </div>
           </h1>
             
           <div className='instructions'>
             <button onClick={() => speak(t('rythemGame.instructions'))} className='speakerButton'>
-              <Image src={speakerIcon} alt="Listen" width={40} height={40} />
+              <Image src="/icons/speaker.svg" alt="Listen" width={40} height={40} />
             </button>
             <p>{t('rythemGame.instructions')}</p>
           </div>

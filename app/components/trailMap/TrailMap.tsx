@@ -3,11 +3,10 @@ import React, { useEffect, useState, useMemo, useRef } from 'react';
 import { motion } from 'framer-motion';
 import '@/app/styles/TrailMap.scss';
 import Image from 'next/image';
-import balloon from '@/assets/airballoon.svg';
 import { FaCloud, FaCog } from 'react-icons/fa';
 import { TrailMapProps } from '@/types/props';
 import { areaTypes } from '@/app/helpers/areas';
-import bgStars from '@/assets/stars/bg-stars.svg';
+import bgStars from '@/public/stars/bg-stars.svg';
 
 export const TrailMap: React.FC<TrailMapProps> = ({
   sessions,
@@ -38,7 +37,7 @@ export const TrailMap: React.FC<TrailMapProps> = ({
   const animalIconSizes = useMemo(() => {
     if (windowWidth < 768) return Math.min(60, windowWidth * 0.15);
     if (windowWidth < 1024) return Math.min(80, windowWidth * 0.1);
-    return 70;
+    return 80;
   }, [windowWidth]);
 
   // 3. All useEffect hooks
@@ -280,7 +279,7 @@ export const TrailMap: React.FC<TrailMapProps> = ({
           style={{ position: 'absolute', pointerEvents: 'none', zIndex: 3 }}
         >
           <Image 
-            src={balloon} 
+            src="/airballoon.svg" 
             alt="Hot air balloon" 
             width={Math.min(110, windowWidth * 0.16)} // Close to original size
             height={Math.min(110, windowWidth * 0.16)}

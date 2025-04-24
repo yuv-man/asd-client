@@ -1,17 +1,11 @@
 // pages/index.js
 import { useState, useEffect, useRef, useCallback } from 'react';
-import soda from '@/assets/memoryIcons/soda-water.svg';
-import apple from '@/assets/memoryIcons/apple.svg';
-import fish from '@/assets/memoryIcons/fish.svg';
-import steak from '@/assets/memoryIcons/steak.svg';
-import poachEgg from '@/assets/memoryIcons/poached-eggs.svg';
 import Head from 'next/head';
 import '@/app/styles/catchObjects.scss';
 import { catchObjectSettings } from '../../helpers/difficultySettings';
 import { FallingObject } from '@/types/types';
 import { ExerciseProps } from '@/types/props';
 import Image from 'next/image';
-import basket from '@/assets/cars/shopping-card.svg';
 import { difficultyEnum } from '@/enums/enumDifficulty';
 import { useTranslations } from 'next-intl';
 
@@ -254,12 +248,12 @@ const CatchObjects: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyL
                 <Image 
                   src={
                     {
-                      apple,
-                      fish,
-                      soda,
-                      steak,
-                      poachedEgg: poachEgg
-                    }[obj.type] ?? apple  // Use nullish coalescing to provide a fallback image
+                      apple: '/memoryIcons/apple.svg',
+                      fish: '/animals/fish.svg',
+                      soda: '/memoryIcons/soda-water.svg',
+                      steak: '/memoryIcons/steak.svg',
+                      poachedEgg: '/memoryIcons/poached-eggs.svg'
+                    }[obj.type] ?? '/memoryIcons/apple.svg'  // Use nullish coalescing to provide a fallback image
                   } 
                   alt={obj.type} 
                   width={50} 
@@ -273,7 +267,7 @@ const CatchObjects: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyL
                 className="basket"
                 style={{ left: `${basketPosition}%` }}
               >
-                <Image src={basket} alt="basket" width={100} height={100} />
+                <Image src="/cars/shopping-card.svg" alt="basket" width={100} height={100} />
               </div>
             )}
             </div>

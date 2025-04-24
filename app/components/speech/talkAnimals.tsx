@@ -4,7 +4,6 @@ import { ExerciseProps } from '@/types/props';
 import '@/app/styles/talkAnimals.scss';
 import TalkAnimalsParentInfo from './TalkAnimalsParentInfo';
 import Image from 'next/image';
-import parentButton from '@/assets/help.svg';
 import Play from './talkAnimal-play';
 import { useTranslations } from 'next-intl';
 
@@ -77,7 +76,7 @@ const TalkAnimals: React.FC<ExerciseProps> = ({ onComplete, isTest, difficultyLe
             {t('talkAnimals.title')}
           </h1>
         <div className="parents-help-button-container" onClick={() => setIsParentModalOpen(true)}>
-            <Image src={parentButton} alt="Parents Help" width={20} height={20} />
+            <Image src="/icons/help.svg" alt="Parents Help" width={20} height={20} />
           </div>
         </div>
         

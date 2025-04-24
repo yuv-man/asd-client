@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useUserStore } from '@/store/userStore';
 import { Exercise, ExerciseType, Score } from '@/types/types';
-import owl from '@/assets/stars/owl.svg';
 import { getExerciseComponent } from '@/app/helpers/exerciseComponents';
 import { exercisesAPI } from '@/lib/api'
 import ResultsModal from '@/app/components/common/ResultsModal';
@@ -114,15 +113,16 @@ const CognitiveQuiz = ({isInitialAssessment}: {isInitialAssessment?: boolean}) =
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="intro-container"
+            className="intro"
           >
-            <Image src={owl} alt="owl" width={100} height={100} />
+            <Image src="/stars/owl.svg" alt="owl" width={100} height={100} />
             <h2>{t('cognitiveQuiz.welcome')}</h2>
             <p>{t('cognitiveQuiz.instructions', { name: user?.name || '' })}</p>
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={startQuiz}
+              className="start-button"
             >
               {t('cognitiveQuiz.start')}
               <ArrowRight />

@@ -5,8 +5,6 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import '@/app/styles/rythemGame.scss';
 import { RHYMING_SETS } from './rythemGame-helper';
-import speakerIcon from '@/assets/speaker.svg';
-import star from '@/assets/rythemGame/star.svg';
 import { useTranslations } from 'next-intl';
 
 declare global {
@@ -247,7 +245,7 @@ export default function Play({ isTest, difficultyLevel, onComplete }: any) {
             <div className="scoreBoard">
               <div className="stats-container">
                 <div className="stats-item score">
-                  <Image src={star} alt="Score" width={30} height={30} />
+                  <Image src="/icons/star.svg" alt="Score" width={30} height={30} />
                   <span>{score}</span>
                 </div>
                 <div className="stats-item round">
@@ -286,7 +284,7 @@ export default function Play({ isTest, difficultyLevel, onComplete }: any) {
                         className="speakerButton"
                         onClick={(e) => speakWord(currentSet.target.word, e)}
                       >
-                        <Image src={speakerIcon} alt="Listen" width={24} height={24} />
+                        <Image src="/icons/speaker.svg" alt="Listen" width={24} height={24} />
                       </button>
                     </div>
                   </div>
@@ -310,7 +308,7 @@ export default function Play({ isTest, difficultyLevel, onComplete }: any) {
                           className="speakerButton"
                           onClick={(e) => speakWord(option.word, e)}
                         >
-                          <Image src={speakerIcon} alt="Listen" width={20} height={20} />
+                          <Image src="/icons/speaker.svg" alt="Listen" width={20} height={20} />
                         </button>
                       </div>
                     </div>
@@ -331,7 +329,7 @@ export default function Play({ isTest, difficultyLevel, onComplete }: any) {
                 <p>{t('rythemPlay.gameOverMessage', { score })}</p>
                 <div className="starsContainer">
                   {Array.from({ length: score }).map((_, i) => (
-                    <Image key={i} src={star} alt="Star" width={40} height={40} />
+                    <Image key={i} src="/icons/star.svg" alt="Star" width={40} height={40} />
                   ))}
                 </div>
               </div>
