@@ -18,7 +18,12 @@ export async function middleware(request: NextRequest) {
   const token = await getToken({ req: request });
   console.log('Token status:', !!token);
   
-  const origin = request.nextUrl.origin;
+  // Get the origin, properly handling production environment
+  const origin = process.env.NEXT_PUBLIC_BASE_URL || 
+    (request.headers.get('x-forwarded-host') 
+      ? `https://${request.headers.get('x-forwarded-host')}`
+      : request.nextUrl.origin);
+  
   const locale = request.nextUrl.pathname.startsWith('/he') ? 'he' : 'en';
   const pathWithoutLocale = request.nextUrl.pathname.replace(/^\/(?:en|he)/, '');
   

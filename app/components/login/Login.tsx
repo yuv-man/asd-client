@@ -31,6 +31,7 @@ const Login = () => {
       
       if (result?.ok) {
         const user = await userAPI.getByEmail(session?.user?.email || '');
+        console.log('user', user);
         if (user) {
           router.push(`/${locale}/training`);
         } else {
