@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { signIn, useSession } from 'next-auth/react';
+import { signIn, useSession, getSession } from 'next-auth/react';
 import { useRouter, useParams } from 'next/navigation';
 import Image from 'next/image';
 import { lilitaOne } from '@/assets/fonts';
@@ -24,19 +24,31 @@ const Login = () => {
     if (authMode === 'signup') {
       signIn(provider, { callbackUrl: `/${locale}/signup` });
     } else {
-      // Sign in first, then check if user exists
-      const result = await signIn(provider, {
-        redirect: false,
-      });
-      
-      if (result?.ok) {
-        const user = await userAPI.getByEmail(session?.user?.email || '');
-        console.log('user', user);
-        if (user) {
-          router.push(`/${locale}/training`);
+      try {
+        const result = await signIn(provider, {
+          redirect: false,
+        });
+        
+        if (result?.ok) {
+          // Force a session update and wait for it
+          await getSession();
+          await new Promise(resolve => setTimeout(resolve, 500));
+          
+          // Get fresh session after the delay
+          const session = await getSession();
+          if (session?.user?.email) {
+            const userExists = await userAPI.checkUserExists(session.user.email);
+            if (userExists) {
+              router.push(`/${locale}/training`);
+            } else {
+              router.push(`/${locale}/signup`);
+            }
+          }
         } else {
-          router.push(`/${locale}/signup`);
+          console.error('Sign in failed:', result?.error);
         }
+      } catch (error) {
+        console.error('OAuth sign in error:', error);
       }
     }
   };
