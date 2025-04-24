@@ -10,107 +10,69 @@ const intlMiddleware = createMiddleware({
   localeDetection: false
 });
 
-// Server-safe API call function
-async function getUserByEmail(email: string) {
-  if (!process.env.NEXT_PUBLIC_API_URL) {
-    console.error("API URL environment variable not defined");
-    return null;
-  }
-
-  try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/profile/email/${email}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    
-    if (!response.ok) {
-      console.error(`API returned status ${response.status}`);
-      return null;
-    }
-    
-    const text = await response.text(); // Get response as text first
-    if (!text) {
-      console.error('Empty response from API');
-      return null;
-    }
-
-    try {
-      return JSON.parse(text); // Then try to parse as JSON
-    } catch (parseError) {
-      console.error('Failed to parse JSON response:', text);
-      return null;
-    }
-  } catch (error) {
-    console.error('Error fetching user by email:', error);
-    return null;
-  }
-}
-
 // Main middleware function
 export async function middleware(request: NextRequest) {
+  console.log('Middleware started:', request.nextUrl.pathname);
+  
   // Get the auth token
   const token = await getToken({ req: request });
+  console.log('Token status:', !!token);
+  
   const origin = request.nextUrl.origin;
   const locale = request.nextUrl.pathname.startsWith('/he') ? 'he' : 'en';
-  const isLoginPage = /^\/(?:en|he)\/login\/?$/.test(request.nextUrl.pathname);
+  const pathWithoutLocale = request.nextUrl.pathname.replace(/^\/(?:en|he)/, '');
+  
+  // Check if this is the root path
+  const isRootPath = request.nextUrl.pathname === '/' || request.nextUrl.pathname === `/${locale}`;
+  
+  // Define auth-related paths
+  const isLoginPage = pathWithoutLocale === '/login' || pathWithoutLocale === '/auth/signin';
+  
+  
+  // Public paths that don't require authentication checks
+  const publicPaths = [
+    '/login',
+    '/auth/signin',
+    '/signup',
+    '/auth/signup',
+    '/auth/error',
+    '/api',
+    '/terms',
+    '/privacy',
+    '/about'
+  ];
+  
+  const isPublicPath = publicPaths.some(path => pathWithoutLocale.startsWith(path));
+  
+  console.log('Path info:', { 
+    origin, 
+    locale, 
+    pathWithoutLocale,
+    isRootPath,
+    isLoginPage,
+    isPublicPath
+  });
 
-  // Special case for root path
-  if (request.nextUrl.pathname === '/') {
-    // Flow 2: No token => redirect to login
-    if (!token || !token.email) {
-      return NextResponse.redirect(`${origin}/${locale}/login`);
+  // Handle no token case first
+  if (!token) {
+    // If trying to access protected route, redirect to login
+    if (!isPublicPath) {
+      console.log('No token, redirecting to login');
+      const callbackUrl = encodeURIComponent(request.nextUrl.pathname + request.nextUrl.search);
+      return NextResponse.redirect(`${origin}/${locale}/login?callbackUrl=${callbackUrl}`);
     }
     
-    // For Flow 1 & 3, check if user exists
-    try {
-      const userData = await getUserByEmail(token.email as string);
-      
-      if (!userData || !userData.data) {
-        // Flow 3: Token + No user => redirect to login step 2
-        return NextResponse.redirect(`${origin}/${locale}/login?step=2`);
-      }
-      
-      // Flow 1: Token + User => redirect to training
-      return NextResponse.redirect(`${origin}/${locale}/training`);
-    } catch (error) {
-      console.error('Error in middleware:', error);
-      // Default to login page on error
+    // If on root path, redirect to login
+    if (isRootPath) {
+      console.log('Root path with no token, redirecting to login');
       return NextResponse.redirect(`${origin}/${locale}/login`);
     }
+     // Otherwise continue to public page
+    return intlMiddleware(request);
   }
+ 
   
-  // For non-root paths
-  if (!token && !isLoginPage) {
-    // Flow 2: No token on protected route => redirect to login
-    return NextResponse.redirect(`${origin}/${locale}/login`);
-  }
-  
-  if (token && token.email && isLoginPage) {
-    try {
-      const userData = await getUserByEmail(token.email as string);
-      
-      if (!userData || !userData.data) {
-        // Flow 3: Token + No user on login page => ensure on step 2
-        // Only redirect if not already on step 2
-        const currentStep = new URL(request.url).searchParams.get('step');
-        if (currentStep !== '2') {
-          return NextResponse.redirect(`${origin}/${locale}/login?step=2`);
-        }
-        // Otherwise stay on login page with step=2
-        return NextResponse.next();
-      }
-      // Flow 1: Token + User on login page => redirect to training
-      return NextResponse.redirect(`${origin}/${locale}/training`);
-    } catch (error) {
-      console.error('Error in middleware:', error);
-      // Stay on login page on error
-      return NextResponse.next();
-    }
-  }
-  
-  // Apply intl middleware for everything else
+  // Apply intl middleware for anything else
   return intlMiddleware(request);
 }
 

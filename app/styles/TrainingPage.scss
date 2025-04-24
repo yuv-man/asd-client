@@ -11,6 +11,8 @@
 
   .session-info {
     margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
 
     .completed-count {
       margin-top: 1rem;
@@ -22,9 +24,10 @@
     color: white;
     padding: 0.5rem 1rem;
     border-radius: 0.25rem;
+    align-self: center;
     
     &:hover {
-      background-color: #2563eb; // blue-600 equivalent
+      background-color: #2563eb;
     }
   }
 
