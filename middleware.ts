@@ -75,7 +75,12 @@ export async function middleware(request: NextRequest) {
      // Otherwise continue to public page
     return intlMiddleware(request);
   }
- 
+
+  // If user has token and tries to access login pages, redirect to homepage
+  if (token && isLoginPage) {
+    console.log('User with token accessing login page, redirecting to homepage');
+    return NextResponse.redirect(`${origin}/${locale}`);
+  }
   
   // Apply intl middleware for anything else
   return intlMiddleware(request);

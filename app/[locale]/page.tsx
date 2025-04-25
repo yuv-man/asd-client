@@ -25,7 +25,7 @@ export default function Home() {
       sessionStore.initializeSessions();
       router.push('/training');
     } else {
-      router.push('/login');
+      router.push('/signup');
     }
   }, [isHydrated, user, router, sessionStore]);
 
