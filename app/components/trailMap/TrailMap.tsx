@@ -6,7 +6,6 @@ import Image from 'next/image';
 import { FaCloud, FaCog } from 'react-icons/fa';
 import { TrailMapProps } from '@/types/props';
 import { areaTypes } from '@/app/helpers/areas';
-import bgStars from '@/public/stars/bg-stars.svg';
 
 export const TrailMap: React.FC<TrailMapProps> = ({
   sessions,
@@ -79,9 +78,10 @@ export const TrailMap: React.FC<TrailMapProps> = ({
   if (isLoading || !windowHeight || !windowWidth) {
     return (
       <div className="trailMapContainer" style={{
-        background: `url(${bgStars.src})`,
+        backgroundImage: `url('/stars/bg-stars.svg')`,
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center'
@@ -121,9 +121,10 @@ export const TrailMap: React.FC<TrailMapProps> = ({
     <div 
       className="trailMapContainer"
       style={{
-        background: `url(${bgStars.src})`,
+        backgroundImage: `url('/stars/bg-stars.svg')`,
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center',
         overflow: 'hidden',
         position: 'relative',
         height: '100vh',

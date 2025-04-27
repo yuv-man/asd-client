@@ -9,7 +9,7 @@ import '@/app/styles/mainPage.scss';
 
 export default function Home() {
   const router = useRouter();
-  const user = useUserStore((state) => state.user);
+  const { user, setUser } = useUserStore();
   const [isHydrated, setIsHydrated] = useState(false);
 
   const checkUser = async () => {
@@ -20,6 +20,7 @@ export default function Home() {
       const session = await getSession();
       const userResponse = await userAPI.getByEmail(session?.user?.email || '');
       if (userResponse) {
+        setUser(userResponse.data);
         sessionStore.initializeSessions();
         router.push('/training');
       } else {
