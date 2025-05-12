@@ -20,7 +20,7 @@
   &__title {
     font-size: 1.5rem;
     font-weight: 700;
-    color: #111827;
+    color: $dark-purple;
     margin-bottom: 0.5rem;
 
     @media (min-width: $breakpoint-sm) {
@@ -30,7 +30,7 @@
 
   &__subtitle {
     font-size: 0.875rem;
-    color: #4B5563;
+    color: $pastel-blue;
 
     @media (min-width: $breakpoint-sm) {
       font-size: 1rem;
@@ -66,16 +66,17 @@
   }
 
   &__card {
-    background-color: white;
+    background-color: $pastel-light-purple;
     border-radius: 0.75rem;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     padding: 1rem;
-    border: 1px solid #E5E7EB;
+    border: 1px solid $border-color;
     transition: transform 0.2s ease-in-out;
 
     &:hover {
       transform: translateY(-2px);
       box-shadow: 0 6px 8px -1px rgba(0, 0, 0, 0.1);
+      background-color: $pastel-purple;
     }
 
     @media (min-width: $breakpoint-sm) {
@@ -86,7 +87,7 @@
   &__card-title {
     font-size: 1.125rem;
     font-weight: 600;
-    margin-bottom: 1rem;
+    color: $dark-purple;
 
     @media (min-width: $breakpoint-sm) {
       font-size: 1.25rem;
@@ -101,7 +102,7 @@
 
   &__empty {
     text-align: center;
-    color: #6B7280;
+    color: $pastel-blue;
     padding: 1rem 0;
   }
 }
@@ -109,15 +110,15 @@
 .activity-item {
   display: flex;
   flex-direction: column;
-  background-color: #F9FAFB;
+  background-color: $light-gray;
   padding: 0.75rem;
   border-radius: 0.5rem;
   margin-bottom: 0.75rem;
-  border: 1px solid #E5E7EB;
+  border: 1px solid $border-color;
   transition: background-color 0.2s ease;
 
   &:hover {
-    background-color: #F3F4F6;
+    background-color: $pastel-light-purple;
   }
 
   @media (min-width: $breakpoint-sm) {

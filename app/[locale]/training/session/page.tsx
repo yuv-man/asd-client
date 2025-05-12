@@ -13,10 +13,6 @@ import { useCallback, useState } from 'react'
 function TrainingSessionPage() {
     const { currentSession, updateSession, moveToNextSession } = useSessions();
     const [isProcessingCompletion, setIsProcessingCompletion] = useState(false);
-  
-    if (!currentSession) {
-        return <span className="loader"></span>;
-    }
     
     const handleSessionCompletion = useCallback(async (session: Session) => {
         // Prevent duplicate completion using the processing flag
@@ -35,9 +31,12 @@ function TrainingSessionPage() {
         }
     }, [updateSession, moveToNextSession, isProcessingCompletion]);
 
+    if (!currentSession) {
+        return <span className="loader"></span>;
+    }
+
     return (
         <main className="training-session-page">
-            <h1>Training Session</h1>
             <TrainingSession session={currentSession} onComplete={handleSessionCompletion}/>
         </main>
     )

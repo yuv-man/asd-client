@@ -1,7 +1,4 @@
-// Add SCSS variables for breakpoints
-$mobile: 480px;
-$tablet: 768px;
-$small-screen: 640px;
+@use './variables' as *;
 
 // Add a mixin for responsive styles
 @mixin responsive($breakpoint) {
@@ -79,7 +76,7 @@ $small-screen: 640px;
           cursor: pointer;
 
           &:hover, &.selected {
-            ring: 2px solid var(--primary-500);
+            ring: 2px solid $pastel-blue;
           }
         }
       }
@@ -117,7 +114,7 @@ $small-screen: 640px;
 
           &:focus {
             outline: none;
-            border-color: var(--primary-500);
+            border-color: $pastel-blue;
           }
         }
       }

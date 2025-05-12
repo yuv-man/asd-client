@@ -39,7 +39,7 @@ const ClientSettingsContent = () => {
             <div className="nav-content">
               <div className="nav-items">
                 <div className="nav-buttons">
-                  <Image src={logo} alt="logo" width={15} height={15} />
+                  <Image src={logo} alt="logo" width={30} height={30} />
                   <button
                     className={`nav-button ${activeTab === 'profile' ? 'active' : ''}`}
                     onClick={() => setActiveTab('profile')}

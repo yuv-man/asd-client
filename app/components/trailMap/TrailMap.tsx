@@ -1,11 +1,32 @@
 'use client'
-import React, { useEffect, useState, useMemo, useRef } from 'react';
+import React, { useEffect, useState, useMemo, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import '@/app/styles/TrailMap.scss';
 import Image from 'next/image';
 import { FaCloud, FaCog } from 'react-icons/fa';
 import { TrailMapProps } from '@/types/props';
 import { areaTypes } from '@/app/helpers/areas';
+import { Session, Exercise } from '@/types/types';
+
+const BREAKPOINTS = {
+  MOBILE: 768,
+  TABLET: 1024
+} as const;
+
+const ANIMATION_CONFIG = {
+  DURATION: 0.8,
+  STIFFNESS: 100
+} as const;
+
+const STYLE_CONSTANTS = {
+  PADDING_TOP: 0.2,
+  PADDING_BOTTOM: 0.2,
+  BUTTON_GRADIENTS: {
+    completed: 'linear-gradient(135deg, rgb(139, 222, 174) 0%, #38A169 100%)',
+    available: 'linear-gradient(135deg,rgb(170, 211, 240) 0%,rgb(95, 170, 231) 100%)',
+    locked: 'linear-gradient(135deg, #CBD5E0 0%, #A0AEC0 100%)'
+  }
+} as const;
 
 export const TrailMap: React.FC<TrailMapProps> = ({
   sessions,
@@ -14,36 +35,45 @@ export const TrailMap: React.FC<TrailMapProps> = ({
   onSettingsClick,
   onQuizSelect
 }) => {
-  // 1. All useState hooks
+  // 1. Move all hooks to the top
   const [displayedSessions, setDisplayedSessions] = useState(sessions);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [windowHeight, setWindowHeight] = useState(0);
-  const [windowWidth, setWindowWidth] = useState(0);
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const [isLoading, setIsLoading] = useState(true);
   
+  // Move these callback hooks before any conditional returns
+  const handleQuizSelect = useCallback((areaId: string) => {
+    onQuizSelect(areaId);
+  }, [onQuizSelect]);
+
+  const handleSessionSelect = useCallback((session: Session) => {
+    if (session.isAvailable) {
+      onSessionSelect(session.id);
+    }
+  }, [onSessionSelect]);
+
   // 2. All derived values and useMemo hooks
-  const sessionHeight = Math.min(windowHeight * 0.15, 180);
+  const sessionHeight = Math.min(dimensions.height * 0.15, 180);
   
   const buttonSize = useMemo(() => {
-    if (windowWidth < 768) {
-      return Math.min(50, windowWidth * 0.12);
-    } else if (windowWidth < 1024) {
-      return Math.min(55, windowWidth * 0.11);
+    if (dimensions.width < 768) {
+      return Math.min(50, dimensions.width * 0.12);
+    } else if (dimensions.width < 1024) {
+      return Math.min(55, dimensions.width * 0.11);
     }
     return 58;
-  }, [windowWidth]);
+  }, [dimensions.width]);
 
   const animalIconSizes = useMemo(() => {
-    if (windowWidth < 768) return Math.min(60, windowWidth * 0.15);
-    if (windowWidth < 1024) return Math.min(80, windowWidth * 0.1);
+    if (dimensions.width < 768) return Math.min(60, dimensions.width * 0.15);
+    if (dimensions.width < 1024) return Math.min(80, dimensions.width * 0.1);
     return 80;
-  }, [windowWidth]);
+  }, [dimensions.width]);
 
   // 3. All useEffect hooks
   useEffect(() => {
     const updateDimensions = () => {
-      setWindowHeight(window.innerHeight);
-      setWindowWidth(window.innerWidth);
+      setDimensions({ width: window.innerWidth, height: window.innerHeight });
       setIsLoading(false);
     };
     
@@ -56,26 +86,29 @@ export const TrailMap: React.FC<TrailMapProps> = ({
     setDisplayedSessions(sessions);
   }, [sessions]);
 
+  const generateNewSessions = (currentLength: number) => {
+    return Array(2).fill(null).map((_, index) => ({
+      id: `session-${currentLength + index}`,
+      exercises: Array(3).fill({
+        id: 'exercise',
+        isCompleted: false
+      }),
+      isAvailable: false,
+      isCompleted: false,
+      position: { x: 0, y: 0 },
+      completedExercises: 0
+    }));
+  };
+
   useEffect(() => {
     if (currentPosition >= displayedSessions.length - 1) {
-      const newSessions = Array(2).fill(null).map((_, index) => ({
-        id: `session-${displayedSessions.length + index}`,
-        exercises: Array(3).fill({
-          id: 'exercise',
-          isCompleted: false
-        }),
-        isAvailable: false,
-        isCompleted: false,
-        position: { x: 0, y: 0 },
-        completedExercises: 0
-      }));
-      
+      const newSessions = generateNewSessions(displayedSessions.length);
       setDisplayedSessions([...displayedSessions, ...newSessions]);
     }
-  }, [currentPosition, displayedSessions, sessions]);
+  }, [currentPosition, displayedSessions]);
 
-  // Loading check after all hooks
-  if (isLoading || !windowHeight || !windowWidth) {
+  // Now we can have the loading check
+  if (isLoading || !dimensions.height || !dimensions.width) {
     return (
       <div className="trailMapContainer" style={{
         backgroundImage: `url('/stars/bg-stars.svg')`,
@@ -93,19 +126,15 @@ export const TrailMap: React.FC<TrailMapProps> = ({
     );
   }
 
-  const handleQuizSelect = (areaId: string) => {
-    onQuizSelect(areaId);
-  };
-
   // Calculate exact container height with padding to prevent cut-off
-  const exactContainerHeight = (displayedSessions.length * sessionHeight) + (windowHeight * 0.4);
+  const exactContainerHeight = (displayedSessions.length * sessionHeight) + (dimensions.height * 0.4);
   
   // Calculate scroll position to center current session with some extra space
-  const targetScrollY = Math.max(0, ((displayedSessions.length - currentPosition - 1) * sessionHeight) - (windowHeight / 2) + (sessionHeight / 2));
+  const targetScrollY = Math.max(0, ((displayedSessions.length - currentPosition - 1) * sessionHeight) - (dimensions.height / 2) + (sessionHeight / 2));
   
   // Improved drag constraints with padding to prevent cut-off
-  const maxDragUp = -(exactContainerHeight - windowHeight);
-  const maxDragDown = windowHeight * 0.2; // Allow some overscroll at the top
+  const maxDragUp = -(exactContainerHeight - dimensions.height);
+  const maxDragDown = dimensions.height * 0.2; // Allow some overscroll at the top
 
   // Fixed animal positions that are definitely on screen
   const animalPositions = [
@@ -133,6 +162,8 @@ export const TrailMap: React.FC<TrailMapProps> = ({
     >
       {/* Settings button with original positioning */}
       <motion.div
+        role="button"
+        aria-label="Settings"
         className="settingsButton"
         onClick={onSettingsClick}
         whileHover={{ scale: 1.1 }}
@@ -153,7 +184,7 @@ export const TrailMap: React.FC<TrailMapProps> = ({
           boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
         }}
       >
-        <FaCog size={Math.min(16, windowWidth * 0.05)} color="white" />
+        <FaCog size={Math.min(16, dimensions.width * 0.05)} color="white" />
       </motion.div>
 
       {/* Scrollable content - with increased padding */}
@@ -170,8 +201,8 @@ export const TrailMap: React.FC<TrailMapProps> = ({
         style={{ 
           
           width: '100%',
-          paddingTop: `${windowHeight * 0.2}px`,  // Add padding to prevent cut-off
-          paddingBottom: `${windowHeight * 0.2}px` // Add padding to prevent cut-off
+          paddingTop: `${dimensions.height * STYLE_CONSTANTS.PADDING_TOP}px`,  // Add padding to prevent cut-off
+          paddingBottom: `${dimensions.height * STYLE_CONSTANTS.PADDING_BOTTOM}px` // Add padding to prevent cut-off
         }}
       >
         {/* Animal buttons with fixed on-screen positions */}
@@ -215,9 +246,9 @@ export const TrailMap: React.FC<TrailMapProps> = ({
           
           // Maintain original horizontal positions
           const getHorizontalPosition = () => {
-            if (windowWidth < 768) {
+            if (dimensions.width < 768) {
               return isEven ? '30%' : '70%'; 
-            } else if (windowWidth < 1024) {
+            } else if (dimensions.width < 1024) {
               return isEven ? '35%' : '65%';
             }
             return isEven ? '40%' : '60%'; // Original desktop spacing
@@ -237,10 +268,10 @@ export const TrailMap: React.FC<TrailMapProps> = ({
                 cursor: session.isAvailable ? 'pointer' : 'not-allowed',
                 zIndex: 2,
                 background: progressPercentage === 100
-                  ? 'linear-gradient(135deg, rgb(139, 222, 174) 0%, #38A169 100%)'
+                  ? STYLE_CONSTANTS.BUTTON_GRADIENTS.completed
                   : session.isAvailable
-                    ? 'linear-gradient(135deg,rgb(170, 211, 240) 0%,rgb(95, 170, 231) 100%)'
-                    : 'linear-gradient(135deg, #CBD5E0 0%, #A0AEC0 100%)',
+                    ? STYLE_CONSTANTS.BUTTON_GRADIENTS.available
+                    : STYLE_CONSTANTS.BUTTON_GRADIENTS.locked,
                 display: 'flex',
                 border: '2px solid darkBlue',
                 alignItems: 'center',
@@ -253,10 +284,10 @@ export const TrailMap: React.FC<TrailMapProps> = ({
               }}
               initial={{ scale: 1 }}
               whileHover={session.isAvailable ? { scale: 1.1 } : {}}
-              onClick={() => session.isAvailable && onSessionSelect(session.id)}
+              onClick={() => handleSessionSelect(session)}
             >
               <div className="progressIndicator">
-                <FaCloud size={Math.min(30, windowWidth * 0.050)} color="white" /> 
+                <FaCloud size={Math.min(30, dimensions.width * 0.050)} color="white" /> 
                 <div className="progressText" 
                   style={{ fontSize: 'clamp(12px, 2.5vw, 16px)' }}> 
                   {completedExercises}/{session.exercises.length || 3}
@@ -271,8 +302,8 @@ export const TrailMap: React.FC<TrailMapProps> = ({
           className="balloon"
           animate={{
             left: `${currentPosition % 2 === 0 ? 
-              (windowWidth < 768 ? '35%' : '45%') : 
-              (windowWidth < 768 ? '65%' : '55%')}`,
+              (dimensions.width < 768 ? '35%' : '45%') : 
+              (dimensions.width < 768 ? '65%' : '55%')}`,
             top: `${(displayedSessions.length - currentPosition - 1) * sessionHeight}px`,
             transform: 'translate(-50%, -50%)'
           }}
@@ -282,8 +313,8 @@ export const TrailMap: React.FC<TrailMapProps> = ({
           <Image 
             src="/airballoon.svg" 
             alt="Hot air balloon" 
-            width={Math.min(110, windowWidth * 0.16)} // Close to original size
-            height={Math.min(110, windowWidth * 0.16)}
+            width={Math.min(110, dimensions.width * 0.16)} // Close to original size
+            height={Math.min(110, dimensions.width * 0.16)}
             priority
           />
         </motion.div>

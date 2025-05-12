@@ -78,6 +78,7 @@ function Profile({ user, onSave }: ProfileProps) {
                 alt="Profile avatar"
                 fill
                 className="avatar-image"
+                sizes='(max-width: 640px) 100px, (max-width: 768px) 150px, 200px'
               />
             </div>
 

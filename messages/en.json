@@ -193,5 +193,13 @@
       "recentActivities": "Recent Activities",
       "recommendedExercises": "Recommended Exercises",
       "noRecentActivities": "No recent activities found"
-    }
+    },
+    "Hello": "Hello",
+    "Let's Start!": "Let's Start!",
+    "Back to Training": "Back to Training",
+    "catch objects": "catch objects",
+    "Catch the falling objects before they hit the ground!": "Catch the falling objects before they hit the ground!",
+    "Let's find rhyming words!": "Let's find rhyming words!",
+    "Talk Animals": "Talk Animals",
+    "Talk to the animals and see if you can guess what they are saying": "Talk to the animals and see if you can guess what they are saying"
 }

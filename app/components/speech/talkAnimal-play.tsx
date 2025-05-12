@@ -11,14 +11,13 @@ import { useLocale } from 'next-intl';
 import { levenshteinDistance } from '@/app/helpers/talkAnimal-helper';
 import { useTranslations } from 'next-intl';
 // Speech recognition setup
-const setupSpeechRecognition = () => {
-  const locale = useLocale();
+const setupSpeechRecognition = (locale: string) => {
   if (typeof window !== 'undefined' && 'webkitSpeechRecognition' in window) {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     const recognition = new SpeechRecognition();
     recognition.continuous = false;
     recognition.interimResults = true;
-    recognition.lang = langEnum[locale as keyof typeof langEnum];;
+    recognition.lang = langEnum[locale as keyof typeof langEnum];
     return recognition;
   }
   return null;
@@ -27,6 +26,7 @@ const setupSpeechRecognition = () => {
 export default function Play({ isTest, difficultyLevel, onComplete }: ExerciseProps) {
   const router = useRouter();
   const t = useTranslations();
+  const locale = useLocale();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [transcript, setTranscript] = useState('');
   const [feedback, setFeedback] = useState('');
@@ -42,9 +42,9 @@ export default function Play({ isTest, difficultyLevel, onComplete }: ExercisePr
   // Get current game content based on user's difficulty level
   const currentGameContent = gameContent[difficultyLevel as keyof typeof gameContent];
 
-  // Initialize speech recognition
+  // Initialize speech recognition with locale
   useEffect(() => {
-    recognitionRef.current = setupSpeechRecognition();
+    recognitionRef.current = setupSpeechRecognition(locale);
     
     if (recognitionRef.current) {
       recognitionRef.current.onresult = (event) => {
@@ -64,7 +64,7 @@ export default function Play({ isTest, difficultyLevel, onComplete }: ExercisePr
         recognitionRef.current.stop();
       }
     };
-  }, []);
+  }, [locale]);
 
   // Update reference to transcript for the onend callback
   useEffect(() => {

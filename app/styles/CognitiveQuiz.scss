@@ -11,13 +11,13 @@
     h2 {
       font-size: 1.875rem;
       font-weight: bold;
-      color: var(--dark-purple);
+      color: $dark-purple;
       margin-bottom: 1rem;
     }
 
     p {
       font-size: 1.125rem;
-      color: var(--dark-purple);
+      color: $dark-purple;
       margin-bottom: 2rem;
       max-width: 42rem;
       margin-left: auto;
